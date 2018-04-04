@@ -1,11 +1,12 @@
-package com.northbrain.acl;
+package com.northbrain.privilege;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AclApplication {
+public class PrivilegeApplication {
+	//jk
 	public static void main(String[] args) {
-		SpringApplication.run(AclApplication.class, args);
+		SpringApplication.run(PrivilegeApplication.class, args);
 	}
 }
