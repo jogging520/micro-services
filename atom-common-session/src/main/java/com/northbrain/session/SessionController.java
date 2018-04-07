@@ -1,9 +1,7 @@
 package com.northbrain.session;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -21,10 +19,17 @@ public class SessionController {
     }
 
     @PostMapping("/sessions")
-    public Mono<Void> create(@RequestBody Flux<Session> sessions) {
-        return sessions
+    public Mono<ResponseEntity<?>> create(@PathVariable String user,
+                                          @PathVariable String role,
+                                          @PathVariable String organization) {
+        return this.sessionService
+                .
+
+// return Mono.just(ResponseEntity.noContent().build());
+        // Mono.just("index");
+
                 .flatMap(session -> {
-                    Mono<Session> saveSession = this.sessionService.saveSession(session);
+                    Mono<Session> saveSession = this.sessionService.saveSession(user, role, organization);
                     return saveSession;
                 })
                 .then();
