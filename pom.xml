@@ -6,7 +6,7 @@
 	<groupId>com.northbrain</groupId>
 	<artifactId>micro-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>micro-services</name>
 	<description>micro-services</description>
@@ -54,6 +54,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-webflux</artifactId>
+				<version>2.0.0.RELEASE</version>
 			</dependency>
 			<!-- lombok -->
 			<dependency>
@@ -67,9 +68,11 @@
 				<artifactId>nio-multipart-parser</artifactId>
 				<version>1.1.0</version>
 			</dependency>
+			<!-- configuration -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-configuration-processor</artifactId>
+				<version>1.2.0.RELEASE</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
