@@ -1,7 +1,7 @@
 package com.northbrain.session.service;
 
 import com.northbrain.session.model.Constants;
-import com.northbrain.session.model.JsonWebToken;
+import com.northbrain.session.model.TokenProperty;
 import com.northbrain.session.model.Session;
 import com.northbrain.session.repository.ISessionHistoryRepository;
 import com.northbrain.session.repository.ISessionRepository;
@@ -16,17 +16,17 @@ import java.util.Date;
 public class SessionService {
     private final ISessionRepository sessionRepository;
     private final ISessionHistoryRepository sessionHistoryRepository;
-    private final JsonWebToken jsonWebToken;
+    private final TokenProperty tokenProperty;
 
     public SessionService(ISessionRepository sessionRepository, ISessionHistoryRepository sessionHistoryRepository,
-                          JsonWebToken jsonWebToken) {
+                          TokenProperty tokenProperty) {
         this.sessionRepository = sessionRepository;
         this.sessionHistoryRepository = sessionHistoryRepository;
-        this.jsonWebToken = jsonWebToken;
+        this.tokenProperty = tokenProperty;
     }
 
     public Flux<Session> findAllSessions() {
-        return this.sessionRepository.findAll().log(jsonWebToken.toString());
+        return this.sessionRepository.findAll().log(tokenProperty.toString());
     }
 
     //如果不存在，那么创建一条，否则返回已经登录。
@@ -44,7 +44,7 @@ public class SessionService {
                                      .loginTime(new Date())
                                      .timestamp(null)
                                      .status(Constants.SESSION_STATUS_HAS_LOGGED)
-                                     .lifeTime(this.jsonWebToken.getLifeTime())
+                                     .lifeTime(this.tokenProperty.getLifeTime())
                                      .build()))
                 .flatMap(session -> sessionRepository.save(Session
                         .builder()
@@ -57,22 +57,20 @@ public class SessionService {
                         .loginTime(new Date())
                         .timestamp(new Date())
                         .status(Constants.SESSION_STATUS_HAS_LOGGED)
-                        .lifeTime(this.jsonWebToken.getLifeTime())
+                        .lifeTime(this.tokenProperty.getLifeTime())
                         .build())
                 )
                 .flatMap(
                         session -> {
                             try {
                                 return Mono.just(JsonWebTokenUtil.generateJsonWebToken(session.sessionId(),
-                                        userId, roleId, organizationId, jsonWebToken.getKey(), jsonWebToken.getCompany(),
-                                        jsonWebToken.getAudience(), jsonWebToken.getIssuer(), jsonWebToken.getLifeTime()));
+                                        userId, roleId, organizationId, tokenProperty.getKey(), tokenProperty.getCompany(),
+                                        tokenProperty.getAudience(), tokenProperty.getIssuer(), tokenProperty.getLifeTime()));
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                return Mono.empty();
                             }
-
-                            return Mono.just(null);
                         }
-
                 );
     }
 }

@@ -21,20 +21,13 @@ public class SessionController {
     }
 
     @PostMapping("/sessions")
-    public Mono<ResponseEntity<?>> create(@PathVariable String user,
+    public Mono<ResponseEntity<?>> create(@PathVariable String channelType,
+                                          @PathVariable String user,
                                           @PathVariable String role,
                                           @PathVariable String organization) {
-        return this.sessionService
-                .
-
-// return Mono.just(ResponseEntity.noContent().build());
-        // Mono.just("index");
-
-                .flatMap(session -> {
-                    Mono<Session> saveSession = this.sessionService.saveSession(user, role, organization);
-                    return saveSession;
-                })
-                .then();
+        return this.sessionService.saveSession(channelType, user, role, organization)
+                .map(token -> ResponseEntity.ok().contentLength(token.length())
+                        .body(token)
+                );
     }
-
 }

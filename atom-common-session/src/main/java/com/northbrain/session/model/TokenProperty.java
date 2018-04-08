@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @NoArgsConstructor
 @ConfigurationProperties(prefix="session.jwt.token")
-public class JsonWebToken {
+public class TokenProperty {
     private String  key;            //密钥
     private String  company;        //公司
     private String  audience;       //受众
