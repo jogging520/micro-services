@@ -3,6 +3,7 @@ package com.northbrain.session.service;
 import com.northbrain.session.model.Constants;
 import com.northbrain.session.model.JsonWebToken;
 import com.northbrain.session.model.Session;
+import com.northbrain.session.repository.ISessionHistoryRepository;
 import com.northbrain.session.repository.ISessionRepository;
 import com.northbrain.session.util.JsonWebTokenUtil;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,13 @@ import java.util.Date;
 @Service
 public class SessionService {
     private final ISessionRepository sessionRepository;
+    private final ISessionHistoryRepository sessionHistoryRepository;
     private final JsonWebToken jsonWebToken;
 
-    public SessionService(ISessionRepository sessionRepository, JsonWebToken jsonWebToken) {
+    public SessionService(ISessionRepository sessionRepository, ISessionHistoryRepository sessionHistoryRepository,
+                          JsonWebToken jsonWebToken) {
         this.sessionRepository = sessionRepository;
+        this.sessionHistoryRepository = sessionHistoryRepository;
         this.jsonWebToken = jsonWebToken;
     }
 
