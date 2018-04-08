@@ -1,4 +1,4 @@
-package com.northbrain.session;
+package com.northbrain.session.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,6 +25,6 @@ public class Session {
     private Date    createTime;         //创建时间
     private Date    loginTime;          //登录时间
     private Date    timestamp;          //时间戳
-    private String  status;             //状态：已登录、已登出
+    private String  status;             //状态：已登录、已主动登出、已被动登出
     private Long    lifeTime;           //寿命，毫秒
 }

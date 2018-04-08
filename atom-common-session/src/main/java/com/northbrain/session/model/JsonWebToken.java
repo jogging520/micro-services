@@ -1,4 +1,4 @@
-package com.northbrain.session;
+package com.northbrain.session.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

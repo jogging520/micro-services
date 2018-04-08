@@ -1,5 +1,6 @@
-package com.northbrain.session;
+package com.northbrain.session.repository;
 
+import com.northbrain.session.model.Session;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 

@@ -43,11 +43,6 @@
 			<groupId>org.synchronoss.cloud</groupId>
 			<artifactId>nio-multipart-parser</artifactId>
 		</dependency>
-		<!-- json web token -->
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-		</dependency>
 		<!-- aop aspectj -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

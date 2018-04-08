@@ -1,5 +1,7 @@
-package com.northbrain.session;
+package com.northbrain.session.controller;
 
+import com.northbrain.session.service.SessionService;
+import com.northbrain.session.model.Session;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
