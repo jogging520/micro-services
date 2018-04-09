@@ -1,5 +1,6 @@
 package com.northbrain.session.controller;
 
+import com.northbrain.session.model.Constants;
 import com.northbrain.session.service.SessionService;
 import com.northbrain.session.model.Session;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +16,18 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-    @GetMapping("/sessions")
-    public Flux<Session> listing() {
-        return this.sessionService.findAllSessions();
-    }
+    //@GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
+    //public Flux<Session> listing() {
+    //    return this.sessionService.findAllSessions();
+    //}
 
-    @PostMapping("/sessions")
-    public Mono<ResponseEntity<?>> create(@PathVariable String channelType,
-                                          @PathVariable String user,
-                                          @PathVariable String role,
-                                          @PathVariable String organization) {
-        return this.sessionService.saveSession(channelType, user, role, organization)
+    @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
+    public Mono<ResponseEntity<?>> create(@RequestParam("channelType") String channelType,
+                                          @RequestParam("userId") String userId,
+                                          @RequestParam("roleId") String roleId,
+                                          @RequestParam("organizationId") String organizationId) {
+        return this.sessionService.saveSession(channelType, userId, roleId, organizationId)
+
                 .map(token -> ResponseEntity.ok().contentLength(token.length())
                         .body(token)
                 );

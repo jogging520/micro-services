@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.experimental.Accessors;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 @Builder
 @Document
 @NoArgsConstructor
+@AllArgsConstructor
 public class Session {
     @Id
     private String  sessionId;          //会话ID

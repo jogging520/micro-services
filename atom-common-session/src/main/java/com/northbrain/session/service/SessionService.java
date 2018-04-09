@@ -32,7 +32,7 @@ public class SessionService {
     //如果不存在，那么创建一条，否则返回已经登录。
     public Mono<String> saveSession(String channelType, String userId, String roleId, String organizationId) {
         return this.sessionRepository
-                .findByTypeAndUserId(channelType, userId)
+                .findByChannelTypeAndUserId(channelType, userId)
                 .switchIfEmpty(
                              sessionRepository.save(Session
                                      .builder()
@@ -43,7 +43,7 @@ public class SessionService {
                                      .createTime(new Date())
                                      .loginTime(new Date())
                                      .timestamp(null)
-                                     .status(Constants.SESSION_STATUS_HAS_LOGGED)
+                                     .status(Constants.SESSION_STATUS_LOGIN)
                                      .lifeTime(this.tokenProperty.getLifeTime())
                                      .build()))
                 .flatMap(session -> sessionRepository.save(Session
@@ -56,7 +56,7 @@ public class SessionService {
                         .createTime(session.createTime())
                         .loginTime(new Date())
                         .timestamp(new Date())
-                        .status(Constants.SESSION_STATUS_HAS_LOGGED)
+                        .status(Constants.SESSION_STATUS_LOGIN)
                         .lifeTime(this.tokenProperty.getLifeTime())
                         .build())
                 )

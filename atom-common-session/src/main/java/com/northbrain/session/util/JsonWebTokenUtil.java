@@ -28,12 +28,13 @@ public class JsonWebTokenUtil {
     public static String generateJsonWebToken(String sessionId, String userId, String roleId, String organizationId,
                                               String key, String company, String audience, String issuer, Long lifeTime)
             throws Exception {
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long currentTimeMillis = System.currentTimeMillis();
         Date now = new Date(currentTimeMillis);
 
         //生成签名密钥
-        byte[] keySecretBytes = DatatypeConverter.parseBase64Binary(key);
+
+        byte[] keySecretBytes = key.getBytes();
         Key secretKey = new SecretKeySpec(keySecretBytes, signatureAlgorithm.getJcaName());
 
         //私有claims部分，目前只保持id号
