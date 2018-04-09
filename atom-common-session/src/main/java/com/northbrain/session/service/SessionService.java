@@ -26,11 +26,15 @@ public class SessionService {
     }
 
     public Flux<Session> findAllSessions() {
-        return this.sessionRepository.findAll().log(tokenProperty.toString());
+        return this.sessionRepository.findAll();
+    }
+
+    public Mono<Session> findOneSession(String sessionId) {
+        return this.sessionRepository.findBySessionId(sessionId);
     }
 
     //如果不存在，那么创建一条，否则返回已经登录。
-    public Mono<String> saveSession(String channelType, String userId, String roleId, String organizationId) {
+    public Mono<String> createSession(String channelType, String userId, String roleId, String organizationId) {
         return this.sessionRepository
                 .findByChannelTypeAndUserId(channelType, userId)
                 .switchIfEmpty(

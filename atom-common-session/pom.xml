@@ -48,6 +48,12 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 		</dependency>
+		<!-- northbrain base-common-util -->
+		<dependency>
+			<groupId>com.northbrain</groupId>
+			<artifactId>base-common-util</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
