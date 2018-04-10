@@ -40,6 +40,6 @@ public class SessionController {
                                                       @RequestParam("roleId") String roleId,
                                                       @RequestParam("organizationId") String organizationId) {
         return this.sessionService.createSession(channelType, userId, roleId, organizationId)
-                ;
+                .log();
     }
 }

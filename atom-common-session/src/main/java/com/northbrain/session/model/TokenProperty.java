@@ -2,11 +2,13 @@ package com.northbrain.session.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Data
+@Accessors(chain=true)
 @NoArgsConstructor
 @ConfigurationProperties(prefix="session.jwt.token")
 public class TokenProperty {

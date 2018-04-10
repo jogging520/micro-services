@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 @Data
-@Accessors(fluent=true, chain=true)
+@Accessors(chain=true)
 @Builder
 @Document
 @NoArgsConstructor

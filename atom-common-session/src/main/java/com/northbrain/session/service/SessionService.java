@@ -52,12 +52,12 @@ public class SessionService {
                                      .build()))
                 .flatMap(session -> sessionRepository.save(Session
                         .builder()
-                        .sessionId(session.sessionId())
+                        .sessionId(session.getSessionId())
                         .channelType(channelType)
                         .userId(userId)
                         .roleId(roleId)
                         .organizationId(organizationId)
-                        .createTime(session.createTime())
+                        .createTime(session.getCreateTime())
                         .loginTime(new Date())
                         .timestamp(new Date())
                         .status(Constants.SESSION_STATUS_LOGIN)
@@ -67,7 +67,7 @@ public class SessionService {
                 .flatMap(
                         session -> {
                             try {
-                                return Mono.just(JsonWebTokenUtil.generateJsonWebToken(session.sessionId(),
+                                return Mono.just(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(),
                                         userId, roleId, organizationId, tokenProperty.getKey(), tokenProperty.getCompany(),
                                         tokenProperty.getAudience(), tokenProperty.getIssuer(), tokenProperty.getLifeTime()));
                             } catch (Exception e) {
