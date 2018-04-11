@@ -22,7 +22,6 @@ public class LogTracerUtil {
 
     /**
      * 定义一个切入点.
-     * 解释下：
      *
      * ~ 第一个 * 代表任意修饰符及任意返回值.
      * ~ 第二个 * 任意包名
@@ -51,7 +50,7 @@ public class LogTracerUtil {
 
         long finishTime = System.currentTimeMillis();
         logger.info("结束调用：" + proceedingJoinPoint.toString() + "，总计耗时：" + (finishTime-startTime) + "ms");
-
+        System.out.println("结束调用：" + proceedingJoinPoint.toString() + "，总计耗时：" + (finishTime-startTime) + "ms");
         return result;
     }
 }

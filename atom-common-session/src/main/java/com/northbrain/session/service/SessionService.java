@@ -25,12 +25,12 @@ public class SessionService {
         this.tokenProperty = tokenProperty;
     }
 
-    public Flux<Session> findAllSessions() {
+    public Flux<Session> selectAllSessions() {
         return this.sessionRepository.findAll();
     }
 
-    public Mono<Session> findOneSession(String sessionId) {
-        return this.sessionRepository.findBySessionId(sessionId);
+    public Mono<Session> selectSessionById(String sessionId) {
+        return this.sessionRepository.findById(sessionId);
     }
 
     //如果不存在，那么创建一条，否则返回已经登录。

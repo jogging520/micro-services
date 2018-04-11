@@ -11,14 +11,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@Accessors(fluent=true, chain=true)
+@Accessors(chain=true)
 @Builder
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessionHistory {
     @Id
-    private String  id;                 //ID
+    private String  sessionHistoryId;   //ID
+    private String  operationType;      //操作类型：增删改
     private String  sessionId;          //会话ID
     private String  channelType;        //渠道类型：WEB、APP、WECHAT、CMS
     private String  userId;             //用户编号

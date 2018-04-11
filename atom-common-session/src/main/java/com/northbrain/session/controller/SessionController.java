@@ -17,8 +17,8 @@ public class SessionController {
     }
 
     @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
-    public Flux<Session> listing() {
-        return this.sessionService.findAllSessions()
+    public Flux<Session> selectAllSessions() {
+        return this.sessionService.selectAllSessions()
                 .map(session -> {
                     System.out.println(session);
                     return session;
@@ -26,9 +26,9 @@ public class SessionController {
     }
 
     @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING_BY_ID)
-    public Mono<Session> findOne(@PathVariable String sessionId) {
+    public Mono<Session> selectSessionById(@PathVariable String sessionId) {
         return this.sessionService
-                .findOneSession(sessionId)
+                .selectSessionById(sessionId)
                 .map(session -> {
                     System.out.println(session);
                     return session;
