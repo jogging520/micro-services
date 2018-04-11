@@ -15,6 +15,6 @@ public class Constants {
     public final static String SESSION_HINT_JWT_VERIFY_PUBLIC_CLAIM_FAILURE         =   "JWT校验公共部分不通过。";
     public final static String SESSION_HINT_JWT_VERIFY_EXPIRATION_FAILURE           =   "JWT已经失效。";
 
-    public final static String SESSION_HTTP_REQUEST_MAPPING         =   "/sessions";
-    public final static String SESSION_HTTP_REQUEST_MAPPING1         =   "/session";
+    public final static String SESSION_HTTP_REQUEST_MAPPING                 =   "/sessions";
+    public final static String SESSION_HTTP_REQUEST_MAPPING_BY_ID           =   "/session/{sessionId}";
 }

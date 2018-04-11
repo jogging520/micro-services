@@ -16,7 +16,7 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-    @GetMapping("/sessions")
+    @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
     public Flux<Session> listing() {
         return this.sessionService.findAllSessions()
                 .map(session -> {
@@ -25,9 +25,10 @@ public class SessionController {
                 });
     }
 
-    @GetMapping("/sessions/{sessionId}")
+    @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING_BY_ID)
     public Mono<Session> findOne(@PathVariable String sessionId) {
-        return this.sessionService.findOneSession(sessionId)
+        return this.sessionService
+                .findOneSession(sessionId)
                 .map(session -> {
                     System.out.println(session);
                     return session;
@@ -35,11 +36,12 @@ public class SessionController {
     }
 
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
-    public Mono<String> createSession(@RequestParam("channelType") String channelType,
-                                                      @RequestParam("userId") String userId,
-                                                      @RequestParam("roleId") String roleId,
-                                                      @RequestParam("organizationId") String organizationId) {
-        return this.sessionService.createSession(channelType, userId, roleId, organizationId)
+    public Mono<String> createSession(@RequestParam String channelType,
+                                      @RequestParam String userId,
+                                      @RequestParam String roleId,
+                                      @RequestParam String organizationId) {
+        return this.sessionService
+                .createSession(channelType, userId, roleId, organizationId)
                 .log();
     }
 }
