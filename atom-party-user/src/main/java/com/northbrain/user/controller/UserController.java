@@ -23,7 +23,7 @@ public class UserController {
 
         return this.userService
                 .selectByUserIdAndPassword(userId, password)
-                .switchIfEmpty(Mono.error(new Exception(Constants.USER_VERIFY_FAILURE)))
+                .switchIfEmpty(Mono.error(new RuntimeException(Constants.USER_VERIFY_FAILURE)))
                 .flatMap(user -> Mono.just(Constants.USER_VERIFY_SUCCESS));
 
     }
