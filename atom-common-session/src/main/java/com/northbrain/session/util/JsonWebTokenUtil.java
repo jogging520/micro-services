@@ -66,11 +66,11 @@ public class JsonWebTokenUtil {
         return jwtBuilder.compact();
     }
 
-    public static Map<String, Object> parseJsonWebToken(String jsonWebToken, String key, String company,
+    public static Map<String, String> parseJsonWebToken(String jsonWebToken, String key, String company,
                                                         String audience, String issuer)
             throws Exception {
         Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(key))
+                .setSigningKey(key.getBytes(Constants.SESSION_JWT_TOKEN_KEY_CHARSET))
                 .parseClaimsJws(jsonWebToken.replace(Constants.SESSION_JWT_TOKEN_PREFIX, ""))
                 .getBody();
 
@@ -88,11 +88,11 @@ public class JsonWebTokenUtil {
         }
 
         //解析私有claims
-        Map<String, Object> privateClaims = new HashMap<>();
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_USER_ID, claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ROLE_ID, claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID, claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID));
+        Map<String, String> privateClaims = new HashMap<>();
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_USER_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ROLE_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID));
 
         return privateClaims;
     }

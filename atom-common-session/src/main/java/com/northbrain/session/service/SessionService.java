@@ -1,6 +1,7 @@
 package com.northbrain.session.service;
 
 import com.northbrain.session.model.Constants;
+import com.northbrain.session.model.Token;
 import com.northbrain.session.model.TokenProperty;
 import com.northbrain.session.model.Session;
 import com.northbrain.session.repository.ISessionHistoryRepository;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class SessionService {
@@ -76,5 +78,28 @@ public class SessionService {
                             }
                         }
                 );
+    }
+
+    public Mono<Token> verifyJWT(String jwt) {
+        try {
+            Map<String, String> claims = JsonWebTokenUtil
+                    .parseJsonWebToken(jwt, tokenProperty.getKey(), tokenProperty.getCompany(),
+                            tokenProperty.getAudience(), tokenProperty.getIssuer());
+
+            return this.sessionRepository
+                    .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
+                    .switchIfEmpty(Mono.empty())
+                    .flatMap(session -> Mono.just(Token
+                            .builder()
+                            .userId(claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID))
+                            .roleId(claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID))
+                            .organizationId(claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID))
+                            .lifeTime(tokenProperty.getLifeTime())
+                            .build()
+                    ));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Mono.empty();
+        }
     }
 }

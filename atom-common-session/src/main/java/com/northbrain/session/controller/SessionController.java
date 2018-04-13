@@ -1,6 +1,7 @@
 package com.northbrain.session.controller;
 
 import com.northbrain.session.model.Constants;
+import com.northbrain.session.model.Token;
 import com.northbrain.session.service.SessionService;
 import com.northbrain.session.model.Session;
 
@@ -43,4 +44,11 @@ public class SessionController {
         return this.sessionService
                 .createSession(channelType, userId, roleId, organizationId);
     }
+
+    @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING_JWT)
+    public Mono<Token> verifyJWT(@RequestParam String jwt) {
+        return this.sessionService
+                .verifyJWT(jwt);
+    }
+
 }
