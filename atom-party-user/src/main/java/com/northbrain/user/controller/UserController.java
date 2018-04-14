@@ -18,14 +18,10 @@ public class UserController {
     }
 
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<String> verifyUserLogInfo(@RequestParam String userId,
+    public Mono<Boolean> verifyUserLogInfo(@RequestParam String userId,
                                           @RequestParam String password) {
-
         return this.userService
-                .selectByUserIdAndPassword(userId, password)
-                .switchIfEmpty(Mono.error(new RuntimeException(Constants.USER_VERIFY_FAILURE)))
-                .flatMap(user -> Mono.just(Constants.USER_VERIFY_SUCCESS));
-
+                .selectByUserIdAndPassword(userId, password);
     }
 
 }

@@ -39,6 +39,7 @@ public class SessionService {
     public Mono<String> createSession(String channelType, String userId, String roleId, String organizationId) {
         return this.sessionRepository
                 .findByChannelTypeAndUserId(channelType, userId)
+                .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                 .switchIfEmpty(
                              sessionRepository.save(Session
                                      .builder()
@@ -87,19 +88,24 @@ public class SessionService {
                             tokenProperty.getAudience(), tokenProperty.getIssuer());
 
             return this.sessionRepository
-                    .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
-                    .switchIfEmpty(Mono.empty())
-                    .flatMap(session -> Mono.just(Token
-                            .builder()
-                            .userId(claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID))
-                            .roleId(claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID))
-                            .organizationId(claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID))
-                            .lifeTime(tokenProperty.getLifeTime())
-                            .build()
-                    ));
+                    .findBySessionId(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
+                    .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
+                    .switchIfEmpty(Mono.just(Session.builder().build()))
+                    .flatMap(session -> {
+                        if(session.getSessionId() == null)
+                            return Mono.just(Token.builder().lifeTime(0L).build());
+
+                        return Mono.just(Token
+                                .builder()
+                                .userId(claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID))
+                                .roleId(claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID))
+                                .organizationId(claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID))
+                                .lifeTime(tokenProperty.getLifeTime())
+                                .build());
+                    });
         } catch (Exception e) {
             e.printStackTrace();
-            return Mono.empty();
+            return Mono.just(Token.builder().lifeTime(0L).build());
         }
     }
 }

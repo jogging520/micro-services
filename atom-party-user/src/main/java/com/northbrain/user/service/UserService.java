@@ -21,9 +21,15 @@ public class UserService {
         return this.userRepository.findById(userId);
     }
 
-    public Mono<User> selectByUserIdAndPassword(String userId, String password) {
+    public Mono<Boolean> selectByUserIdAndPassword(String userId, String password) {
         return this.userRepository
                 .findByUserIdAndPassword(userId, password)
-                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE));
+                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE))
+                .switchIfEmpty(Mono.just(User.builder().build()))
+                .flatMap(user -> {
+                    if(user.getUserId() == null)
+                        return Mono.just(false);
+                    return Mono.just(true);
+                });
     }
 }
