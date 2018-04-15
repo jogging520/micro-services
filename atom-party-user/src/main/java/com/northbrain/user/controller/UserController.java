@@ -1,5 +1,6 @@
 package com.northbrain.user.controller;
 
+import com.northbrain.user.model.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +19,13 @@ public class UserController {
     }
 
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<Boolean> verifyUserLogInfo(@RequestParam String userId,
-                                          @RequestParam String password) {
+    public Mono<Authentication> verifyUserLogInfo(@RequestParam String channelType,
+                                                  @RequestParam String userId,
+                                                  @RequestParam String roleId,
+                                                  @RequestParam String organizationId,
+                                                  @RequestParam String password) {
         return this.userService
-                .selectByUserIdAndPassword(userId, password);
+                .selectByUserIdAndPassword(channelType, userId, roleId, organizationId, password);
     }
 
 }

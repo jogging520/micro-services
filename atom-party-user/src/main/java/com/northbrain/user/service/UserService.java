@@ -1,5 +1,6 @@
 package com.northbrain.user.service;
 
+import com.northbrain.user.model.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.northbrain.user.model.Constants;
@@ -21,15 +22,33 @@ public class UserService {
         return this.userRepository.findById(userId);
     }
 
-    public Mono<Boolean> selectByUserIdAndPassword(String userId, String password) {
+    public Mono<Authentication> selectByUserIdAndPassword(String channelType,
+                                                          String userId,
+                                                          String roleId,
+                                                          String organizationId,
+                                                          String password) {
         return this.userRepository
                 .findByUserIdAndPassword(userId, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
                     if(user.getUserId() == null)
-                        return Mono.just(false);
-                    return Mono.just(true);
+                        return Mono.just(Authentication
+                                .builder()
+                                .channelType(channelType)
+                                .userId(userId)
+                                .roleId(roleId)
+                                .organizationId(organizationId)
+                                .verification(false)
+                                .build());
+                    return Mono.just(Authentication
+                            .builder()
+                            .channelType(channelType)
+                            .userId(userId)
+                            .roleId(roleId)
+                            .organizationId(organizationId)
+                            .verification(true)
+                            .build());
                 });
     }
 }

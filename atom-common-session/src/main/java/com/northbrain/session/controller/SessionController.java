@@ -37,10 +37,10 @@ public class SessionController {
     }
 
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
-    public Mono<String> login(@RequestParam String channelType,
-                              @RequestParam String userId,
-                              @RequestParam String roleId,
-                              @RequestParam String organizationId) {
+    public Mono<Token> login(@RequestParam String channelType,
+                             @RequestParam String userId,
+                             @RequestParam String roleId,
+                             @RequestParam String organizationId) {
         return this.sessionService
                 .createSession(channelType, userId, roleId, organizationId);
     }

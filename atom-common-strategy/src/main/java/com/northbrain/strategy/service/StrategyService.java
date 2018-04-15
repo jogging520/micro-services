@@ -7,6 +7,9 @@ import com.northbrain.strategy.model.Strategy;
 import com.northbrain.strategy.repository.IStrategyRepository;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.Date;
 
 @Service
 public class StrategyService {
@@ -21,5 +24,9 @@ public class StrategyService {
         return this.strategyRepository
                 .findAll()
                 .filter(strategy -> strategy.getStatus().equalsIgnoreCase(Constants.STRATEGY_STATUS_ACTIVE));
+    }
+
+    public Flux<Strategy> saveStrategies(Flux<Strategy> strategies) {
+        return this.strategyRepository.saveAll(strategies);
     }
 }

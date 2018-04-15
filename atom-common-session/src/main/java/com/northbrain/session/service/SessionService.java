@@ -35,8 +35,7 @@ public class SessionService {
         return this.sessionRepository.findById(sessionId);
     }
 
-    //如果不存在，那么创建一条，否则返回已经登录。
-    public Mono<String> createSession(String channelType, String userId, String roleId, String organizationId) {
+    public Mono<Token> createSession(String channelType, String userId, String roleId, String organizationId) {
         return this.sessionRepository
                 .findByChannelTypeAndUserId(channelType, userId)
                 .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
@@ -70,12 +69,21 @@ public class SessionService {
                 .flatMap(
                         session -> {
                             try {
-                                return Mono.just(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(),
-                                        userId, roleId, organizationId, tokenProperty.getKey(), tokenProperty.getCompany(),
-                                        tokenProperty.getAudience(), tokenProperty.getIssuer(), tokenProperty.getLifeTime()));
+                                return Mono.just(Token
+                                                .builder()
+                                                .channelType(channelType)
+                                                .userId(userId)
+                                                .roleId(roleId)
+                                                .organizationId(organizationId)
+                                                .lifeTime(this.tokenProperty.getLifeTime())
+                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(), channelType,
+                                                        userId, roleId, organizationId, tokenProperty.getKey(), tokenProperty.getCompany(),
+                                                        tokenProperty.getAudience(), tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
+                                                .build()
+                                        );
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                return Mono.empty();
+                                return Mono.just(Token.builder().lifeTime(0L).build());
                             }
                         }
                 );
@@ -97,10 +105,12 @@ public class SessionService {
 
                         return Mono.just(Token
                                 .builder()
+                                .channelType(claims.get(Constants.SESSION_JWT_CLAIMS_CHANNEL_TYPE))
                                 .userId(claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID))
                                 .roleId(claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID))
                                 .organizationId(claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID))
                                 .lifeTime(tokenProperty.getLifeTime())
+                                .token(jwt)
                                 .build());
                     });
         } catch (Exception e) {
