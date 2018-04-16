@@ -35,7 +35,18 @@ public class SessionService {
         return this.sessionRepository.findById(sessionId);
     }
 
-    public Mono<Token> createSession(String channelType, String userId, String roleId, String organizationId) {
+    /**
+     * 方法：创建会话
+     * @param channelType 渠道类型
+     * @param userId 用户编号
+     * @param roleId 角色编号
+     * @param organizationId 组织机构编号
+     * @return 令牌
+     */
+    public Mono<Token> createSession(String channelType,
+                                     String userId,
+                                     String roleId,
+                                     String organizationId) {
         return this.sessionRepository
                 .findByChannelTypeAndUserId(channelType, userId)
                 .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
@@ -89,6 +100,11 @@ public class SessionService {
                 );
     }
 
+    /**
+     * 方法：校验JWT的有效性
+     * @param jwt json web token
+     * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
+     */
     public Mono<Token> verifyJWT(String jwt) {
         try {
             Map<String, String> claims = JsonWebTokenUtil

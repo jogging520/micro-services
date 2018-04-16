@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * 类名：鉴权结果类
+ * 用途：用于返回校验结果
+ */
 @Data
 @Accessors(chain=true)
 @Builder
@@ -14,9 +18,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Authentication {
-    private String  channelType;        //渠道类型：WEB、APP、WECHAT、CMS
-    private String  userId;             //用户编号
-    private String  roleId;             //角色编号
-    private String  organizationId;     //组织机构编号
-    private Boolean verification;       //校验结果
+    private Boolean result;       //校验结果
 }
