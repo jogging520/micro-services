@@ -2,13 +2,14 @@ package com.northbrain.menu.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Accessors(chain=true)
@@ -16,8 +17,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class MenuHistory {
     @Id
+    private String      menuHistoryId;      //菜单历史编号
+    private String      operationType;      //操作类型：增删改
     private String      menuId;             //菜单ID
     private String      menuType;           //菜单类型：CMS、WEB、APP、WECHAT
     private String      roleId;             //角色编号（根据不同的角色进行菜单控制，避免部分前端不支持ACL）
