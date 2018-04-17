@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 类名：鉴权结果类
@@ -14,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
 public class Authentication {
