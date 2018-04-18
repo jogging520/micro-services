@@ -24,12 +24,13 @@ public class UserHistory {
     private String      userId;             //用户编号
     private String      type;               //用户类型
     private String      userName;           //用户名称
-    private String      alias;              //别名
     private String      password;           //密码
-    private String      email;              //电子邮件
-    private String[]    phone;              //电话号码
-    private String      roleId;             //角色编号
-    private String      organizationId;     //组织编号
+    private String      mobile;             //手机号码
+    private String[]    appTypes;           //可以登录的应用类型
+    private String[]    roleId;             //角色编号
+    private String[]    organizationId;     //组织编号
+    private String[]    email;              //电子邮件
+    private String[]    wechat;             //微信号码
     private Date        createTime;         //创建时间
     private Date        timestamp;          //时间戳
     private String      status;             //状态

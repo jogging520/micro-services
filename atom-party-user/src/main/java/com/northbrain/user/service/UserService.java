@@ -25,7 +25,35 @@ public class UserService {
         return this.userRepository.findById(userId);
     }
 
-    public Mono<Authentication> selectByLoginParams(String channelType,
+    public Mono<Authentication> selectByUserNameAndPassword(String appType,
+                                                            String userName,
+                                                            String password) {
+        return this.userRepository
+                .findByUserNameAndPassword(userName, password)
+                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
+                        Arrays.asList(user.getAppTypes()).contains(appType))
+                .switchIfEmpty(Mono.just(User.builder().build()))
+                .flatMap(user -> {
+                    if(user.getUserId() == null)
+                        return Mono.just(Authentication
+                                .builder()
+                                .result(false)
+                                .build());
+                    return Mono.just(Authentication
+                            .builder()
+                            .userId(user.getUserId())
+                            .userName(user.getUserName())
+                            .mobile(user.getMobile())
+                            .appType(appType)
+                            .result(true)
+                            .build());
+                });
+    }
+
+    //先通过普通的KEY-AUTH（USERNAME+PASSWORD和MOBILE+CAPTCHA）获取用户的ID、组织机构等校验信息
+    //用户要不要进行相应的选择，如角色和机构？如果需要，则反向再查询组织机构和角色信息
+    //最后根据这些信息再进行会话登录。
+    public Mono<Authentication> selectByLoginParams(String appType,
                                                     String userId,
                                                     String roleId,
                                                     String organizationId,
@@ -33,9 +61,9 @@ public class UserService {
         return this.userRepository
                 .findByUserIdAndPassword(userId, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                        Arrays.asList(user.getChannelType()).contains(channelType) &&
-                        Arrays.asList(user.getRoleId()).contains(roleId) &&
-                        Arrays.asList(user.getOrganizationId()).contains(organizationId))
+                        Arrays.asList(user.getAppTypes()).contains(appType) &&
+                        Arrays.asList(user.getRoleIds()).contains(roleId) &&
+                        Arrays.asList(user.getOrganizationIds()).contains(organizationId))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
                     if(user.getUserId() == null)
@@ -55,13 +83,12 @@ public class UserService {
                 .save(User.builder()
                         .type("COMMON")
                         .userName("jiakun")
-                        .alias(new String[]{"jiakun"})
                         .password("jjjkkk")
-                        .channelType(new String[]{"CMS"})
-                        .roleId(new String[]{"Manager"})
-                        .organizationId(new String[]{"GSYD"})
-                        .email(new String[]{"13893190802@139.com"})
-                        .phone(new String[]{"13893190802"})
+                        .appTypes(new String[]{"CMS"})
+                        .roleIds(new String[]{"Manager"})
+                        .organizationIds(new String[]{"GSYD"})
+                        .emails(new String[]{"13893190802@139.com"})
+                        .mobile("13893190802")
                         .createTime(new Date())
                         .timestamp(new Date())
                         .status(Constants.USER_STATUS_ACTIVE)
