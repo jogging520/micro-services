@@ -29,7 +29,7 @@ public class UserController {
      * @return 校验结果
      */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<Authentication> verifyUserLoggingInfo(@RequestParam(required = true) String appType,
+    public Mono<Authentication> verifyUserLoggingInfo(@RequestParam String appType,
                                                       @RequestParam(required = false) String userName,
                                                       @RequestParam(required = false) String password,
                                                       @RequestParam(required = false) String mobile) {

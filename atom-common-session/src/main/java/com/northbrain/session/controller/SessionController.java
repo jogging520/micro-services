@@ -45,7 +45,7 @@ public class SessionController {
      * @return 令牌
      */
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
-    public Mono<Token> login(@RequestParam(required = true) String appType,
+    public Mono<Token> login(@RequestParam String appType,
                              @RequestParam(required = false) String userName,
                              @RequestParam(required = false) String password,
                              @RequestParam(required = false) String mobile) {

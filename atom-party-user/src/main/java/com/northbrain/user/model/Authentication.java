@@ -16,7 +16,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Authentication {
-    private String      userId;             //用户编号
-    private String      userName;           //用户名称
+    private int         authType;           //认证方式
     private Boolean     result;             //校验结果
 }

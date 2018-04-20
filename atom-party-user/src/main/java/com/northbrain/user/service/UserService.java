@@ -41,8 +41,7 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
-                            .userId(user.getUserId())
-                            .userName(user.getUserName())
+                            .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
                             .result(true)
                             .build());
                 });
@@ -63,8 +62,7 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
-                            .userId(user.getUserId())
-                            .userName(user.getUserName())
+                            .authType(Constants.USER_LOGGING_TYPE_CAPTCHA)
                             .result(true)
                             .build());
                 });
