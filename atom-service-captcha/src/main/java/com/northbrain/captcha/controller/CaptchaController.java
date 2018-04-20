@@ -30,11 +30,13 @@ public class CaptchaController {
     /**
      * 方法：获取用户已经发送的最后一条验证码
      * @param mobile 手机号码
+     * @param captcha 验证码
      * @return 验证码
      */
     @GetMapping(Constants.CAPTCHA_HTTP_REQUEST_MAPPING)
-    public Mono<Captcha> selectCaptcha(String mobile) {
+    public Mono<Captcha> selectCaptcha(String mobile,
+                                       String captcha) {
         return this.captchaService
-                .selectCaptchaByMobile(mobile);
+                .selectCaptchaByMobile(mobile, captcha);
     }
 }

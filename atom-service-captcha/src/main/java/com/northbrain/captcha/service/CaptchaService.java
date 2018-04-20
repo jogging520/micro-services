@@ -24,17 +24,18 @@ public class CaptchaService {
         return this.captchaRepository
                 .save(Captcha.builder()
                         .mobile(mobile)
-                        .code("123456")
+                        .captcha("123456")
                         .createTime(new Date())
                         .timestamp(new Date())
-                        .status(Constants.CAPTCHA_STATUS_ACTIVE)
+                        .status(Constants.CAPTCHA_STATUS_SUCCESS)
                         .build()
                 )
                 .then();
     }
 
-    public Mono<Captcha> selectCaptchaByMobile(String mobile) {
+    public Mono<Captcha> selectCaptchaByMobile(String mobile, String captchaCode) {
         return this.captchaRepository
-                .findFirst1ByMobileOrderByCreateTimeDesc(mobile);
+                .findFirst1ByMobileOrderByCreateTimeDesc(mobile)
+                .filter(captcha -> captcha.getCaptcha().equals(captchaCode));
     }
 }

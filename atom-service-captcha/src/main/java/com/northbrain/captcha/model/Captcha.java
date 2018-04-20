@@ -24,7 +24,7 @@ public class Captcha {
     @Id
     private String      captchaId;          //验证码ID
     private String      mobile;             //手机号码
-    private String      code;               //验证码
+    private String      captcha;            //验证码
     private Date        createTime;         //创建时间
     private Date        timestamp;          //时间戳
     private String      status;             //状态
