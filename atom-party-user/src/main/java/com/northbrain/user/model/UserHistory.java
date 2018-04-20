@@ -27,10 +27,10 @@ public class UserHistory {
     private String      password;           //密码
     private String      mobile;             //手机号码
     private String[]    appTypes;           //可以登录的应用类型
-    private String[]    roleId;             //角色编号
-    private String[]    organizationId;     //组织编号
-    private String[]    email;              //电子邮件
-    private String[]    wechat;             //微信号码
+    private String[]    roleIds;            //角色编号
+    private String[]    organizationIds;    //组织编号
+    private String[]    emails;             //电子邮件
+    private String[]    wechates;           //微信号码
     private Date        createTime;         //创建时间
     private Date        timestamp;          //时间戳
     private String      status;             //状态

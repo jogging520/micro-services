@@ -23,7 +23,7 @@ public class User {
     private String      type;               //用户类型
     private String      userName;           //用户名称
     private String      password;           //密码
-    private String      mobile;             //手机号码
+    private String[]    mobiles;            //手机号码
     private String[]    appTypes;           //可以登录的应用类型
     private String[]    roleIds;            //角色编号
     private String[]    organizationIds;    //组织编号

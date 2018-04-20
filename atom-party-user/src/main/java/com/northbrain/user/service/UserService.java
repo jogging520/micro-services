@@ -43,27 +43,20 @@ public class UserService {
                             .builder()
                             .userId(user.getUserId())
                             .userName(user.getUserName())
-                            .mobile(user.getMobile())
+                            .mobiles(user.getMobiles())
                             .appType(appType)
                             .result(true)
                             .build());
                 });
     }
 
-    //先通过普通的KEY-AUTH（USERNAME+PASSWORD和MOBILE+CAPTCHA）获取用户的ID、组织机构等校验信息
-    //用户要不要进行相应的选择，如角色和机构？如果需要，则反向再查询组织机构和角色信息
-    //最后根据这些信息再进行会话登录。
-    public Mono<Authentication> selectByLoginParams(String appType,
-                                                    String userId,
-                                                    String roleId,
-                                                    String organizationId,
-                                                    String password) {
+    public Mono<Authentication> selectByMobileAndCaptcha(String appType,
+                                                         String mobile,
+                                                         String captcha) {
         return this.userRepository
-                .findByUserIdAndPassword(userId, password)
+                .findByMobilesContaining(mobile)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                        Arrays.asList(user.getAppTypes()).contains(appType) &&
-                        Arrays.asList(user.getRoleIds()).contains(roleId) &&
-                        Arrays.asList(user.getOrganizationIds()).contains(organizationId))
+                        Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
                     if(user.getUserId() == null)
@@ -73,10 +66,18 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
+                            .userId(user.getUserId())
+                            .userName(user.getUserName())
+                            .mobiles(user.getMobiles())
+                            .appType(appType)
                             .result(true)
                             .build());
                 });
     }
+
+    //先通过普通的KEY-AUTH（USERNAME+PASSWORD和MOBILE+CAPTCHA）获取用户的ID、组织机构等校验信息
+    //用户要不要进行相应的选择，如角色和机构？如果需要，则反向再查询组织机构和角色信息
+    //最后根据这些信息再进行会话登录。
 
     public Mono<User> createUser() {
         return this.userRepository
@@ -88,7 +89,7 @@ public class UserService {
                         .roleIds(new String[]{"Manager"})
                         .organizationIds(new String[]{"GSYD"})
                         .emails(new String[]{"13893190802@139.com"})
-                        .mobile("13893190802")
+                        .mobiles(new String[]{"13893190802"})
                         .createTime(new Date())
                         .timestamp(new Date())
                         .status(Constants.USER_STATUS_ACTIVE)

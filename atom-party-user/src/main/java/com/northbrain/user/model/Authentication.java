@@ -18,9 +18,5 @@ import lombok.experimental.Accessors;
 public class Authentication {
     private String      userId;             //用户编号
     private String      userName;           //用户名称
-    private String      mobile;             //手机号码
-    private String      appType;            //应用类型
-    private String      roleId;             //角色编号
-    private String      organizationId;     //组织编号
     private Boolean     result;             //校验结果
 }

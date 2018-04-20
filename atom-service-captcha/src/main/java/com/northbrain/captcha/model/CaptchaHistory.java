@@ -10,18 +10,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-/**
- * 类名：验证码
- * 用途：用于验证码的发送、校验等。
- */
 @Data
 @Accessors(chain=true)
 @Builder
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
-public class Captcha {
+public class CaptchaHistory {
     @Id
+    private String      captchaHistoryId;   //用户历史编号
+    private String      operationType;      //操作类型：增删改
     private String      captchaId;          //验证码ID
     private String      mobile;             //手机号码
     private String      code;               //验证码
