@@ -43,16 +43,13 @@ public class UserService {
                             .builder()
                             .userId(user.getUserId())
                             .userName(user.getUserName())
-                            .mobiles(user.getMobiles())
-                            .appType(appType)
                             .result(true)
                             .build());
                 });
     }
 
-    public Mono<Authentication> selectByMobileAndCaptcha(String appType,
-                                                         String mobile,
-                                                         String captcha) {
+    public Mono<Authentication> selectByMobile(String appType,
+                                               String mobile) {
         return this.userRepository
                 .findByMobilesContaining(mobile)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
@@ -68,16 +65,10 @@ public class UserService {
                             .builder()
                             .userId(user.getUserId())
                             .userName(user.getUserName())
-                            .mobiles(user.getMobiles())
-                            .appType(appType)
                             .result(true)
                             .build());
                 });
     }
-
-    //先通过普通的KEY-AUTH（USERNAME+PASSWORD和MOBILE+CAPTCHA）获取用户的ID、组织机构等校验信息
-    //用户要不要进行相应的选择，如角色和机构？如果需要，则反向再查询组织机构和角色信息
-    //最后根据这些信息再进行会话登录。
 
     public Mono<User> createUser() {
         return this.userRepository

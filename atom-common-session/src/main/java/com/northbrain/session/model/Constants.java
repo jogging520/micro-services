@@ -5,10 +5,7 @@ public class Constants {
     public final static String SESSION_STATUS_LOGOUT                =   "LOGOUT";           //会话已主动登出状态
     public final static String SESSION_STATUS_CLEANED               =   "CLEANED";          //会话已主动登出状态
     public final static String SESSION_JWT_CLAIMS_SESSION_ID        =   "sessionId";        //JWT的申明内容的私有部分：会话编号
-    public final static String SESSION_JWT_CLAIMS_CHANNEL_TYPE      =   "channelType";      //JWT的申明内容的私有部分：渠道类型
-    public final static String SESSION_JWT_CLAIMS_USER_ID           =   "userId";           //JWT的申明内容的私有部分：用户编号
-    public final static String SESSION_JWT_CLAIMS_ROLE_ID           =   "roleId";           //JWT的申明内容的私有部分：会话编号
-    public final static String SESSION_JWT_CLAIMS_ORGANIZATION_ID   =   "organizationId";   //JWT的申明内容的私有部分：会话编号
+    public final static String SESSION_JWT_CLAIMS_APP_TYPE          =   "appType";          //JWT的申明内容的私有部分：应用类型
     public final static String SESSION_JWT_HEADER_PARAM_TYPE_NAME   =   "typ";              //JWT的申明内容的公共部分：类型
     public final static String SESSION_JWT_HEADER_PARAM_TYPE_VALUE  =   "JWT";              //JWT的申明内容的公共部分：类型取值
     public final static String SESSION_JWT_TOKEN_PREFIX             =   "Bearer ";          //JWT的前缀

@@ -20,14 +20,28 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 方法：通过两种方式验证用户信息，一种是用户名+密码，另一种是手机+验证码
+     * @param appType  应用类型
+     * @param userName 用户名
+     * @param password 密码
+     * @param mobile 手机号码
+     * @return 校验结果
+     */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<Authentication> verifyUserLogInfo(@RequestParam String channelType,
-                                                  @RequestParam String userId,
-                                                  @RequestParam String roleId,
-                                                  @RequestParam String organizationId,
-                                                  @RequestParam String password) {
-        return this.userService
-                .selectByLoginParams(channelType, userId, roleId, organizationId, password);
+    public Mono<Authentication> verifyUserLoggingInfo(@RequestParam(required = true) String appType,
+                                                      @RequestParam(required = false) String userName,
+                                                      @RequestParam(required = false) String password,
+                                                      @RequestParam(required = false) String mobile) {
+        if(userName != null && password != null)
+            return this.userService.selectByUserNameAndPassword(appType, userName, password);
+        else if(mobile != null)
+            return this.userService.selectByMobile(appType, mobile);
+
+        return Mono.just(Authentication
+                .builder()
+                .result(false)
+                .build());
     }
 
     @PostMapping(Constants.USER_HTTP_REQUEST_MAPPING)

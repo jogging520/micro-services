@@ -25,8 +25,8 @@ import java.util.Map;
 public class JsonWebTokenUtil {
     private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
 
-    public static String generateJsonWebToken(String sessionId, String channelType, String userId, String roleId, String organizationId,
-                                              String key, String company, String audience, String issuer, Long lifeTime)
+    public static String generateJsonWebToken(String sessionId, String appType, String key,
+                                              String company, String audience, String issuer, Long lifeTime)
             throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long currentTimeMillis = System.currentTimeMillis();
@@ -40,10 +40,7 @@ public class JsonWebTokenUtil {
         //私有claims部分，目前只保持id号
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, sessionId);
-        claims.put(Constants.SESSION_JWT_CLAIMS_CHANNEL_TYPE, channelType);
-        claims.put(Constants.SESSION_JWT_CLAIMS_USER_ID, userId);
-        claims.put(Constants.SESSION_JWT_CLAIMS_ROLE_ID, roleId);
-        claims.put(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID, organizationId);
+        claims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, appType);
 
         //添加构成JWT的参数
         JwtBuilder jwtBuilder = Jwts
@@ -91,10 +88,7 @@ public class JsonWebTokenUtil {
         //解析私有claims
         Map<String, String> privateClaims = new HashMap<>();
         privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_CHANNEL_TYPE, (String) claims.get(Constants.SESSION_JWT_CLAIMS_CHANNEL_TYPE));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_USER_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ROLE_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID));
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, (String) claims.get(Constants.SESSION_JWT_CLAIMS_APP_TYPE));
 
         return privateClaims;
     }

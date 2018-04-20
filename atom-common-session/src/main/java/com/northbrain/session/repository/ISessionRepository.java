@@ -5,7 +5,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 
 public interface ISessionRepository extends ReactiveCrudRepository<Session, String> {
-    Mono<Session> findByChannelTypeAndUserId(String channelType, String userId);
+    Mono<Session> findByAppTypeAndUserName(String appType, String userName);
 
     Mono<Session> findBySessionId(String sessionId);
 }

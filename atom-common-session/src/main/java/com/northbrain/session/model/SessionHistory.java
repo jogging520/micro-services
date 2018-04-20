@@ -21,10 +21,9 @@ public class SessionHistory {
     private String  sessionHistoryId;   //ID
     private String  operationType;      //操作类型：增删改
     private String  sessionId;          //会话ID
-    private String  channelType;        //渠道类型：WEB、APP、WECHAT、CMS
-    private String  userId;             //用户编号
-    private String  roleId;             //角色编号
-    private String  organizationId;     //组织编号
+    private String  appType;            //应用类型：WEB、APP、WECHAT、CMS
+    private String  userName;           //用户名
+    private String  mobile;             //手机号码
     private Date    createTime;         //创建时间
     private Date    loginTime;          //登录时间
     private Date    timestamp;          //时间戳

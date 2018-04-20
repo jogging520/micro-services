@@ -38,21 +38,19 @@ public class SessionController {
 
     /**
      * 方法：登录
-     * @param channelType 渠道类型
-     * @param userId 用户编号
-     * @param roleId 角色编号
-     * @param organizationId 组织机构编号
-     * @param password 密码（透传）
-     * @return
+     * @param appType 应用类型
+     * @param userName 用户姓名
+     * @param password 密码
+     * @param mobile 手机号码
+     * @return 令牌
      */
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
-    public Mono<Token> login(@RequestParam String channelType,
-                             @RequestParam String userId,
-                             @RequestParam String roleId,
-                             @RequestParam String organizationId,
-                             @RequestParam String password) {
+    public Mono<Token> login(@RequestParam(required = true) String appType,
+                             @RequestParam(required = false) String userName,
+                             @RequestParam(required = false) String password,
+                             @RequestParam(required = false) String mobile) {
         return this.sessionService
-                .createSession(channelType, userId, roleId, organizationId);
+                .createSession(appType, userName, mobile);
     }
 
     /**

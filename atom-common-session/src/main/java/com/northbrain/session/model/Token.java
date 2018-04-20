@@ -16,10 +16,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Token {
-    private String  channelType;        //渠道类型：WEB、APP、WECHAT、CMS、OPENAPI
-    private String  userId;             //用户编号
-    private String  roleId;             //角色编号
-    private String  organizationId;     //组织机构编号
+    private String  sessionId;          //会话编号
     private Long    lifeTime;           //寿命时长
     private String  token;              //TOKEN
 }

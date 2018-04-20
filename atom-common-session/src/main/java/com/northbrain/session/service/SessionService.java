@@ -37,26 +37,23 @@ public class SessionService {
 
     /**
      * 方法：创建会话
-     * @param channelType 渠道类型
-     * @param userId 用户编号
-     * @param roleId 角色编号
-     * @param organizationId 组织机构编号
+     * @param appType 应用类型
+     * @param userName 用户名
+     * @param mobile 手机号码
      * @return 令牌
      */
-    public Mono<Token> createSession(String channelType,
-                                     String userId,
-                                     String roleId,
-                                     String organizationId) {
+    public Mono<Token> createSession(String appType,
+                                     String userName,
+                                     String mobile) {
         return this.sessionRepository
-                .findByChannelTypeAndUserId(channelType, userId)
+                .findByAppTypeAndUserName(appType, userName)
                 .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                 .switchIfEmpty(
                              sessionRepository.save(Session
                                      .builder()
-                                     .channelType(channelType)
-                                     .userId(userId)
-                                     .roleId(roleId)
-                                     .organizationId(organizationId)
+                                     .appType(appType)
+                                     .userName(userName)
+                                     .mobile(mobile)
                                      .createTime(new Date())
                                      .loginTime(new Date())
                                      .timestamp(null)
@@ -66,10 +63,9 @@ public class SessionService {
                 .flatMap(session -> sessionRepository.save(Session
                         .builder()
                         .sessionId(session.getSessionId())
-                        .channelType(channelType)
-                        .userId(userId)
-                        .roleId(roleId)
-                        .organizationId(organizationId)
+                        .appType(appType)
+                        .userName(userName)
+                        .mobile(mobile)
                         .createTime(session.getCreateTime())
                         .loginTime(new Date())
                         .timestamp(new Date())
@@ -82,14 +78,11 @@ public class SessionService {
                             try {
                                 return Mono.just(Token
                                                 .builder()
-                                                .channelType(channelType)
-                                                .userId(userId)
-                                                .roleId(roleId)
-                                                .organizationId(organizationId)
+                                                .sessionId(session.getSessionId())
                                                 .lifeTime(this.tokenProperty.getLifeTime())
-                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(), channelType,
-                                                        userId, roleId, organizationId, tokenProperty.getKey(), tokenProperty.getCompany(),
-                                                        tokenProperty.getAudience(), tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
+                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(), appType,
+                                                        tokenProperty.getKey(), tokenProperty.getCompany(), tokenProperty.getAudience(),
+                                                        tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
                                                 .build()
                                         );
                             } catch (Exception e) {
@@ -121,10 +114,7 @@ public class SessionService {
 
                         return Mono.just(Token
                                 .builder()
-                                .channelType(claims.get(Constants.SESSION_JWT_CLAIMS_CHANNEL_TYPE))
-                                .userId(claims.get(Constants.SESSION_JWT_CLAIMS_USER_ID))
-                                .roleId(claims.get(Constants.SESSION_JWT_CLAIMS_ROLE_ID))
-                                .organizationId(claims.get(Constants.SESSION_JWT_CLAIMS_ORGANIZATION_ID))
+                                .sessionId(session.getSessionId())
                                 .lifeTime(tokenProperty.getLifeTime())
                                 .token(jwt)
                                 .build());
