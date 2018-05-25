@@ -1,4 +1,4 @@
-package com.northbrain.util;
+package com.northbrain.util.tracer;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -7,13 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 类名：StackTracerUtil
+ * 类名：StackTracer
  * 用途：跟踪栈打印信息，将栈调用信息打印到日志中。默认情况下输出到标准Out设备中，提供静态方法供全局使用。
  * @author Jiakun
  * @version 1.0
  */
-public class StackTracerUtil {
-    private final static Logger logger = LoggerFactory.getLogger(StackTracerUtil.class);
+public class StackTracer {
+    private final static Logger logger = LoggerFactory.getLogger(StackTracer.class);
 
     /**
      * 方法：获取异常Exception详细信息

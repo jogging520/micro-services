@@ -31,7 +31,8 @@ public class UserService {
         return this.userRepository
                 .findByUserNameAndPassword(userName, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                        Arrays.asList(user.getAppTypes()).contains(appType))
+                                user.getAppTypes() != null &&
+                                Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
                     if(user.getUserId() == null)
@@ -52,6 +53,7 @@ public class UserService {
         return this.userRepository
                 .findByMobilesContaining(mobile)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
+                        user.getAppTypes() != null &&
                         Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {

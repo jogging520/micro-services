@@ -1,4 +1,4 @@
-package com.northbrain.util;
+package com.northbrain.util.tracer;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -25,8 +25,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Aspect
 @Component
 @Order(0)
-public class WebTracerUtil {
-    private final Logger logger = LoggerFactory.getLogger(WebTracerUtil.class);
+public class WebTracer {
+    private final Logger logger = LoggerFactory.getLogger(WebTracer.class);
     private ThreadLocal<Long> startTimeThreadLocal = new ThreadLocal<>();
 
     @Pointcut("execution(* com.northbrain..*Controller.*(..)) && " +

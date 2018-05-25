@@ -1,4 +1,4 @@
-package com.northbrain.util;
+package com.northbrain.util.tracer;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @Order(1)
-public class LogTracerUtil {
-    private final Logger logger = LoggerFactory.getLogger(LogTracerUtil.class);
+public class LogTracer {
+    private final Logger logger = LoggerFactory.getLogger(LogTracer.class);
 
     /**
      * 定义一个切入点.
