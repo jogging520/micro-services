@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.northbrain</groupId>
-	<artifactId>atom-party-user</artifactId>
+	<artifactId>atom-party-organization</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>atom-party-user</name>
-	<description>atom-party-user</description>
+	<name>atom-party-organization</name>
+	<description>organization</description>
 
 	<parent>
 		<groupId>com.northbrain</groupId>
@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-    </properties>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -49,7 +49,7 @@
 			<artifactId>base-common-util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -70,7 +70,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>com.northbrain.user.UserApplication</mainClass>
+							<mainClass>com.northbrain.organization.OrganizationApplication</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -87,51 +87,7 @@
 					</execution>
 				</executions>
 			</plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmTarget>1.8</jvmTarget>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>testCompile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+		</plugins>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -155,6 +111,5 @@
 			</testResource>
 		</testResources>
 	</build>
-
 
 </project>

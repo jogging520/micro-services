@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.northbrain.user.model.Constants;
-import com.northbrain.user.service.UserService;
 
 import reactor.core.publisher.Mono;
 

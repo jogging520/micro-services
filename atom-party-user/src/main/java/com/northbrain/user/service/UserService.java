@@ -31,8 +31,8 @@ public class UserService {
         return this.userRepository
                 .findByUserNameAndPassword(userName, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                                user.getAppTypes() != null &&
-                                Arrays.asList(user.getAppTypes()).contains(appType))
+                        user.getAppTypes() != null &&
+                        Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
                     if(user.getUserId() == null)
@@ -78,7 +78,6 @@ public class UserService {
                         .password("jjjkkk")
                         .appTypes(new String[]{"CMS"})
                         .roleIds(new String[]{"Manager"})
-                        .organizationIds(new String[]{"GSYD"})
                         .emails(new String[]{"13893190802@139.com"})
                         .mobiles(new String[]{"13893190802"})
                         .createTime(new Date())

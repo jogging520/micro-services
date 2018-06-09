@@ -23,10 +23,9 @@ public class User {
     private String      type;               //用户类型
     private String      userName;           //用户名称
     private String      password;           //密码
-    private String[]    mobiles;            //手机号码
     private String[]    appTypes;           //可以登录的应用类型
     private String[]    roleIds;            //角色编号
-    private String[]    organizationIds;    //组织编号
+    private String[]    mobiles;            //手机号码
     private String[]    emails;             //电子邮件
     private String[]    wechates;           //微信号码
     private Date        createTime;         //创建时间

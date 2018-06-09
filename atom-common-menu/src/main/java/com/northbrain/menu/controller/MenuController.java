@@ -20,12 +20,12 @@ public class MenuController {
 
     /**
      * 方法：获取特定系统的菜单列表
-     * @param menuType 菜单类型，如:CMS、WEB、APP、WECHAT
+     * @param appType 应用类型，如:CMS、WEB、APP、WECHAT
      * @param roleId 角色编号
      * @return 特定的菜单流
      */
     @GetMapping(Constants.MENU_HTTP_REQUEST_MAPPING)
-    public Mono<Menu> getMenu(@RequestParam String menuType,
+    public Mono<Menu> getMenu(@RequestParam String appType,
                               @RequestParam String roleId) {
         return this.menuService
                 .selectMenu(menuType, roleId);
