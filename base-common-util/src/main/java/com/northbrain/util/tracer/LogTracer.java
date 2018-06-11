@@ -1,5 +1,6 @@
 package com.northbrain.util.tracer;
 
+import com.northbrain.util.model.Constants;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 类名：LogTracerUtil
+ * 类名：LogTracer
  * 用途：日志跟踪器，利用spring的aop打印方法调用的开始时间和结束时间，以及耗时。
  * @version 1.0
  */
@@ -40,17 +41,16 @@ public class LogTracer {
      * @throws Throwable 异常
      */
     @Around("invokeLog()")
-    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
 
-        logger.info("开始调用：" + proceedingJoinPoint.toString());
+        logger.info(Constants.UTIL_INVOKE_METHOD_BEGIN + proceedingJoinPoint.toString());
 
         Object result = proceedingJoinPoint.proceed();
 
         long finishTime = System.currentTimeMillis();
-        logger.info("结束调用：" + proceedingJoinPoint.toString() + "，总计耗时：" + (finishTime-startTime) + "ms");
-        System.out.println("结束调用：" + proceedingJoinPoint.toString() + "，总计耗时：" + (finishTime-startTime) + "ms");
+        logger.info(Constants.UTIL_INVOKE_METHOD_END + proceedingJoinPoint.toString() + Constants.UTIL_INVOKE_METHOD_COST + (finishTime-startTime) + "ms");
+
         return result;
     }
 }

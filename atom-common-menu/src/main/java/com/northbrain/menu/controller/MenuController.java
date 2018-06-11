@@ -28,6 +28,6 @@ public class MenuController {
     public Mono<Menu> getMenu(@RequestParam String appType,
                               @RequestParam String roleId) {
         return this.menuService
-                .selectMenu(menuType, roleId);
+                .selectMenu(appType, roleId);
     }
 }

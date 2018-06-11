@@ -12,4 +12,5 @@ public class Constants {
 
 
     public final static String  USER_HTTP_REQUEST_MAPPING               =   "/users";   //用户rest资源
+    public final static String  USER_SPECIFIED_HTTP_REQUEST_MAPPING     =   "/users/{userId}";   //用户rest资源
 }

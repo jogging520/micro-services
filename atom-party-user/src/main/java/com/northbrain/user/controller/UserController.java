@@ -2,10 +2,8 @@ package com.northbrain.user.controller;
 
 import com.northbrain.user.model.Authentication;
 import com.northbrain.user.model.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.northbrain.user.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 import com.northbrain.user.model.Constants;
 
@@ -47,6 +45,12 @@ public class UserController {
     public Mono<User> createUser() {
         return this.userService
                 .createUser();
+    }
+
+    @GetMapping(Constants.USER_SPECIFIED_HTTP_REQUEST_MAPPING)
+    public Mono<User> queryUser(@PathVariable String userId) {
+        return this.userService
+                .selectByUserId(userId);
     }
 
 }

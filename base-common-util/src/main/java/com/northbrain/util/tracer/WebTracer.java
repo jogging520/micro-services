@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 
+import com.northbrain.util.model.Constants;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -37,8 +38,7 @@ public class WebTracer {
     public void invokeLog(){}
 
     @Before("invokeLog()")
-    public void doBefore(JoinPoint joinPoint)
-    {
+    public void doBefore(JoinPoint joinPoint) {
         //设置请求时间
         startTimeThreadLocal.set(System.currentTimeMillis());
 
@@ -48,27 +48,28 @@ public class WebTracer {
 
 
         // 记录详细请求内容
-        logger.info("URL:" + httpServletRequest.getRequestURL().toString());
-        logger.info("HTTP_METHOD:" + httpServletRequest.getMethod());
-        logger.info("IP:" + httpServletRequest.getRemoteAddr());
-        logger.info("CLASS_METHOD:" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        logger.info("PARAMS:" + Arrays.toString(joinPoint.getArgs()));
+        logger.info(Constants.UTIL_HTTP_REQUEST_URL + httpServletRequest.getRequestURL().toString());
+        logger.info(Constants.UTIL_HTTP_REQUEST_METHOD + httpServletRequest.getMethod());
+        logger.info(Constants.UTIL_HTTP_REQUEST_IP + httpServletRequest.getRemoteAddr());
+        logger.info(Constants.UTIL_HTTP_REQUEST_CLASS_METHOD + joinPoint.getSignature().getDeclaringTypeName()
+                + Constants.UTIL_HTTP_REQUEST_CLASS_METHOD_SEPARATOR
+                + joinPoint.getSignature().getName());
+        logger.info(Constants.UTIL_HTTP_REQUEST_PARAMS + Arrays.toString(joinPoint.getArgs()));
         //获取所有参数：
         Enumeration<String> enumeration = httpServletRequest.getParameterNames();
-        while(enumeration.hasMoreElements())
-        {
+        while(enumeration.hasMoreElements()) {
             String paraName = enumeration.nextElement();
             logger.info(httpServletRequest.getParameter(paraName));
         }
     }
 
-    @AfterReturning("invokeLog()")
-    public void  doAfterReturning()
-    {
+    @AfterReturning(returning = "response", pointcut = "invokeLog()")
+    public void  doAfterReturning(Object response) throws Throwable {
         // 处理完请求，返回内容
         long startTime = startTimeThreadLocal.get();
         long finishTime = System.currentTimeMillis();
 
-        logger.info("本次HTTP请求耗时：" + String.valueOf(finishTime-startTime));
+        logger.info(Constants.UTIL_HTTP_RESPONSE_BODY + response);
+        logger.info(Constants.UTIL_HTTP_REQUEST_RESPONSE_COST + String.valueOf(finishTime-startTime));
     }
 }

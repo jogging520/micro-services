@@ -21,13 +21,13 @@ public class MenuService {
 
     /**
      * 方法：获取特定系统的菜单列表
-     * @param menuType 菜单类型，如:CMS、WEB、APP、WECHAT
+     * @param appType 菜单类型，如:CMS、WEB、APP、WECHAT
      * @param roleId 角色编号
      * @return 特定的菜单流
      */
-    public Mono<Menu> selectMenu(String menuType, String roleId) {
+    public Mono<Menu> selectMenu(String appType, String roleId) {
         return this.menuRepository
-                .findByMenuTypeAndRoleId(menuType, roleId)
+                .findByMenuTypeAndRoleId(appType, roleId)
                 .filter(menu -> menu.getStatus().equalsIgnoreCase(Constants.MENU_STATUS_ACTIVE));
     }
 }
