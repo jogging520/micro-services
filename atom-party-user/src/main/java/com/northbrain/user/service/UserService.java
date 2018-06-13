@@ -22,7 +22,8 @@ public class UserService {
     }
 
     public Mono<User> selectByUserId(String userId) {
-        return this.userRepository.findById(userId);
+        return this.userRepository.findById(userId)
+                .log();
     }
 
     public Mono<Authentication> selectByUserNameAndPassword(String appType,

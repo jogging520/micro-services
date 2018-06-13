@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Accessors(chain=true)
 @Builder
@@ -17,9 +19,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Organization {
     @Id
     private String          organizationId;          //会话ID
+    @NotNull
     private String          code;
+    @NotNull
     private String          name;
+    @NotNull
     private String          regionId;
     private String          parent;
-    private String          status;
+    private Organization[]  children;
 }

@@ -1,5 +1,6 @@
 package com.northbrain.organization.service;
 
+import com.northbrain.organization.model.Organization;
 import com.northbrain.organization.model.Region;
 import com.northbrain.organization.repository.IOrganizationRepository;
 import com.northbrain.organization.repository.IRegionRepository;
@@ -18,6 +19,11 @@ public class OrganizationService {
 
     public Flux<Region> queryRegions() {
         return this.regionRepository
-                .findAll();
+                        .findAll();
+    }
+
+    public Flux<Organization> queryOrganizations() {
+        return this.organizationRepository
+                        .findAll();
     }
 }

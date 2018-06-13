@@ -31,6 +31,30 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<!-- webflux -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<version>${spring-boot.version}</version>
+		</dependency>
+		<!-- configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<version>1.2.0.RELEASE</version>
+		</dependency>
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.synchronoss.cloud</groupId>
+			<artifactId>nio-multipart-parser</artifactId>
+			<version>1.1.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,30 +77,6 @@
 				<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
-			<!-- webflux -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-webflux</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<!-- lombok -->
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>1.16.20</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.synchronoss.cloud</groupId>
-				<artifactId>nio-multipart-parser</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-			<!-- configuration -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-configuration-processor</artifactId>
-				<version>1.2.0.RELEASE</version>
-			</dependency>
 			<!-- json web token -->
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
@@ -89,15 +89,7 @@
 				<artifactId>spring-boot-starter-aop</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
-			<!-- web -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-
 
 </project>

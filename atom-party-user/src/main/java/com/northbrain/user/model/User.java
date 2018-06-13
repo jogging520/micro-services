@@ -14,6 +14,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Accessors(chain=true)
 @Builder
@@ -23,8 +25,11 @@ import lombok.experimental.Accessors;
 public class User {
     @Id
     private String          userId;             //用户编号
+    @NotNull
     private String          type;               //用户类型
+    @NotNull
     private String          userName;           //用户名称
+    @NotNull
     private String          password;           //密码
     private String[]        appTypes;           //可以登录的应用类型
     private String[]        roleIds;            //角色编号
