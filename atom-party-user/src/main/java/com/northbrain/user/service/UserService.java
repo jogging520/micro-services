@@ -21,9 +21,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Mono<User> selectByUserId(String userId) {
-        return this.userRepository.findById(userId)
-                .log();
+    public Mono<User> selectByUserName(String userName) {
+        return this.userRepository
+                .findByUserName(userName)
+                .map(user -> user.setPassword(null)
+                        .setStatus(null));
     }
 
     public Mono<Authentication> selectByUserNameAndPassword(String appType,

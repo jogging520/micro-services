@@ -11,5 +11,7 @@ public interface IUserRepository extends ReactiveCrudRepository<User, String> {
 
     Mono<User> findByUserNameAndPassword(String userName, String password);
 
+    Mono<User> findByUserName(String userName);
+
     Mono<User> findByMobilesContaining(String mobile);
 }

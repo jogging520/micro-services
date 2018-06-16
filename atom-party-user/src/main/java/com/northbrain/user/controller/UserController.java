@@ -3,6 +3,7 @@ package com.northbrain.user.controller;
 import com.northbrain.user.model.Authentication;
 import com.northbrain.user.model.User;
 import com.northbrain.user.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.northbrain.user.model.Constants;
@@ -48,9 +49,10 @@ public class UserController {
     }
 
     @GetMapping(Constants.USER_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public Mono<User> queryUser(@PathVariable String userId) {
-        return this.userService
-                .selectByUserId(userId);
+    public ResponseEntity<Mono<User>> queryUser(@PathVariable String userName) {
+        return ResponseEntity.ok()
+                .body(this.userService
+                        .selectByUserName(userName));
     }
 
 }
