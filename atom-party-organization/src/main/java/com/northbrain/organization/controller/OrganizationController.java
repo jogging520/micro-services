@@ -4,7 +4,6 @@ import com.northbrain.organization.model.Constants;
 import com.northbrain.organization.model.Organization;
 import com.northbrain.organization.model.Region;
 import com.northbrain.organization.service.OrganizationService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

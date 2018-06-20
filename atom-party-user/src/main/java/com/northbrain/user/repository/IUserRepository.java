@@ -7,7 +7,7 @@ import com.northbrain.user.model.User;
 import reactor.core.publisher.Mono;
 
 public interface IUserRepository extends ReactiveCrudRepository<User, String> {
-    Mono<User> findByUserIdAndPassword(String userId, String password);
+    Mono<User> findByIdAndPassword(String userId, String password);
 
     Mono<User> findByUserNameAndPassword(String userName, String password);
 

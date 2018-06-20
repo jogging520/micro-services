@@ -6,6 +6,4 @@ import reactor.core.publisher.Mono;
 
 public interface ISessionRepository extends ReactiveCrudRepository<Session, String> {
     Mono<Session> findByAppTypeAndUserName(String appType, String userName);
-
-    Mono<Session> findBySessionId(String sessionId);
 }

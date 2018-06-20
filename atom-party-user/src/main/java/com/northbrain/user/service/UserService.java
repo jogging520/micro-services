@@ -21,9 +21,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Mono<User> selectByUserName(String userName) {
+    public Mono<User> selectByUserId(String userId) {
         return this.userRepository
-                .findByUserName(userName)
+                .findById(userId)
                 .map(user -> user.setPassword(null)
                         .setStatus(null));
     }
@@ -38,13 +38,14 @@ public class UserService {
                         Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
-                    if(user.getUserId() == null)
+                    if(user.getId() == null)
                         return Mono.just(Authentication
                                 .builder()
                                 .result(false)
                                 .build());
                     return Mono.just(Authentication
                             .builder()
+                            .userId(user.getId())
                             .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
                             .result(true)
                             .build());
@@ -60,7 +61,7 @@ public class UserService {
                         Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
-                    if(user.getUserId() == null)
+                    if(user.getId() == null)
                         return Mono.just(Authentication
                                 .builder()
                                 .result(false)

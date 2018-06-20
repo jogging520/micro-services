@@ -39,18 +39,18 @@ public class SessionController {
     /**
      * 方法：登录
      * @param appType 应用类型
+     * @param userId 用户编号
      * @param userName 用户姓名
-     * @param password 密码
      * @param mobile 手机号码
      * @return 令牌
      */
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
     public Mono<Token> login(@RequestParam String appType,
+                             @RequestParam String userId,
                              @RequestParam(required = false) String userName,
-                             @RequestParam(required = false) String password,
                              @RequestParam(required = false) String mobile) {
         return this.sessionService
-                .createSession(appType, userName, mobile);
+                .createSession(appType, userId, userName, mobile);
     }
 
     /**

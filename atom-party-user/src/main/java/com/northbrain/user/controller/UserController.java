@@ -49,10 +49,10 @@ public class UserController {
     }
 
     @GetMapping(Constants.USER_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<User>> queryUser(@PathVariable String userName) {
+    public ResponseEntity<Mono<User>> queryUser(@PathVariable String userId) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .selectByUserName(userName));
+                        .selectByUserId(userId));
     }
 
 }

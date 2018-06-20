@@ -38,11 +38,13 @@ public class SessionService {
     /**
      * 方法：创建会话
      * @param appType 应用类型
+     * @param userId 用户编号
      * @param userName 用户名
      * @param mobile 手机号码
      * @return 令牌
      */
     public Mono<Token> createSession(String appType,
+                                     String userId,
                                      String userName,
                                      String mobile) {
         return this.sessionRepository
@@ -51,19 +53,23 @@ public class SessionService {
                 .switchIfEmpty(
                              sessionRepository.save(Session
                                      .builder()
+                                     .type(Constants.SESSION_TYPE_COMMON)
                                      .appType(appType)
+                                     .userId(userId)
                                      .userName(userName)
                                      .mobile(mobile)
                                      .createTime(new Date())
                                      .loginTime(new Date())
-                                     .timestamp(null)
+                                     .timestamp(new Date())
                                      .status(Constants.SESSION_STATUS_LOGIN)
                                      .lifeTime(this.tokenProperty.getLifeTime())
                                      .build()))
                 .flatMap(session -> sessionRepository.save(Session
                         .builder()
-                        .sessionId(session.getSessionId())
+                        .id(session.getId())
+                        .type(Constants.SESSION_TYPE_COMMON)
                         .appType(appType)
+                        .userId(userId)
                         .userName(userName)
                         .mobile(mobile)
                         .createTime(session.getCreateTime())
@@ -78,9 +84,10 @@ public class SessionService {
                             try {
                                 return Mono.just(Token
                                                 .builder()
-                                                .sessionId(session.getSessionId())
+                                                .sessionId(session.getId())
+                                                .userId(userId)
                                                 .lifeTime(this.tokenProperty.getLifeTime())
-                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getSessionId(), appType,
+                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getId(), appType,
                                                         tokenProperty.getKey(), tokenProperty.getCompany(), tokenProperty.getAudience(),
                                                         tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
                                                 .build()
@@ -105,16 +112,16 @@ public class SessionService {
                             tokenProperty.getAudience(), tokenProperty.getIssuer());
 
             return this.sessionRepository
-                    .findBySessionId(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
+                    .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
                     .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                     .switchIfEmpty(Mono.just(Session.builder().build()))
                     .flatMap(session -> {
-                        if(session.getSessionId() == null)
+                        if(session.getId() == null)
                             return Mono.just(Token.builder().lifeTime(0L).build());
 
                         return Mono.just(Token
                                 .builder()
-                                .sessionId(session.getSessionId())
+                                .sessionId(session.getId())
                                 .lifeTime(tokenProperty.getLifeTime())
                                 .token(jwt)
                                 .build());

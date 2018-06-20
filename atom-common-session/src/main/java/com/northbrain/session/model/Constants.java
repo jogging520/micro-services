@@ -4,6 +4,9 @@ public class Constants {
     public final static String SESSION_STATUS_LOGIN                 =   "LOGIN";            //会话已登录状态
     public final static String SESSION_STATUS_LOGOUT                =   "LOGOUT";           //会话已主动登出状态
     public final static String SESSION_STATUS_CLEANED               =   "CLEANED";          //会话已主动登出状态
+
+    public final static String SESSION_TYPE_COMMON                  =   "COMMON";           //普通类型
+
     public final static String SESSION_JWT_CLAIMS_SESSION_ID        =   "sessionId";        //JWT的申明内容的私有部分：会话编号
     public final static String SESSION_JWT_CLAIMS_APP_TYPE          =   "appType";          //JWT的申明内容的私有部分：应用类型
     public final static String SESSION_JWT_HEADER_PARAM_TYPE_NAME   =   "typ";              //JWT的申明内容的公共部分：类型
