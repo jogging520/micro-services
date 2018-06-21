@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 类名：令牌

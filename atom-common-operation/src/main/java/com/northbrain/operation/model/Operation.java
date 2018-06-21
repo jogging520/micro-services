@@ -33,7 +33,7 @@ public class Operation {
     @NotNull
     private String          sessionId;          //会话编号
     @NotNull
-    private String          organizationId;     //组织机构编号
+    private String          roleId;             //角色编号
     @NotNull
     private String          businessType;       //业务类型
     @NotNull

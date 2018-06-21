@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Accessors(chain=true)
 @Builder
@@ -20,11 +22,19 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class Strategy {
     @Id
-    private String              strategyId;             //策略编号
-    private String              type;                   //类型
-    private String              strategyName;           //策略名称
-    private Map<String, String> strategy;               //策略
-    private Date                createTime;             //创建时间
-    private Date                timestamp;              //时间戳
-    private String              status;                 //状态
+    private String              id;                 //策略编号
+    @NotNull
+    private String              type;               //类型
+    @NotNull
+    private String              name;               //策略名称
+    private Map<String, String> parameters;         //参数
+    @NotNull
+    private Date                createTime;         //创建时间
+    @NotNull
+    private Date                timestamp;          //状态时间
+    @NotNull
+    private String              status;             //状态
+    @NotNull
+    private String              operationId;        //操作流水号
+    private String              description;        //描述
 }

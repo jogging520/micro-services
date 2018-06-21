@@ -28,9 +28,9 @@ public class UserService {
                         .setStatus(null));
     }
 
-    public Mono<Authentication> selectByUserNameAndPassword(String appType,
-                                                            String userName,
-                                                            String password) {
+    public Mono<Authentication> queryByUserNameAndPassword(String appType,
+                                                           String userName,
+                                                           String password) {
         return this.userRepository
                 .findByUserNameAndPassword(userName, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
@@ -52,8 +52,8 @@ public class UserService {
                 });
     }
 
-    public Mono<Authentication> selectByMobile(String appType,
-                                               String mobile) {
+    public Mono<Authentication> queryByMobile(String appType,
+                                              String mobile) {
         return this.userRepository
                 .findByMobilesContaining(mobile)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
@@ -68,6 +68,7 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
+                            .userId(user.getId())
                             .authType(Constants.USER_LOGGING_TYPE_CAPTCHA)
                             .result(true)
                             .build());

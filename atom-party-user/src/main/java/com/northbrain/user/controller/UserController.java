@@ -32,9 +32,9 @@ public class UserController {
                                                       @RequestParam(required = false) String password,
                                                       @RequestParam(required = false) String mobile) {
         if(userName != null && password != null)
-            return this.userService.selectByUserNameAndPassword(appType, userName, password);
+            return this.userService.queryByUserNameAndPassword(appType, userName, password);
         else if(mobile != null)
-            return this.userService.selectByMobile(appType, mobile);
+            return this.userService.queryByMobile(appType, mobile);
 
         return Mono.just(Authentication
                 .builder()

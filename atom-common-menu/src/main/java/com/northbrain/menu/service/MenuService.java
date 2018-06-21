@@ -25,9 +25,9 @@ public class MenuService {
      * @param roleId 角色编号
      * @return 特定的菜单流
      */
-    public Mono<Menu> selectMenu(String appType, String roleId) {
+    public Mono<Menu> queryMenus(String appType, String roleId) {
         return this.menuRepository
-                .findByMenuTypeAndRoleId(appType, roleId)
+                .findByTypeAndRoleId(appType, roleId)
                 .filter(menu -> menu.getStatus().equalsIgnoreCase(Constants.MENU_STATUS_ACTIVE));
     }
 }

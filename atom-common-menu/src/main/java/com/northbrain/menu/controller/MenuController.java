@@ -25,9 +25,9 @@ public class MenuController {
      * @return 特定的菜单流
      */
     @GetMapping(Constants.MENU_HTTP_REQUEST_MAPPING)
-    public Mono<Menu> getMenu(@RequestParam String appType,
-                              @RequestParam String roleId) {
+    public Mono<Menu> queryMenus(@RequestParam String appType,
+                                 @RequestParam String roleId) {
         return this.menuService
-                .selectMenu(appType, roleId);
+                .queryMenus(appType, roleId);
     }
 }
