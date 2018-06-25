@@ -1,4 +1,4 @@
-package com.northbrain.acl;
+package com.northbrain.statistics;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AclApplicationTests {
+public class AtomCommonStatisticsApplicationTests {
 
 	@Test
 	public void contextLoads() {

@@ -1,14 +1,13 @@
 package com.northbrain.menu.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.northbrain.menu.model.Constants;
-import com.northbrain.menu.model.Menu;
+import com.northbrain.menu.model.CmsMenu;
 import com.northbrain.menu.service.MenuService;
 
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @RestController
 public class MenuController {
@@ -19,15 +18,12 @@ public class MenuController {
     }
 
     /**
-     * 方法：获取特定系统的菜单列表
-     * @param appType 应用类型，如:CMS、WEB、APP、WECHAT
-     * @param roleId 角色编号
+     * 方法：获取CMS系统的菜单列表
      * @return 特定的菜单流
      */
-    @GetMapping(Constants.MENU_HTTP_REQUEST_MAPPING)
-    public Mono<Menu> queryMenus(@RequestParam String appType,
-                                 @RequestParam String roleId) {
+    @GetMapping(Constants.MENU_CMS_HTTP_REQUEST_MAPPING)
+    public Flux<CmsMenu> queryCmsMenus() {
         return this.menuService
-                .queryMenus(appType, roleId);
+                .queryCmsMenus();
     }
 }

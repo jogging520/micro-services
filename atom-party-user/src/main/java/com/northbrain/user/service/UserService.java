@@ -82,7 +82,7 @@ public class UserService {
                         .userName("jiakun")
                         .password("jjjkkk")
                         .appTypes(new String[]{"CMS"})
-                        .roleIds(new String[]{"Manager"})
+                        .roles(new String[]{"Manager"})
                         .emails(new String[]{"13893190802@139.com"})
                         .mobiles(new String[]{"13893190802"})
                         .createTime(new Date())

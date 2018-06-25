@@ -34,7 +34,7 @@ public class User {
     @NotNull
     private String[]            appTypes;           //可以登录的应用类型
     @NotNull
-    private String[]            roleIds;            //角色编号
+    private String[]            roles;              //角色
     @NotNull
     private Map<String, String> affiliations;       //归属
     private String[]            mobiles;            //手机号码

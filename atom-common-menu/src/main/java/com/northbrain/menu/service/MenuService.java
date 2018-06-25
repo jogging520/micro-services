@@ -1,33 +1,31 @@
 package com.northbrain.menu.service;
 
+import com.northbrain.menu.repository.ICmsMenuHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import com.northbrain.menu.model.Constants;
-import com.northbrain.menu.model.Menu;
-import com.northbrain.menu.repository.IMenuHistoryRepository;
-import com.northbrain.menu.repository.IMenuRepository;
+import com.northbrain.menu.model.CmsMenu;
+import com.northbrain.menu.repository.ICmsMenuRepository;
 
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @Service
 public class MenuService {
-    private final IMenuRepository menuRepository;
-    private final IMenuHistoryRepository menuHistoryRepository;
+    private final ICmsMenuRepository cmsMenuRepository;
+    private final ICmsMenuHistoryRepository cmsMenuHistoryRepository;
 
-    public MenuService(IMenuRepository menuRepository, IMenuHistoryRepository menuHistoryRepository) {
-        this.menuRepository = menuRepository;
-        this.menuHistoryRepository = menuHistoryRepository;
+    public MenuService(ICmsMenuRepository cmsMenuRepository, ICmsMenuHistoryRepository cmsMenuHistoryRepository) {
+        this.cmsMenuRepository = cmsMenuRepository;
+        this.cmsMenuHistoryRepository = cmsMenuHistoryRepository;
     }
 
     /**
-     * 方法：获取特定系统的菜单列表
-     * @param appType 菜单类型，如:CMS、WEB、APP、WECHAT
-     * @param roleId 角色编号
+     * 方法：获取CMS系统的菜单列表
      * @return 特定的菜单流
      */
-    public Mono<Menu> queryMenus(String appType, String roleId) {
-        return this.menuRepository
-                .findByTypeAndRoleId(appType, roleId)
+    public Flux<CmsMenu> queryCmsMenus() {
+        return this.cmsMenuRepository
+                .findAll()
                 .filter(menu -> menu.getStatus().equalsIgnoreCase(Constants.MENU_STATUS_ACTIVE));
     }
 }
