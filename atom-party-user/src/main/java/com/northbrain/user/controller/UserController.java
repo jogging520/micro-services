@@ -28,9 +28,9 @@ public class UserController {
      */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Authentication>> verifyUserLoggingInfo(@RequestParam String appType,
-                                                      @RequestParam(required = false) String userName,
-                                                      @RequestParam(required = false) String password,
-                                                      @RequestParam(required = false) String mobile) {
+                                                                      @RequestParam(required = false) String userName,
+                                                                      @RequestParam(required = false) String password,
+                                                                      @RequestParam(required = false) String mobile) {
         if(userName != null && password != null)
             return ResponseEntity.ok()
                     .body(this.userService

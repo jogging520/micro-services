@@ -1,5 +1,6 @@
 package com.northbrain.menu.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +23,10 @@ public class MenuController {
      * @return 特定的菜单流
      */
     @GetMapping(Constants.MENU_CMS_HTTP_REQUEST_MAPPING)
-    public Flux<CmsMenu> queryCmsMenus() {
-        return this.menuService
-                .queryCmsMenus();
+    public ResponseEntity<Flux<CmsMenu>> queryCmsMenus() {
+        return ResponseEntity
+                .ok()
+                .body(this.menuService
+                        .queryCmsMenus());
     }
 }
