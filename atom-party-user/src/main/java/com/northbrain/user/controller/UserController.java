@@ -27,32 +27,38 @@ public class UserController {
      * @return 校验结果
      */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<Authentication> verifyUserLoggingInfo(@RequestParam String appType,
+    public ResponseEntity<Mono<Authentication>> verifyUserLoggingInfo(@RequestParam String appType,
                                                       @RequestParam(required = false) String userName,
                                                       @RequestParam(required = false) String password,
                                                       @RequestParam(required = false) String mobile) {
         if(userName != null && password != null)
-            return this.userService.queryByUserNameAndPassword(appType, userName, password);
+            return ResponseEntity.ok()
+                    .body(this.userService
+                            .queryByUserNameAndPassword(appType, userName, password));
         else if(mobile != null)
-            return this.userService.queryByMobile(appType, mobile);
+            return ResponseEntity.ok()
+                    .body(this.userService
+                            .queryByMobile(appType, mobile));
 
-        return Mono.just(Authentication
-                .builder()
-                .result(false)
-                .build());
+        return ResponseEntity.ok()
+                .body(Mono.just(Authentication
+                        .builder()
+                        .result(false)
+                        .build()));
     }
 
     @PostMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public Mono<User> createUser() {
-        return this.userService
-                .createUser();
+    public ResponseEntity<Mono<User>> createUser() {
+        return ResponseEntity.ok()
+                .body(this.userService
+                        .createUser());
     }
 
     @GetMapping(Constants.USER_SPECIFIED_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<User>> queryUser(@PathVariable String userId) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .selectByUserId(userId));
+                        .queryByUserId(userId));
     }
 
 }

@@ -21,7 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Mono<User> selectByUserId(String userId) {
+    public Mono<User> queryByUserId(String userId) {
         return this.userRepository
                 .findById(userId)
                 .map(user -> user.setPassword(null)

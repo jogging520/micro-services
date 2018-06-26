@@ -26,7 +26,7 @@ public class StrategyService {
                 .filter(strategy -> strategy.getStatus().equalsIgnoreCase(Constants.STRATEGY_STATUS_ACTIVE));
     }
 
-    public Flux<Strategy> saveStrategies(Flux<Strategy> strategies) {
+    public Flux<Strategy> createStrategies(Flux<Strategy> strategies) {
         return this.strategyRepository.saveAll(strategies);
     }
 }
