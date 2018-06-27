@@ -14,6 +14,10 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 类名：策略类
+ * 用途：用于存放各类参数，通过type区分大类，在parameters存储细粒度参数。
+ */
 @Data
 @Accessors(chain=true)
 @Builder
@@ -27,7 +31,7 @@ public class Strategy {
     private String                  type;               //类型
     @NotNull
     private String                  name;               //策略名称
-    private Map<String, String[]>   parameters;         //参数
+    private Map<String, String>     parameters;         //参数
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull
