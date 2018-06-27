@@ -21,11 +21,11 @@ public class StrategyController {
         this.strategyService = strategyService;
     }
 
-    @GetMapping(Constants.STRATEGY_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Strategy>> selectStrategies() {
+    @GetMapping(Constants.STRATEGY_APPLICATION_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Strategy>> queryApplicationStrategies() {
         return ResponseEntity.ok()
                 .body(this.strategyService
-                        .selectStrategies());
+                        .queryApplicationStrategies());
     }
 
     @PostMapping(Constants.STRATEGY_HTTP_REQUEST_MAPPING)

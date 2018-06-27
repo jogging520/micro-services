@@ -20,10 +20,9 @@ public class StrategyService {
         this.strategyRepository = strategyRepository;
     }
 
-    public Flux<Strategy> selectStrategies() {
+    public Flux<Strategy> queryApplicationStrategies() {
         return this.strategyRepository
-                .findAll()
-                .filter(strategy -> strategy.getStatus().equalsIgnoreCase(Constants.STRATEGY_STATUS_ACTIVE));
+                .findByTypeAndStatus(Constants.STRATEGY_TYPE_APPLICATION, Constants.STRATEGY_STATUS_ACTIVE);
     }
 
     public Flux<Strategy> createStrategies(Flux<Strategy> strategies) {

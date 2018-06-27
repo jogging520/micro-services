@@ -26,7 +26,7 @@ public class UserController {
      * @param mobile 手机号码
      * @return 校验结果
      */
-    @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
+    @GetMapping(Constants.USER_AUTHENTICATION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Authentication>> verifyUserLoggingInfo(@RequestParam String appType,
                                                                       @RequestParam(required = false) String userName,
                                                                       @RequestParam(required = false) String password,
@@ -54,8 +54,8 @@ public class UserController {
                         .createUser());
     }
 
-    @GetMapping(Constants.USER_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<User>> queryUser(@PathVariable String userId) {
+    @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<User>> queryUser(@RequestParam String userId) {
         return ResponseEntity.ok()
                 .body(this.userService
                         .queryByUserId(userId));

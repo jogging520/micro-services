@@ -87,7 +87,7 @@ public class SessionService {
                                                 .sessionId(session.getId())
                                                 .userId(userId)
                                                 .lifeTime(this.tokenProperty.getLifeTime())
-                                                .token(JsonWebTokenUtil.generateJsonWebToken(session.getId(), appType,
+                                                .jwt(JsonWebTokenUtil.generateJsonWebToken(session.getId(), appType,
                                                         tokenProperty.getKey(), tokenProperty.getCompany(), tokenProperty.getAudience(),
                                                         tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
                                                 .build()
@@ -123,7 +123,7 @@ public class SessionService {
                                 .builder()
                                 .sessionId(session.getId())
                                 .lifeTime(tokenProperty.getLifeTime())
-                                .token(jwt)
+                                .jwt(jwt)
                                 .build());
                     });
         } catch (Exception e) {

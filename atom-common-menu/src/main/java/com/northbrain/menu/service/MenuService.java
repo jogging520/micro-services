@@ -25,7 +25,6 @@ public class MenuService {
      */
     public Flux<CmsMenu> queryCmsMenus() {
         return this.cmsMenuRepository
-                .findAll()
-                .filter(menu -> menu.getStatus().equalsIgnoreCase(Constants.MENU_STATUS_ACTIVE));
+                .findAll();
     }
 }

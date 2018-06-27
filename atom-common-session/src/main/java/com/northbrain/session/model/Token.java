@@ -26,5 +26,5 @@ public class Token {
     @NotNull
     private Long    lifeTime;           //寿命时长
     @NotNull
-    private String  token;              //TOKEN
+    private String  jwt;                //jwt
 }
