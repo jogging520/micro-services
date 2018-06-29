@@ -33,7 +33,7 @@ public class CmsMenu {
     private String              badge_status;       //徽标数，设置 Badge 颜色 （默认：error， 所有颜色值见：https://github.com/cipchk/ng-alain/blob/master/_documents/utils.md#色彩）
     private Boolean             hide;               //是否隐藏
     private Boolean             hideInBreadcrumb;   //隐藏面包屑，指 `page-header` 组件的自动生成面包屑时有效
-    private String[]            acl;                //ACL配置，若导入 `@delon/acl` 时自动有效，等同于 `ACLService.can(roleOrAbility: ACLCanType)` 参数值
+    private Integer[]           acl;                //ACL配置，若导入 `@delon/acl` 时自动有效，等同于 `ACLService.can(roleOrAbility: ACLCanType)` 参数值
     private Boolean             shortcut;           //是否快捷菜单项
     private Boolean             shortcut_root;      //快捷菜单根节点
     private Boolean             reuse;              //是否允许复用，需配合 `reuse-tab` 组件

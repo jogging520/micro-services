@@ -25,6 +25,11 @@ public class StrategyService {
                 .findByTypeAndStatus(Constants.STRATEGY_TYPE_APPLICATION, Constants.STRATEGY_STATUS_ACTIVE);
     }
 
+    public Flux<Strategy> queryErrorCodeStrategies() {
+        return this.strategyRepository
+                .findByTypeAndStatus(Constants.STRATEGY_TYPE_ERRORCODE, Constants.STRATEGY_STATUS_ACTIVE);
+    }
+
     public Flux<Strategy> createStrategies(Flux<Strategy> strategies) {
         return this.strategyRepository.saveAll(strategies);
     }

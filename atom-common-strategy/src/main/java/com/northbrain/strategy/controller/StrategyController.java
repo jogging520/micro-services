@@ -28,6 +28,13 @@ public class StrategyController {
                         .queryApplicationStrategies());
     }
 
+    @GetMapping(Constants.STRATEGY_ERRORCODE_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Strategy>> queryErrorCodeStrategies() {
+        return ResponseEntity.ok()
+                .body(this.strategyService
+                        .queryErrorCodeStrategies());
+    }
+
     @PostMapping(Constants.STRATEGY_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Flux<Strategy>> createStrategies(@RequestBody Flux<Strategy> strategies) {
         return ResponseEntity.ok()
