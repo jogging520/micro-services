@@ -13,8 +13,10 @@ public class FamilyService {
         this.familyRepository = familyRepository;
     }
 
-    public Mono<Family> queryFamily(String familyId) {
+    public Mono<Family> queryFamilyById(String operationId,
+                                        String familyId) {
         return this.familyRepository
-                .findById(familyId);
+                .findById(familyId)
+                .log(operationId);
     }
 }

@@ -1,4 +1,4 @@
-package com.northbrain.family.model;
+package com.northbrain.school.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +17,16 @@ import java.util.Date;
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
-public class Family {
+public class School {
     @Id
     private String                  id;                 //id号
     @NotNull
-    private String                  houseHolder;         //户主姓名
+    private String                  type;               //类型
+    @NotNull
+    private String                  name;               //学校名称
     @NotNull
     private String                  regionId;           //归属行政区域编号
-    @NotNull
-    private String                  masterIdCardNo;     //户主身份证号码
+    private String                  masterName;         //校长姓名
     @NotNull
     private String                  phone;              //电话号码
     @NotNull

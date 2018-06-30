@@ -13,15 +13,17 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Flux<Student> queryStudents() {
+    public Flux<Student> queryStudentsByRegionIds(String operationId,
+                                                  String[] regionIds) {
         return this.studentRepository
-                .findAll();
+                .findByRegionIdIn(regionIds)
+                .log(operationId);
     }
 
-    public Flux<Student> createStudents(Flux<Student> students) {
-        return students
-                .flatMap(student -> this.studentRepository
-                            .save(student)
-                );
+    public Flux<Student> createStudents(String operationId,
+                                        Flux<Student> students) {
+        return this.studentRepository
+                .saveAll(students)
+                .log(operationId);
     }
 }

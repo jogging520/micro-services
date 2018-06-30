@@ -3,10 +3,8 @@ package com.northbrain.student.controller;
 import com.northbrain.student.model.Constants;
 import com.northbrain.student.model.Student;
 import com.northbrain.student.service.StudentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -18,14 +16,18 @@ public class StudentController {
     }
 
     @GetMapping(Constants.STUDENT_HTTP_REQUEST_MAPPING)
-    public Flux<Student> queryStudents() {
-        return this.studentService
-                .queryStudents();
+    public ResponseEntity<Flux<Student>> queryStudentsByRegionIds(@RequestParam String operationId,
+                                                                  @RequestParam String[] regionIds) {
+        return ResponseEntity.ok()
+                .body(this.studentService
+                        .queryStudentsByRegionIds(operationId, regionIds));
     }
 
     @PostMapping(Constants.STUDENT_HTTP_REQUEST_MAPPING)
-    public Flux<Student> createStudents(@RequestBody  Flux<Student> students) {
-        return this.studentService
-                .createStudents(students);
+    public ResponseEntity<Flux<Student>> createStudents(@RequestParam String operationId,
+                                                        @RequestBody  Flux<Student> students) {
+        return ResponseEntity.ok()
+                .body(this.studentService
+                        .createStudents(operationId, students));
     }
 }

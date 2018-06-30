@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 类名：操作记录
@@ -23,24 +24,22 @@ import java.util.Date;
 @AllArgsConstructor
 public class Operation {
     @Id
-    private String          id;                 //id号
+    private String                      id;                 //id号
     @NotNull
-    private String          type;               //类型
+    private String                      type;               //类型
     @NotNull
-    private String          appType;            //应用程序类型
+    private String                      appType;            //应用程序类型
     @NotNull
-    private String          userId;             //用户编号
+    private String                      userId;             //用户编号
     @NotNull
-    private String          sessionId;          //会话编号
+    private String                      sessionId;          //会话编号
     @NotNull
-    private String          roleId;             //角色编号
+    private String                      businessType;       //业务类型
     @NotNull
-    private String          businessType;       //业务类型
+    private Date                        createTime;         //创建时间
     @NotNull
-    private Date            createTime;         //创建时间
+    private Date                        timestamp;          //状态时间
     @NotNull
-    private Date            timestamp;          //状态时间
-    @NotNull
-    private String          status;             //状态
-    private String          description;        //描述
+    private String                      status;             //状态
+    private String                      description;        //描述
 }
