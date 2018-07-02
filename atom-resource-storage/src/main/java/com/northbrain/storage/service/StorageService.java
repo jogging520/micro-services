@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+
 @Service
 public class StorageService {
     private final IPictureRepository pictureRepository;
@@ -25,8 +27,12 @@ public class StorageService {
 
     public Flux<Picture> createPictures(String operationId,
                                         Flux<Picture> pictures) {
-        return this.pictureRepository
-                .saveAll(pictures)
-                .log(operationId);
+        return pictures
+                .map(picture -> picture
+                        .setStatus(Constants.STORAGE_STATUS_ACTIVE)
+                        .setCreateTime(new Date())
+                        .setTimestamp(new Date())
+                        .setOperationId(operationId))
+                .flatMap(picture -> this.pictureRepository.save(picture));
     }
 }
