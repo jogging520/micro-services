@@ -1,4 +1,4 @@
-package com.northbrain.school.model;
+package com.northbrain.storage.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,19 +17,13 @@ import java.util.Date;
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
-public class School {
+public class Picture {
     @Id
     private String                  id;                 //id号
     @NotNull
-    private String                  type;               //类型
+    private String                  type;               //类型：png，jpg
     @NotNull
-    private String                  name;               //学校名称
-    @NotNull
-    private String                  regionId;           //归属行政区域编号
-    private String                  masterName;         //校长姓名
-    private String                  avatar;             //头像
-    @NotNull
-    private String                  phone;              //电话号码
+    private String                  content;            //图片内容，BASE64格式
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull
