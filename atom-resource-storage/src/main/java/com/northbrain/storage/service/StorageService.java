@@ -21,8 +21,7 @@ public class StorageService {
                                           String pictureId) {
         return this.pictureRepository
                 .findById(pictureId)
-                .filter(picture -> picture.getStatus().equalsIgnoreCase(Constants.STORAGE_STATUS_ACTIVE))
-                .log(operationId);
+                .filter(picture -> picture.getStatus().equalsIgnoreCase(Constants.STORAGE_STATUS_ACTIVE));
     }
 
     public Flux<Picture> createPictures(String operationId,
