@@ -2,6 +2,8 @@ package com.northbrain.family.service;
 
 import com.northbrain.family.model.Constants;
 import com.northbrain.family.model.Family;
+import com.northbrain.family.model.FamilyHistory;
+import com.northbrain.family.repository.IFamilyHistoryRepository;
 import com.northbrain.family.repository.IFamilyRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.util.Date;
 @Log
 public class FamilyService {
     private final IFamilyRepository familyRepository;
+    private final IFamilyHistoryRepository familyHistoryRepository;
 
-    public FamilyService(IFamilyRepository familyRepository) {
+    public FamilyService(IFamilyRepository familyRepository, IFamilyHistoryRepository familyHistoryRepository) {
         this.familyRepository = familyRepository;
+        this.familyHistoryRepository = familyHistoryRepository;
     }
 
     /**
@@ -36,6 +40,21 @@ public class FamilyService {
                 .flatMap(family -> {
                     log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
                     log.info(family.toString());
+
+                    this.familyHistoryRepository
+                            .save(FamilyHistory.builder()
+                                    .operationType(Constants.FAMILY_HISTORY_CREATE)
+                                    .familyId(family.getId())
+                                    .houseHolder(family.getHouseHolder())
+                                    .region(family.getRegion())
+                                    .masterIdCardNo(family.getMasterIdCardNo())
+                                    .phone(family.getPhone())
+                                    .createTime(family.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(family.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(family.getDescription())
+                                    .build());
 
                     return this.familyRepository
                             .save(family);

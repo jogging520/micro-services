@@ -5,21 +5,23 @@ import org.springframework.stereotype.Service;
 
 import com.northbrain.strategy.model.Constants;
 import com.northbrain.strategy.model.Strategy;
+import com.northbrain.strategy.model.StrategyHistory;
+import com.northbrain.strategy.repository.IStrategyHistoryRepository;
 import com.northbrain.strategy.repository.IStrategyRepository;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.Date;
 
 @Service
 @Log
 public class StrategyService {
-
     private final IStrategyRepository strategyRepository;
+    private final IStrategyHistoryRepository strategyHistoryRepository;
 
-    public StrategyService(IStrategyRepository strategyRepository) {
+    public StrategyService(IStrategyRepository strategyRepository, IStrategyHistoryRepository strategyHistoryRepository) {
         this.strategyRepository = strategyRepository;
+        this.strategyHistoryRepository = strategyHistoryRepository;
     }
 
     /**
@@ -71,6 +73,21 @@ public class StrategyService {
                 .flatMap(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
                     log.info(strategy.toString());
+
+                    this.strategyHistoryRepository
+                            .save(StrategyHistory.builder()
+                                    .operationType(Constants.STRATEGY_HISTORY_CREATE)
+                                    .strategyId(strategy.getId())
+                                    .type(strategy.getType())
+                                    .name(strategy.getName())
+                                    .parameters(strategy.getParameters())
+                                    .createTime(strategy.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(strategy.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(strategy.getDescription())
+                                    .build());
+
                     return this.strategyRepository
                             .save(strategy);
                 });

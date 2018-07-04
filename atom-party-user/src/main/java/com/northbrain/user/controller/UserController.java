@@ -27,38 +27,50 @@ public class UserController {
      * @return 校验结果
      */
     @GetMapping(Constants.USER_AUTHENTICATION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Authentication>> verifyUserLoggingInfo(@RequestParam String appType,
-                                                                      @RequestParam(required = false) String userName,
-                                                                      @RequestParam(required = false) String password,
-                                                                      @RequestParam(required = false) String mobile) {
+    public ResponseEntity<Mono<Authentication>> verifyUser(@RequestParam String serialNo,
+                                                           @RequestParam String appType,
+                                                           @RequestParam(required = false) String userName,
+                                                           @RequestParam(required = false) String password,
+                                                           @RequestParam(required = false) String mobile) {
         if(userName != null && password != null)
             return ResponseEntity.ok()
                     .body(this.userService
-                            .queryByUserNameAndPassword(appType, userName, password));
+                            .verifyByUserNameAndPassword(serialNo, appType, userName, password));
         else if(mobile != null)
             return ResponseEntity.ok()
                     .body(this.userService
-                            .queryByMobile(appType, mobile));
+                            .verifyByMobile(serialNo, appType, mobile));
 
-        return ResponseEntity.ok()
-                .body(Mono.just(Authentication
-                        .builder()
-                        .result(false)
-                        .build()));
+        return ResponseEntity.badRequest()
+                .body(null);
     }
 
+    /**
+     * 方法：创建新用户
+     * @param serialNo 流水号
+     * @param user 用户
+     * @return 新用户
+     */
     @PostMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<User>> createUser() {
+    public ResponseEntity<Mono<User>> createUser(@RequestParam String serialNo,
+                                                 @RequestBody User user) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .createUser());
+                        .createUser(serialNo, user));
     }
 
+    /**
+     * 方法：根据ID号查找用户信息
+     * @param serialNo 流水号
+     * @param userId 用户编号
+     * @return 用户信息
+     */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<User>> queryUser(@RequestParam String userId) {
+    public ResponseEntity<Mono<User>> queryUser(@RequestParam String serialNo,
+                                                @RequestParam String userId) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .queryByUserId(userId));
+                        .queryUserById(serialNo, userId));
     }
 
 }

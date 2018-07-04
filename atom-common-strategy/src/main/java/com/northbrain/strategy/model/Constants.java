@@ -3,6 +3,10 @@ package com.northbrain.strategy.model;
 public class Constants {
     public final static String STRATEGY_STATUS_ACTIVE                           =   "ACTIVE";
 
+    public final static String STRATEGY_HISTORY_CREATE                          =   "CREATE";   //历史归档：创建
+    public final static String STRATEGY_HISTORY_UPDATE                          =   "UPDATE";   //历史归档：更新
+    public final static String STRATEGY_HISTORY_DELETE                          =   "DELETE";   //历史归档：删除
+
     public final static String STRATEGY_TYPE_APPLICATION                        =   "application";
     public final static String STRATEGY_TYPE_ERRORCODE                          =   "errorcode";
 

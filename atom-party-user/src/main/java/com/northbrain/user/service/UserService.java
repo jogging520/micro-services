@@ -5,32 +5,57 @@ import org.springframework.stereotype.Service;
 
 import com.northbrain.user.model.Constants;
 import com.northbrain.user.model.User;
+import com.northbrain.user.model.UserHistory;
+import com.northbrain.user.repository.IUserHistoryRepository;
 import com.northbrain.user.repository.IUserRepository;
 
+import lombok.extern.java.Log;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Date;
 
 @Service
+@Log
 public class UserService {
-
     private final IUserRepository userRepository;
+    private final IUserHistoryRepository userHistoryRepository;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, IUserHistoryRepository userHistoryRepository) {
         this.userRepository = userRepository;
+        this.userHistoryRepository = userHistoryRepository;
     }
 
-    public Mono<User> queryByUserId(String userId) {
+    /**
+     * 方法：根据ID号查找用户信息
+     * @param serialNo 流水号
+     * @param userId 用户编号
+     * @return 用户信息
+     */
+    public Mono<User> queryUserById(String serialNo,
+                                    String userId) {
         return this.userRepository
-                .findById(userId)
-                .map(user -> user.setPassword(null)
-                        .setStatus(null));
+                .findByIdAndStatus(userId, Constants.USER_STATUS_ACTIVE)
+                .map(user -> {
+                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                    log.info(user.toString());
+                    return user.setPassword(null)
+                            .setStatus(null);
+                });
     }
 
-    public Mono<Authentication> queryByUserNameAndPassword(String appType,
-                                                           String userName,
-                                                           String password) {
+    /**
+     * 方法：根据用户名+密码验证用户信息
+     * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param userName 用户名
+     * @param password 密码
+     * @return 校验结果
+     */
+    public Mono<Authentication> verifyByUserNameAndPassword(String serialNo,
+                                                            String appType,
+                                                            String userName,
+                                                            String password) {
         return this.userRepository
                 .findByUserNameAndPassword(userName, password)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
@@ -45,15 +70,28 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
-                            .userId(user.getId())
+                            .user(user.getId())
                             .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
                             .result(true)
                             .build());
+                })
+                .map(authentication -> {
+                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                    log.info(authentication.toString());
+                    return authentication;
                 });
     }
 
-    public Mono<Authentication> queryByMobile(String appType,
-                                              String mobile) {
+    /**
+     * 方法：根据手机号码验证用户信息
+     * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param mobile 手机号码
+     * @return 校验结果
+     */
+    public Mono<Authentication> verifyByMobile(String serialNo,
+                                               String appType,
+                                               String mobile) {
         return this.userRepository
                 .findByMobilesContaining(mobile)
                 .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
@@ -68,27 +106,59 @@ public class UserService {
                                 .build());
                     return Mono.just(Authentication
                             .builder()
-                            .userId(user.getId())
+                            .user(user.getId())
                             .authType(Constants.USER_LOGGING_TYPE_CAPTCHA)
                             .result(true)
                             .build());
+                })
+                .map(authentication -> {
+                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                    log.info(authentication.toString());
+                    return authentication;
                 });
     }
 
-    public Mono<User> createUser() {
+    /**
+     * 方法：创建新用户
+     * @param serialNo 流水号
+     * @param user 用户
+     * @return 新用户
+     */
+    public Mono<User> createUser(String serialNo,
+                                 User user) {
         return this.userRepository
-                .save(User.builder()
-                        .type("COMMON")
-                        .userName("jiakun")
-                        .password("jjjkkk")
-                        .appTypes(new String[]{"CMS"})
-                        .roleIds(new String[]{"Manager"})
-                        .emails(new String[]{"13893190802@139.com"})
-                        .mobiles(new String[]{"13893190802"})
-                        .createTime(new Date())
-                        .timestamp(new Date())
-                        .status(Constants.USER_STATUS_ACTIVE)
-                        .build()
-                );
+                .save(user.setStatus(Constants.USER_STATUS_ACTIVE)
+                        .setCreateTime(new Date())
+                        .setTimestamp(new Date())
+                        .setSerialNo(serialNo))
+                .map(newUser -> {
+                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                    log.info(newUser.toString());
+
+                    this.userHistoryRepository
+                            .save(UserHistory.builder()
+                                    .operationType(Constants.USER_HISTORY_CREATE)
+                                    .userId(newUser.getId())
+                                    .type(newUser.getType())
+                                    .userName(newUser.getUserName())
+                                    .password(newUser.getPassword())
+                                    .realName(newUser.getRealName())
+                                    .avatar(newUser.getAvatar())
+                                    .appTypes(newUser.getAppTypes())
+                                    .roles(newUser.getRoles())
+                                    .permissions(newUser.getPermissions())
+                                    .affiliations(newUser.getAffiliations())
+                                    .mobiles(newUser.getMobiles())
+                                    .emails(newUser.getEmails())
+                                    .wechates(newUser.getWechates())
+                                    .createTime(newUser.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(newUser.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(newUser.getDescription())
+                                    .build());
+
+                    return newUser;
+                });
     }
 }

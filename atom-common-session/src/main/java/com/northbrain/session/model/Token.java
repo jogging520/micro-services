@@ -1,9 +1,6 @@
 package com.northbrain.session.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -18,11 +15,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Token {
     @NotNull
-    private String  sessionId;          //会话编号
+    private String  session;            //会话编号
     @NotNull
-    private String  userId;             //用户编号
+    private String  user;               //用户编号
     @NotNull
     private Long    lifeTime;           //寿命时长
     @NotNull

@@ -3,7 +3,9 @@ package com.northbrain.privilege.service;
 import com.northbrain.privilege.model.Constants;
 import com.northbrain.privilege.model.Permission;
 import com.northbrain.privilege.model.Role;
+import com.northbrain.privilege.model.RoleHistory;
 import com.northbrain.privilege.repository.IPermissionRepository;
+import com.northbrain.privilege.repository.IRoleHistoryRepository;
 import com.northbrain.privilege.repository.IRoleRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,13 @@ import java.util.Date;
 public class PrivilegeService {
     private final IRoleRepository roleRepository;
     private final IPermissionRepository permissionRepository;
+    private final IRoleHistoryRepository roleHistoryRepository;
 
-    public PrivilegeService(IRoleRepository roleRepository, IPermissionRepository permissionRepository) {
+    public PrivilegeService(IRoleRepository roleRepository, IPermissionRepository permissionRepository,
+                            IRoleHistoryRepository roleHistoryRepository) {
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
+        this.roleHistoryRepository = roleHistoryRepository;
     }
 
     /**
@@ -50,16 +55,34 @@ public class PrivilegeService {
      */
     public Mono<Role> createRole(String serialNo,
                                  Role role) {
+
+
         return this.roleRepository
                 .save(role
                         .setStatus(Constants.PRIVILEGE_STATUS_ACTIVE)
                         .setCreateTime(new Date())
                         .setTimestamp(new Date())
                         .setSerialNo(serialNo))
-                .map(role1 -> {
+                .map(newRole -> {
                     log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
                     log.info(role.toString());
-                    return role;
+
+                    this.roleHistoryRepository
+                            .save(RoleHistory.builder()
+                                    .operationType(Constants.PRIVILEGE_HISTORY_CREATE)
+                                    .roleId(newRole.getId())
+                                    .type(newRole.getType())
+                                    .name(newRole.getName())
+                                    .appTypes(newRole.getAppTypes())
+                                    .permissions(newRole.getPermissions())
+                                    .createTime(newRole.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(newRole.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(newRole.getDescription())
+                                    .build());
+
+                    return newRole;
                 });
     }
 

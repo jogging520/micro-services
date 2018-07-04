@@ -2,6 +2,8 @@ package com.northbrain.school.service;
 
 import com.northbrain.school.model.Constants;
 import com.northbrain.school.model.School;
+import com.northbrain.school.model.SchoolHistory;
+import com.northbrain.school.repository.ISchoolHistoryRepository;
 import com.northbrain.school.repository.ISchoolRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.util.Date;
 @Log
 public class SchoolService {
     private final ISchoolRepository schoolRepository;
+    private final ISchoolHistoryRepository schoolHistoryRepository;
 
-    public SchoolService(ISchoolRepository schoolRepository) {
+    public SchoolService(ISchoolRepository schoolRepository, ISchoolHistoryRepository schoolHistoryRepository) {
         this.schoolRepository = schoolRepository;
+        this.schoolHistoryRepository = schoolHistoryRepository;
     }
 
     /**
@@ -36,6 +40,24 @@ public class SchoolService {
                 .flatMap(school -> {
                     log.info(Constants.SCHOOL_OPERATION_SERIAL_NO + serialNo);
                     log.info(school.toString());
+
+                    this.schoolHistoryRepository
+                            .save(SchoolHistory.builder()
+                                    .operationType(Constants.SCHOOL_HISTORY_CREATE)
+                                    .schoolId(school.getId())
+                                    .type(school.getType())
+                                    .name(school.getName())
+                                    .region(school.getRegion())
+                                    .masterName(school.getMasterName())
+                                    .avatar(school.getAvatar())
+                                    .phone(school.getPhone())
+                                    .createTime(school.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(school.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(school.getDescription())
+                                    .build());
+
                     return this.schoolRepository
                             .save(school);
                 });

@@ -2,6 +2,8 @@ package com.northbrain.student.service;
 
 import com.northbrain.student.model.Constants;
 import com.northbrain.student.model.Student;
+import com.northbrain.student.model.StudentHistory;
+import com.northbrain.student.repository.IStudentHistoryRepository;
 import com.northbrain.student.repository.IStudentRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.util.Date;
 @Log
 public class StudentService {
     private final IStudentRepository studentRepository;
+    private final IStudentHistoryRepository studentHistoryRepository;
 
-    public StudentService(IStudentRepository studentRepository) {
+    public StudentService(IStudentRepository studentRepository, IStudentHistoryRepository studentHistoryRepository) {
         this.studentRepository = studentRepository;
+        this.studentHistoryRepository = studentHistoryRepository;
     }
 
     /**
@@ -104,6 +108,41 @@ public class StudentService {
                 .flatMap(student -> {
                     log.info(Constants.STUDENT_OPERATION_SERIAL_NO + serialNo);
                     log.info(student.toString());
+
+                    this.studentHistoryRepository
+                            .save(StudentHistory.builder()
+                                    .operationType(Constants.STUDENT_HISTORY_CREATE)
+                                    .studentId(student.getId())
+                                    .type(student.getType())
+                                    .name(student.getName())
+                                    .otherName(student.getOtherName())
+                                    .region(student.getRegion())
+                                    .avatar(student.getAvatar())
+                                    .gender(student.getGender())
+                                    .birthday(student.getBirthday())
+                                    .nationality(student.getNationality())
+                                    .politics(student.getPolitics())
+                                    .isAtSchool(student.getIsAtSchool())
+                                    .health(student.getHealth())
+                                    .family(student.getFamily())
+                                    .school(student.getSchool())
+                                    .grade(student.getGrade())
+                                    .period(student.getPeriod())
+                                    .idCardNo(student.getIdCardNo())
+                                    .schoolRollNo(student.getSchoolRollNo())
+                                    .distanceOfSchoolAndHome(student.getDistanceOfSchoolAndHome())
+                                    .trafficCondition(student.getTrafficCondition())
+                                    .aids(student.getAids())
+                                    .demands(student.getDemands())
+                                    .solutions(student.getSolutions())
+                                    .isPoor(student.getIsPoor())
+                                    .createTime(student.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(student.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(student.getDescription())
+                                    .build());
+
                     return this.studentRepository.save(student);
                 });
     }

@@ -1,13 +1,14 @@
-package com.northbrain.session.model;
+package com.northbrain.school.model;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain=true)
@@ -16,26 +17,23 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Document
-public class SessionHistory {
+public class SchoolHistory {
     @Id
     private String                  id;                 //id编号
     @NotNull
     private String                  operationType;      //操作类型
     @NotNull
-    private String                  sessionId;          //会话编号
+    private String                  schoolId;           //学校编号
     @NotNull
     private String                  type;               //类型
     @NotNull
-    private String                  appType;            //应用类型：WEB、APP、WECHAT、CMS
+    private String                  name;               //学校名称
     @NotNull
-    private String                  user;               //用户编号
+    private String                  region;             //归属行政区域编号
+    private String                  masterName;         //校长姓名
+    private String                  avatar;             //头像
     @NotNull
-    private String                  userName;           //用户名
-    private String                  mobile;             //手机号码
-    @NotNull
-    private Date                    loginTime;          //登录时间
-    @NotNull
-    private Long                    lifeTime;           //寿命，毫秒
+    private String                  phone;              //电话号码
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull
@@ -44,6 +42,5 @@ public class SessionHistory {
     private String                  status;             //状态
     @NotNull
     private String                  serialNo;           //操作流水号
-    @NotNull
     private String                  description;        //描述
 }

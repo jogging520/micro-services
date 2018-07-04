@@ -3,10 +3,7 @@ package com.northbrain.session.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -15,9 +12,10 @@ import java.util.Date;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Document
 public class Session {
     @Id
     private String          id;                 //id号
@@ -26,7 +24,7 @@ public class Session {
     @NotNull
     private String          appType;            //应用类型：WEB、APP、WECHAT、CMS
     @NotNull
-    private String          userId;             //用户编号
+    private String          user;               //用户编号
     @NotNull
     private String          userName;           //用户名
     private String          mobile;             //手机号码
@@ -40,6 +38,8 @@ public class Session {
     private Date            timestamp;          //状态时间
     @NotNull
     private String          status;             //状态
+    @NotNull
+    private String          serialNo;           //操作流水号
     @NotNull
     private String          description;        //描述
 }

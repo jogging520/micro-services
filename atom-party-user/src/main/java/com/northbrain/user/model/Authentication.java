@@ -1,9 +1,6 @@
 package com.northbrain.user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -17,9 +14,10 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Authentication {
     @NotNull
-    private String      userId;             //用户编号
+    private String      user;               //用户编号
     @NotNull
     private int         authType;           //认证方式
     @NotNull

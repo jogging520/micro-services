@@ -1,12 +1,14 @@
 package com.northbrain.student.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import javax.validation.constraints.NotNull;
+
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain=true)
@@ -15,9 +17,13 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Document
-public class Student {
+public class StudentHistory {
     @Id
-    private String              id;                             //会话ID
+    private String              id;                             //id编号
+    @NotNull
+    private String              operationType;                  //操作类型
+    @NotNull
+    private String              studentId;                      //用户编号
     @NotNull
     private String              type;                           //类型
     @NotNull

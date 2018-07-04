@@ -8,6 +8,8 @@ import com.northbrain.session.repository.ISessionHistoryRepository;
 import com.northbrain.session.repository.ISessionRepository;
 import com.northbrain.session.util.JsonWebTokenUtil;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,6 +17,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Service
+@Log
 public class SessionService {
     private final ISessionRepository sessionRepository;
     private final ISessionHistoryRepository sessionHistoryRepository;
@@ -27,26 +30,40 @@ public class SessionService {
         this.tokenProperty = tokenProperty;
     }
 
-    public Flux<Session> selectAllSessions() {
-        return this.sessionRepository.findAll();
-    }
+    /**
+     * 方法：根据ID号查找会话信息
+     * @param serialNo 流水号
+     * @param sessionId 会话编号
+     * @return 会话信息
+     */
+    public Mono<Session> querySessionById(String serialNo,
+                                          String sessionId) {
+        return this.sessionRepository
+                .findById(sessionId)
+                .map(session -> {
+                    log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                    log.info(session.toString());
 
-    public Mono<Session> selectSessionById(String sessionId) {
-        return this.sessionRepository.findById(sessionId);
+                    return session;
+                });
     }
 
     /**
      * 方法：创建会话
+     * @param serialNo 流水号
      * @param appType 应用类型
-     * @param userId 用户编号
+     * @param user 用户编号
      * @param userName 用户名
      * @param mobile 手机号码
      * @return 令牌
      */
-    public Mono<Token> createSession(String appType,
-                                     String userId,
+    public Mono<Token> createSession(String serialNo,
+                                     String appType,
+                                     String user,
                                      String userName,
                                      String mobile) {
+        log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+
         return this.sessionRepository
                 .findByAppTypeAndUserName(appType, userName)
                 .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
@@ -55,7 +72,7 @@ public class SessionService {
                                 .builder()
                                 .type(Constants.SESSION_TYPE_COMMON)
                                 .appType(appType)
-                                .userId(userId)
+                                .user(user)
                                 .userName(userName)
                                 .mobile(mobile)
                                 .createTime(new Date())
@@ -69,7 +86,7 @@ public class SessionService {
                         .id(session.getId())
                         .type(Constants.SESSION_TYPE_COMMON)
                         .appType(appType)
-                        .userId(userId)
+                        .user(user)
                         .userName(userName)
                         .mobile(mobile)
                         .createTime(session.getCreateTime())
@@ -84,8 +101,8 @@ public class SessionService {
                             try {
                                 return Mono.just(Token
                                                 .builder()
-                                                .sessionId(session.getId())
-                                                .userId(userId)
+                                                .session(session.getId())
+                                                .user(user)
                                                 .lifeTime(this.tokenProperty.getLifeTime())
                                                 .jwt(JsonWebTokenUtil.generateJsonWebToken(session.getId(), appType,
                                                         tokenProperty.getKey(), tokenProperty.getCompany(), tokenProperty.getAudience(),
@@ -102,10 +119,14 @@ public class SessionService {
 
     /**
      * 方法：校验JWT的有效性
+     * @param serialNo 流水号
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
      */
-    public Mono<Token> verifyJWT(String jwt) {
+    public Mono<Token> verifyJWT(String serialNo,
+                                 String jwt) {
+        log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+
         try {
             Map<String, String> claims = JsonWebTokenUtil
                     .parseJsonWebToken(jwt, tokenProperty.getKey(), tokenProperty.getCompany(),
@@ -121,7 +142,7 @@ public class SessionService {
 
                         return Mono.just(Token
                                 .builder()
-                                .sessionId(session.getId())
+                                .session(session.getId())
                                 .lifeTime(tokenProperty.getLifeTime())
                                 .jwt(jwt)
                                 .build());
