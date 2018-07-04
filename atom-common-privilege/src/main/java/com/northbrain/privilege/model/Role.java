@@ -1,9 +1,6 @@
 package com.northbrain.privilege.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,9 +11,10 @@ import java.util.Date;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Document
 public class Role {
     @Id
     private String                  id;                 //id编号
@@ -27,7 +25,7 @@ public class Role {
     @NotNull
     private String[]                appTypes;           //应用类型
     @NotNull
-    private Integer[]               permissionIds;      //权限
+    private Integer[]               permissions;        //权限
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull
@@ -35,6 +33,6 @@ public class Role {
     @NotNull
     private String                  status;             //状态
     @NotNull
-    private String                  operationId;        //操作流水号
+    private String                  serialNo;           //操作流水号
     private String                  description;        //描述
 }

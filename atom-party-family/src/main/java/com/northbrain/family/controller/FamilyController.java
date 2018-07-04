@@ -4,10 +4,8 @@ import com.northbrain.family.model.Constants;
 import com.northbrain.family.model.Family;
 import com.northbrain.family.service.FamilyService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,11 +16,31 @@ public class FamilyController {
         this.familyService = familyService;
     }
 
-    @GetMapping(Constants.FAMILY_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Family>> queryFamily(@RequestParam String operationId,
-                                                    @PathVariable String familyId) {
+    /**
+     * 方法：新建家庭信息
+     * @param serialNo 操作流水号
+     * @param families 家庭数组
+     * @return 创建成功的家庭列表
+     */
+    @PostMapping(Constants.FAMILY_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Family>> createFamilies(@RequestParam String serialNo,
+                                                       @RequestBody Flux<Family> families) {
         return ResponseEntity.ok()
                 .body(this.familyService
-                        .queryFamilyById(operationId, familyId));
+                        .createFamilies(serialNo, families));
+    }
+
+    /**
+     * 方法：按照ID号查询家庭信息
+     * @param serialNo 操作流水号
+     * @param familyId 家庭编号
+     * @return 家庭信息
+     */
+    @GetMapping(Constants.FAMILY_SPECIFIED_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Family>> queryFamilyById(@RequestParam String serialNo,
+                                                        @PathVariable String familyId) {
+        return ResponseEntity.ok()
+                .body(this.familyService
+                        .queryFamilyById(serialNo, familyId));
     }
 }

@@ -16,35 +16,59 @@ public class SchoolController {
         this.schoolService = schoolService;
     }
 
+    /**
+     * 方法：创建学校
+     * @param serialNo 操作流水号
+     * @param schools 学校列表
+     * @return 创建成功的学校列表
+     */
     @PostMapping(Constants.SCHOOL_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<School>> createSchools(@RequestParam String operationId,
+    public ResponseEntity<Flux<School>> createSchools(@RequestParam String serialNo,
                                                       @RequestBody Flux<School> schools) {
         return ResponseEntity.ok()
                 .body(this.schoolService
-                        .createSchools(operationId, schools));
+                        .createSchools(serialNo, schools));
     }
 
+    /**
+     * 方法：根据区域查询学校
+     * @param serialNo 操作流水号
+     * @param regions 区域数组
+     * @return 学校列表
+     */
     @GetMapping(Constants.SCHOOL_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<School>> querySchoolsByRegionIds(@RequestParam String operationId,
-                                                                @RequestParam String[] regionIds) {
+    public ResponseEntity<Flux<School>> querySchoolsByRegions(@RequestParam String serialNo,
+                                                              @RequestParam String[] regions) {
         return ResponseEntity.ok()
                 .body(this.schoolService
-                        .querySchoolsByRegionIds(operationId, regionIds));
+                        .querySchoolsByRegions(serialNo, regions));
     }
 
+    /**
+     * 方法：按照名称模糊匹配学校
+     * @param serialNo 操作流水号
+     * @param name 学校名称
+     * @return 学校列表
+     */
     @GetMapping(Constants.SCHOOL_SPECIFIED_NAME_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<School>> querySchoolsByName(@RequestParam String operationId,
+    public ResponseEntity<Flux<School>> querySchoolsByName(@RequestParam String serialNo,
                                                            @RequestParam String name) {
         return ResponseEntity.ok()
                 .body(this.schoolService
-                        .querySchoolsByName(operationId, name));
+                        .querySchoolsByName(serialNo, name));
     }
 
+    /**
+     * 方法：按照学校ID查找学校信息
+     * @param serialNo 操作流水号
+     * @param schoolId 学校ID
+     * @return 学校信息
+     */
     @GetMapping(Constants.SCHOOL_SPECIFIED_ID_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<School>> querySchoolsById(@RequestParam String operationId,
-                                                         @RequestParam String schoolId) {
+    public ResponseEntity<Mono<School>> querySchoolById(@RequestParam String serialNo,
+                                                        @RequestParam String schoolId) {
         return ResponseEntity.ok()
                 .body(this.schoolService
-                        .querySchoolById(operationId, schoolId));
+                        .querySchoolById(serialNo, schoolId));
     }
 }

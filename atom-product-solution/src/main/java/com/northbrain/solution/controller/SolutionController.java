@@ -17,10 +17,15 @@ public class SolutionController {
         this.solutionService = solutionService;
     }
 
+    /**
+     * 方法：查询在用的所以解决方案
+     * @param serialNo 流水号
+     * @return 解决方案
+     */
     @GetMapping(Constants.SOLUTION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Solution>> querySolutions(@RequestParam String operationId) {
+    public ResponseEntity<Flux<Solution>> querySolutions(@RequestParam String serialNo) {
         return ResponseEntity.ok()
                 .body(this.solutionService
-                        .querySolutions(operationId));
+                        .querySolutions(serialNo));
     }
 }

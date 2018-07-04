@@ -16,19 +16,31 @@ public class StorageController {
         this.storageService = storageService;
     }
 
+    /**
+     * 方法：按照图片ID号查询图片
+     * @param serialNo 流水号
+     * @param pictureId 图片ID
+     * @return 图片
+     */
     @GetMapping(Constants.STORAGE_PICTURE_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Picture>> queryPictureById(@RequestParam String operationId,
+    public ResponseEntity<Mono<Picture>> queryPictureById(@RequestParam String serialNo,
                                                           @PathVariable String pictureId) {
         return ResponseEntity.ok()
                 .body(this.storageService
-                        .queryPictureById(operationId, pictureId));
+                        .queryPictureById(serialNo, pictureId));
     }
 
+    /**
+     * 方法：创建图片
+     * @param serialNo 流水号
+     * @param pictures 图片
+     * @return 创建成功的图片
+     */
     @PostMapping(Constants.STORAGE_PICTURE_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Picture>> createPictures(@RequestParam String operationId,
+    public ResponseEntity<Flux<Picture>> createPictures(@RequestParam String serialNo,
                                                         @RequestBody Flux<Picture> pictures) {
         return ResponseEntity.ok()
                 .body(this.storageService
-                        .createPictures(operationId, pictures));
+                        .createPictures(serialNo, pictures));
     }
 }

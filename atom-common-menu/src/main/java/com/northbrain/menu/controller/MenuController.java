@@ -20,13 +20,14 @@ public class MenuController {
 
     /**
      * 方法：获取CMS系统的菜单列表
-     * @return 特定的菜单流
+     * @param serialNo 操作流水号
+     * @return 菜单
      */
     @GetMapping(Constants.MENU_CMS_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<CmsMenu>> queryCmsMenus() {
+    public ResponseEntity<Flux<CmsMenu>> queryCmsMenus(String serialNo) {
         return ResponseEntity
                 .ok()
                 .body(this.menuService
-                        .queryCmsMenus());
+                        .queryCmsMenus(serialNo));
     }
 }

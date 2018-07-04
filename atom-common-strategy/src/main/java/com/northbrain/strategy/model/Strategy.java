@@ -3,13 +3,10 @@ package com.northbrain.strategy.model;
 import java.util.Date;
 import java.util.Map;
 
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
@@ -21,9 +18,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Document
 public class Strategy {
     @Id
     private String                  id;                 //策略编号
@@ -39,6 +37,6 @@ public class Strategy {
     @NotNull
     private String                  status;             //状态
     @NotNull
-    private String                  operationId;        //操作流水号
+    private String                  serialNo;           //操作流水号
     private String                  description;        //描述
 }

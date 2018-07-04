@@ -1,9 +1,6 @@
 package com.northbrain.privilege.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,9 +19,10 @@ import java.util.Date;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Document
 public class Permission {
     @Id
     private Integer                 id;                 //id编号
@@ -43,6 +41,6 @@ public class Permission {
     @NotNull
     private String                  status;             //状态
     @NotNull
-    private String                  operationId;        //操作流水号
+    private String                  serialNo;           //操作流水号
     private String                  description;        //描述
 }

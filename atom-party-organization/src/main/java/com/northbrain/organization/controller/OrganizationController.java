@@ -6,6 +6,7 @@ import com.northbrain.organization.model.Region;
 import com.northbrain.organization.service.OrganizationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,30 +19,29 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
+    /**
+     * 方法：查找区域信息
+     * @param serialNo 流水号
+     * @return 区域信息
+     */
     @GetMapping(Constants.ORGANIZATION_REGION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Region>> queryRegions() {
+    public ResponseEntity<Flux<Region>> queryRegions(@RequestParam String serialNo) {
         return ResponseEntity
                 .ok()
                 .body(this.organizationService
-                        .queryRegions());
+                        .queryRegions(serialNo));
     }
 
+    /**
+     * 方法：查询组织机构信息
+     * @param serialNo 流水号
+     * @return 组织机构信息
+     */
     @GetMapping(Constants.ORGANIZATION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Organization>> queryOrganizations() {
+    public ResponseEntity<Flux<Organization>> queryOrganizations(@RequestParam String serialNo) {
         return ResponseEntity
                 .ok()
                 .body(this.organizationService
-                        .queryOrganizations());
-    }
-
-    @GetMapping(Constants.ORGANIZATION_HTTP_REQUEST_MAPPING_TEST)
-    public ResponseEntity<Mono<Organization>> test() {
-        return ResponseEntity
-                .badRequest()
-                .body(Mono.just(Organization
-                        .builder()
-                        .name("test name")
-                        .build()));
-        //return ResponseEntity.ok().body(Mono.error(new RuntimeException("{key: 'dafd', value: 'jdfa'}")));
+                        .queryOrganizations(serialNo));
     }
 }

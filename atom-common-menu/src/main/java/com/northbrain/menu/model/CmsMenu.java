@@ -2,10 +2,7 @@ package com.northbrain.menu.model;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,9 +12,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @Accessors(chain=true)
 @Builder
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(includeFieldNames = true)
+@Document
 public class CmsMenu {
     @Id
     private String              id;                 //菜单ID
@@ -45,6 +43,6 @@ public class CmsMenu {
     @NotNull
     private String              status;             //状态
     @NotNull
-    private String              operationId;        //操作流水号
+    private String              serialNo;           //操作流水号
     private String              description;        //描述
 }
