@@ -127,38 +127,46 @@ public class UserService {
     public Mono<User> createUser(String serialNo,
                                  User user) {
         return this.userRepository
-                .save(user.setStatus(Constants.USER_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .map(newUser -> {
-                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(newUser.toString());
+                .findByIdOrUserName(user.getId(), user.getUserName())
+                .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
+                .switchIfEmpty(this.userRepository
+                        .save(user
+                                .setStatus(Constants.USER_STATUS_ACTIVE)
+                                .setCreateTime(new Date())
+                                .setTimestamp(new Date())
+                                .setSerialNo(serialNo))
+                        .map(newUser -> {
+                            log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                            log.info(newUser.toString());
 
-                    this.userHistoryRepository
-                            .save(UserHistory.builder()
-                                    .operationType(Constants.USER_HISTORY_CREATE)
-                                    .userId(newUser.getId())
-                                    .type(newUser.getType())
-                                    .userName(newUser.getUserName())
-                                    .password(newUser.getPassword())
-                                    .realName(newUser.getRealName())
-                                    .avatar(newUser.getAvatar())
-                                    .appTypes(newUser.getAppTypes())
-                                    .roles(newUser.getRoles())
-                                    .permissions(newUser.getPermissions())
-                                    .affiliations(newUser.getAffiliations())
-                                    .mobiles(newUser.getMobiles())
-                                    .emails(newUser.getEmails())
-                                    .wechates(newUser.getWechates())
-                                    .createTime(newUser.getCreateTime())
-                                    .timestamp(new Date())
-                                    .status(newUser.getStatus())
-                                    .serialNo(serialNo)
-                                    .description(newUser.getDescription())
-                                    .build());
+                            this.userHistoryRepository
+                                    .save(UserHistory.builder()
+                                            .operationType(Constants.USER_HISTORY_CREATE)
+                                            .userId(newUser.getId())
+                                            .type(newUser.getType())
+                                            .userName(newUser.getUserName())
+                                            .password(newUser.getPassword())
+                                            .realName(newUser.getRealName())
+                                            .avatar(newUser.getAvatar())
+                                            .appTypes(newUser.getAppTypes())
+                                            .roles(newUser.getRoles())
+                                            .permissions(newUser.getPermissions())
+                                            .affiliations(newUser.getAffiliations())
+                                            .mobiles(newUser.getMobiles())
+                                            .emails(newUser.getEmails())
+                                            .wechates(newUser.getWechates())
+                                            .createTime(newUser.getCreateTime())
+                                            .timestamp(new Date())
+                                            .status(newUser.getStatus())
+                                            .serialNo(serialNo)
+                                            .description(newUser.getDescription())
+                                            .build())
+                                    .subscribe(userHistory -> {
+                                        log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                                        log.info(userHistory.toString());
+                                    });
 
-                    return newUser;
-                });
+                            return newUser.setStatus(Constants.USER_ERRORCODE_SUCCESS);
+                        }));
     }
 }

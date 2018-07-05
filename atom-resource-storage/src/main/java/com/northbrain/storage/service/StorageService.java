@@ -47,6 +47,7 @@ public class StorageService {
                                         Flux<Picture> pictures) {
         return pictures
                 .map(picture -> picture
+                        .setId(null)
                         .setStatus(Constants.STORAGE_STATUS_ACTIVE)
                         .setCreateTime(new Date())
                         .setTimestamp(new Date())
