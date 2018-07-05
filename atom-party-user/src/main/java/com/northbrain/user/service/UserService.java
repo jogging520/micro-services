@@ -1,11 +1,10 @@
 package com.northbrain.user.service;
 
-import com.northbrain.user.model.Authentication;
+import com.northbrain.user.model.*;
+import com.northbrain.user.repository.IVerificationHistoryRepository;
+import com.northbrain.user.repository.IVerificationRepository;
 import org.springframework.stereotype.Service;
 
-import com.northbrain.user.model.Constants;
-import com.northbrain.user.model.User;
-import com.northbrain.user.model.UserHistory;
 import com.northbrain.user.repository.IUserHistoryRepository;
 import com.northbrain.user.repository.IUserRepository;
 
@@ -20,10 +19,17 @@ import java.util.Date;
 public class UserService {
     private final IUserRepository userRepository;
     private final IUserHistoryRepository userHistoryRepository;
+    private final IVerificationRepository verificationRepository;
+    private final IVerificationHistoryRepository verificationHistoryRepository;
 
-    public UserService(IUserRepository userRepository, IUserHistoryRepository userHistoryRepository) {
+    public UserService(IUserRepository userRepository,
+                       IUserHistoryRepository userHistoryRepository,
+                       IVerificationRepository verificationRepository,
+                       IVerificationHistoryRepository verificationHistoryRepository) {
         this.userRepository = userRepository;
         this.userHistoryRepository = userHistoryRepository;
+        this.verificationRepository = verificationRepository;
+        this.verificationHistoryRepository = verificationHistoryRepository;
     }
 
     /**
@@ -56,30 +62,66 @@ public class UserService {
                                                             String appType,
                                                             String userName,
                                                             String password) {
+        //判断是否密码输入错误，如果错误，则记录一次
+        //这个要修改，把错误的次数作为一个服务调用，在前端判断。
         return this.userRepository
-                .findByUserNameAndPassword(userName, password)
-                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                        user.getAppTypes() != null &&
-                        Arrays.asList(user.getAppTypes()).contains(appType))
-                .switchIfEmpty(Mono.just(User.builder().build()))
+                .findByUserName(userName)
                 .flatMap(user -> {
-                    if(user.getId() == null)
+                    if(!user.getPassword().equalsIgnoreCase(password)) {
+                        this.verificationRepository
+                                .save(Verification.builder()
+                                        .type(Constants.USER_COUNTER_TYPE_COMMON)
+                                        .appType(appType)
+                                        .user(user.getId())
+                                        .loginTime(new Date())
+                                        .timestamp(new Date())
+                                        .status(Constants.USER_COUNTER_STATUS_WRONG_PASSWORD)
+                                        .serialNo(serialNo)
+                                        .description(Constants.USER_COUNTER_AUTO_DESCRIPTION)
+                                        .build())
+                                .subscribe(verification -> {
+                                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+                                    log.info(Constants.USER_COUNTER_STATUS_WRONG_PASSWORD);
+                                });
+
+                        return this.verificationRepository
+                                .findByUserAndAppType(user.getId(), appType)
+                                .count()
+                                .flatMap(c -> {
+                                    if(c > Constants.USER_LOGGING_MAX_ATTEMPT_TIME)
+                                        return Mono.just(Authentication
+                                                .builder()
+                                                .user(user.getId())
+                                                .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
+                                                .result(true)
+                                                .build());
+
+                                    return Mono.just(Authentication
+                                            .builder()
+                                            .result(false)
+                                            .build());
+                                });
+
+                    } else if(user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
+                            user.getAppTypes() != null &&
+                            Arrays.asList(user.getAppTypes()).contains(appType)) {
                         return Mono.just(Authentication
                                 .builder()
-                                .result(false)
+                                .user(user.getId())
+                                .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
+                                .result(true)
                                 .build());
+                    }
+
                     return Mono.just(Authentication
                             .builder()
-                            .user(user.getId())
-                            .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
-                            .result(true)
+                            .result(false)
                             .build());
                 })
-                .map(authentication -> {
-                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(authentication.toString());
-                    return authentication;
-                });
+                .switchIfEmpty(Mono.just(Authentication
+                        .builder()
+                        .result(false)
+                        .build()));
     }
 
     /**

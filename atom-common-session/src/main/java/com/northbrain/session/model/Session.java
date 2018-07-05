@@ -22,7 +22,7 @@ public class Session {
     @NotNull
     private String          type;               //类型
     @NotNull
-    private String          appType;            //应用类型：WEB、APP、WECHAT、CMS
+    private String          appType;            //应用类型：WEB、APP、WCT、CMS、LED、MNT
     @NotNull
     private String          user;               //用户编号
     @NotNull

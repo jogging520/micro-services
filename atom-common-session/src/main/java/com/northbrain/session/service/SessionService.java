@@ -119,6 +119,7 @@ public class SessionService {
 
     /**
      * 方法：校验JWT的有效性
+     * 对于当前未失效的的JWT都可以使用，每次按照ID查找，只要找到其中之一便有效。
      * @param serialNo 流水号
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
@@ -135,6 +136,7 @@ public class SessionService {
             return this.sessionRepository
                     .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
                     .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
+                    .filter(session -> session.getCreateTime().getTime() + session.getLifeTime() >= System.currentTimeMillis())
                     .switchIfEmpty(Mono.just(Session.builder().build()))
                     .flatMap(session -> {
                         if(session.getId() == null)

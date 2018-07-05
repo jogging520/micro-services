@@ -55,35 +55,37 @@ public class PrivilegeService {
      */
     public Mono<Role> createRole(String serialNo,
                                  Role role) {
-
-
         return this.roleRepository
-                .save(role
-                        .setStatus(Constants.PRIVILEGE_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .map(newRole -> {
-                    log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
-                    log.info(role.toString());
+                .findById(role.getId())
+                .map(newRole -> newRole.setStatus(Constants.PRIVILEGE_ERRORCODE_HAS_EXISTS))
+                .switchIfEmpty(
+                        this.roleRepository
+                                .save(role
+                                        .setStatus(Constants.PRIVILEGE_STATUS_ACTIVE)
+                                        .setCreateTime(new Date())
+                                        .setTimestamp(new Date())
+                                        .setSerialNo(serialNo))
+                                .map(newRole -> {
+                                    log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
+                                    log.info(role.toString());
 
-                    this.roleHistoryRepository
-                            .save(RoleHistory.builder()
-                                    .operationType(Constants.PRIVILEGE_HISTORY_CREATE)
-                                    .roleId(newRole.getId())
-                                    .type(newRole.getType())
-                                    .name(newRole.getName())
-                                    .appTypes(newRole.getAppTypes())
-                                    .permissions(newRole.getPermissions())
-                                    .createTime(newRole.getCreateTime())
-                                    .timestamp(new Date())
-                                    .status(newRole.getStatus())
-                                    .serialNo(serialNo)
-                                    .description(newRole.getDescription())
-                                    .build());
+                                    this.roleHistoryRepository
+                                            .save(RoleHistory.builder()
+                                                    .operationType(Constants.PRIVILEGE_HISTORY_CREATE)
+                                                    .roleId(newRole.getId())
+                                                    .type(newRole.getType())
+                                                    .name(newRole.getName())
+                                                    .appTypes(newRole.getAppTypes())
+                                                    .permissions(newRole.getPermissions())
+                                                    .createTime(newRole.getCreateTime())
+                                                    .timestamp(new Date())
+                                                    .status(newRole.getStatus())
+                                                    .serialNo(serialNo)
+                                                    .description(newRole.getDescription())
+                                                    .build());
 
-                    return newRole;
-                });
+                                    return newRole.setStatus(Constants.PRIVILEGE_ERRORCODE_SUCCESS);
+                                }));
     }
 
     /**

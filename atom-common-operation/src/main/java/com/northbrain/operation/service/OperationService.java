@@ -85,21 +85,6 @@ public class OperationService {
     }
 
     /**
-     * 方法：创建操作记录
-     * @param operation 操作记录
-     * @return 创建成功的操作记录
-     */
-    public Mono<Operation> createOperation(Operation operation) {
-        log.info(operation.toString());
-
-        return this.operationRepository
-                .save(operation
-                        .setStatus(Constants.OPERATION_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date()));
-    }
-
-    /**
      * 方法：根据ID查询操作记录
      * @param serialNo 流水号
      * @return 操作记录
@@ -122,5 +107,39 @@ public class OperationService {
                     log.info(record.toString());
                     return record;
                 });
+    }
+
+    /**
+     * 方法：创建操作记录
+     * @param operation 操作记录
+     * @return 创建成功的操作记录
+     */
+    public Mono<Operation> createOperation(Operation operation) {
+        log.info(operation.toString());
+
+        return this.operationRepository
+                .save(operation
+                        .setStatus(Constants.OPERATION_STATUS_ACTIVE)
+                        .setCreateTime(new Date())
+                        .setTimestamp(new Date()))
+                .map(newOperation -> newOperation
+                        .setStatus(Constants.OPERATION_ERRORCODE_SUCCESS));
+    }
+
+    /**
+     * 方法：创建新记录（操作明细）
+     * @param record 明细记录
+     * @return 创建成功的明细记录
+     */
+    public Mono<Record> createRecord(Record record) {
+        log.info(record.toString());
+
+        return this.recordRepository
+                .save(record
+                        .setStatus(Constants.OPERATION_STATUS_ACTIVE)
+                        .setCreateTime(new Date())
+                        .setTimestamp(new Date()))
+                .map(newRecord -> newRecord
+                        .setStatus(Constants.OPERATION_ERRORCODE_SUCCESS));
     }
 }

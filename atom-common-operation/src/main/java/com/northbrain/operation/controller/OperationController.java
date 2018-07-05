@@ -86,4 +86,16 @@ public class OperationController {
                 .body(this.operationService
                         .queryRecordsBySerialNo(serialNo));
     }
+
+    /**
+     * 方法：创建新记录（操作明细）
+     * @param record 明细记录
+     * @return 创建成功的明细记录
+     */
+    @PostMapping(Constants.OPERATION_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Record>> createRecord(@RequestBody Record record) {
+        return ResponseEntity.ok()
+                .body(this.operationService
+                        .createRecord(record));
+    }
 }
