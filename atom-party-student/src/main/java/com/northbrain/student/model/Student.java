@@ -17,7 +17,7 @@ import java.util.Date;
 @Document
 public class Student {
     @Id
-    private String              id;                             //会话ID
+    private String              id;                             //ID
     @NotNull
     private String              type;                           //类型
     @NotNull
