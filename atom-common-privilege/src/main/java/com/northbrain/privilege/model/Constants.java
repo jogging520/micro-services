@@ -23,6 +23,6 @@ public class Constants {
     /**
      * 错误码定义
      */
-    public final static String PRIVILEGE_ERRORCODE_SUCCESS                          =   "CODE_COMMON_PRIVILEGE_000";
-    public final static String PRIVILEGE_ERRORCODE_HAS_EXISTS                       =   "CODE_COMMON_PRIVILEGE_001";
+    public final static String PRIVILEGE_ERRORCODE_SUCCESS                          =   "SUCCESS";
+    public final static String PRIVILEGE_ERRORCODE_HAS_EXISTS                       =   "ERROR_COMMON_PRIVILEGE_HAS_EXISTS";
 }

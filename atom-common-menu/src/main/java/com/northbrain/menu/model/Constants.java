@@ -12,7 +12,9 @@ public class Constants {
     public final static String  MENU_CMS_HTTP_REQUEST_MAPPING           =   "/menus/cms";
     public final static String  MENU_WEB_HTTP_REQUEST_MAPPING           =   "/menus/web";
     public final static String  MENU_APP_HTTP_REQUEST_MAPPING           =   "/menus/app";
-    public final static String  MENU_WECHAT_HTTP_REQUEST_MAPPING        =   "/menus/wechat";
+    public final static String  MENU_WCT_HTTP_REQUEST_MAPPING           =   "/menus/wct";
+    public final static String  MENU_LED_HTTP_REQUEST_MAPPING           =   "/menus/led";
+    public final static String  MENU_MON_HTTP_REQUEST_MAPPING           =   "/menus/mon";
 
     /**
      * 操作定义
@@ -22,5 +24,5 @@ public class Constants {
     /**
      * 错误码定义
      */
-    public final static String  MENU_ERRORCODE_SUCCESS                  =   "CODE_COMMON_MENU_000";
+    public final static String  MENU_ERRORCODE_SUCCESS                  =   "SUCCESS";
 }

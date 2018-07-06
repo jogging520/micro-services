@@ -4,9 +4,7 @@ import com.northbrain.solution.model.Constants;
 import com.northbrain.solution.model.Solution;
 import com.northbrain.solution.service.SolutionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -27,5 +25,19 @@ public class SolutionController {
         return ResponseEntity.ok()
                 .body(this.solutionService
                         .querySolutions(serialNo));
+    }
+
+    /**
+     * 方法：创建解决方案
+     * @param serialNo 流水号
+     * @param solutions 解决方案
+     * @return 创建成功的解决方案
+     */
+    @PostMapping(Constants.SOLUTION_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Solution>> createSolutions(@RequestParam String serialNo,
+                                                          @RequestBody Flux<Solution> solutions) {
+        return ResponseEntity.ok()
+                .body(this.solutionService
+                        .createSolutions(serialNo, solutions));
     }
 }

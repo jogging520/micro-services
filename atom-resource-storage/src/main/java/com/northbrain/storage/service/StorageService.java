@@ -2,6 +2,8 @@ package com.northbrain.storage.service;
 
 import com.northbrain.storage.model.Constants;
 import com.northbrain.storage.model.Picture;
+import com.northbrain.storage.model.PictureHistory;
+import com.northbrain.storage.repository.IPictureHistoryRepository;
 import com.northbrain.storage.repository.IPictureRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,12 @@ import java.util.Date;
 @Log
 public class StorageService {
     private final IPictureRepository pictureRepository;
+    private final IPictureHistoryRepository pictureHistoryRepository;
 
-    public StorageService(IPictureRepository pictureRepository) {
+    public StorageService(IPictureRepository pictureRepository,
+                          IPictureHistoryRepository pictureHistoryRepository) {
         this.pictureRepository = pictureRepository;
+        this.pictureHistoryRepository = pictureHistoryRepository;
     }
 
     /**
@@ -46,17 +51,36 @@ public class StorageService {
     public Flux<Picture> createPictures(String serialNo,
                                         Flux<Picture> pictures) {
         return pictures
-                .map(picture -> picture
-                        .setId(null)
-                        .setStatus(Constants.STORAGE_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .flatMap(picture -> this.pictureRepository.save(picture))
-                .map(picture -> {
+                .flatMap(picture ->
+                        this.pictureRepository
+                                .save(picture
+                                .setId(null)
+                                .setStatus(Constants.STORAGE_STATUS_ACTIVE)
+                                .setCreateTime(new Date())
+                                .setTimestamp(new Date())
+                                .setSerialNo(serialNo)))
+                .map(newPicture -> {
                     log.info(Constants.STORAGE_OPERATION_SERIAL_NO + serialNo);
-                    log.info(picture.toString());
-                    return picture;
+                    log.info(newPicture.toString());
+
+                    this.pictureHistoryRepository
+                            .save(PictureHistory.builder()
+                                    .operationType(Constants.STORAGE_HISTORY_CREATE)
+                                    .pictureId(newPicture.getId())
+                                    .type(newPicture.getType())
+                                    .content(newPicture.getContent())
+                                    .createTime(newPicture.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(newPicture.getStatus())
+                                    .serialNo(serialNo)
+                                    .description(newPicture.getDescription())
+                                    .build())
+                            .subscribe(pictureHistory -> {
+                                log.info(Constants.STORAGE_OPERATION_SERIAL_NO + serialNo);
+                                log.info(pictureHistory.toString());
+                            });
+
+                    return newPicture.setStatus(Constants.STORAGE_ERRORCODE_SUCCESS);
                 });
     }
 }

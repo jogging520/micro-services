@@ -25,12 +25,16 @@ public class Constants {
     public final static String SESSION_HINT_JWT_VERIFY_PUBLIC_CLAIM_FAILURE         =   "JWT校验公共部分不通过。";
     public final static String SESSION_HINT_JWT_VERIFY_EXPIRATION_FAILURE           =   "JWT已经失效。";
 
+    public final static String SESSION_ATTEMPT_AUTO_DESCRIPTION                     =   "system auto.";   //系统自动生成
+
     /**
      * restful资源定义
      */
     public final static String SESSION_HTTP_REQUEST_MAPPING                         =   "/sessions";
     public final static String SESSION_SPECIFIED_HTTP_REQUEST_MAPPING               =   "/sessions/{sessionId}";
     public final static String SESSION_HTTP_REQUEST_MAPPING_JWT                     =   "/sessions/token";
+    public final static String SESSION_ATTEMPT_HTTP_REQUEST_MAPPING                 =   "/sessions/attempt";
+
 
     /**
      * 操作定义
@@ -40,5 +44,5 @@ public class Constants {
     /**
      * 错误码定义
      */
-    public final static String SESSION_ERRORCODE_SUCCESS                            =   "CODE_COMMON_SESSION_000";
+    public final static String SESSION_ERRORCODE_SUCCESS                            =   "SUCCESS";
 }

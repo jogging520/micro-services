@@ -1,5 +1,6 @@
 package com.northbrain.session.controller;
 
+import com.northbrain.session.model.Attempt;
 import com.northbrain.session.model.Constants;
 import com.northbrain.session.model.Token;
 import com.northbrain.session.service.SessionService;
@@ -7,8 +8,8 @@ import com.northbrain.session.model.Session;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 @RestController
 public class SessionController {
@@ -64,4 +65,51 @@ public class SessionController {
                         .verifyJWT(serialNo, jwt));
     }
 
+    /**
+     * 方法：查询尝试登录的次数（当日）
+     * @param serialNo 流水号
+     * @param userName 用户名
+     * @param appType 应用类型
+     * @return 尝试登录的次数
+     */
+    @GetMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Long>> queryAttemptCount(@RequestParam String serialNo,
+                                                        @RequestParam String userName,
+                                                        @RequestParam String appType) {
+        return ResponseEntity.ok()
+                .body(this.sessionService
+                        .queryAttemptCount(serialNo, userName, appType));
+    }
+
+    /**
+     * 方法：创建一条尝试登录的记录
+     * @param serialNo 流水号
+     * @param attempt 尝试登录实体
+     * @return 创建成功的尝试登录实体
+     */
+    @PostMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Attempt>> createAttempt(@RequestParam String serialNo,
+                                                       @RequestBody Attempt attempt) {
+        return ResponseEntity.ok()
+                .body(this.sessionService
+                        .createAttempt(serialNo, attempt));
+    }
+
+    /**
+     * 方法：清理尝试登录的记录，并入历史库
+     * @param serialNo 流水号
+     * @param userName 用户名
+     * @param appType 应用类型
+     * @return 空
+     */
+    @DeleteMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Void> deleteAttempts(@RequestParam String serialNo,
+                                                        @RequestParam String userName,
+                                                        @RequestParam String appType) {
+        this.sessionService
+                .deleteAttempts(serialNo, userName, appType);
+
+        return ResponseEntity.ok()
+                .body(null);
+    }
 }

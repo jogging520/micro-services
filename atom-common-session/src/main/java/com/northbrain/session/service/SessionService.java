@@ -1,9 +1,8 @@
 package com.northbrain.session.service;
 
-import com.northbrain.session.model.Constants;
-import com.northbrain.session.model.Token;
-import com.northbrain.session.model.TokenProperty;
-import com.northbrain.session.model.Session;
+import com.northbrain.session.model.*;
+import com.northbrain.session.repository.IAttemptHistoryRepository;
+import com.northbrain.session.repository.IAttemptRepository;
 import com.northbrain.session.repository.ISessionHistoryRepository;
 import com.northbrain.session.repository.ISessionRepository;
 import com.northbrain.session.util.JsonWebTokenUtil;
@@ -13,6 +12,7 @@ import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -21,12 +21,19 @@ import java.util.Map;
 public class SessionService {
     private final ISessionRepository sessionRepository;
     private final ISessionHistoryRepository sessionHistoryRepository;
+    private final IAttemptRepository attemptRepository;
+    private final IAttemptHistoryRepository attemptHistoryRepository;
     private final TokenProperty tokenProperty;
 
-    public SessionService(ISessionRepository sessionRepository, ISessionHistoryRepository sessionHistoryRepository,
+    public SessionService(ISessionRepository sessionRepository,
+                          ISessionHistoryRepository sessionHistoryRepository,
+                          IAttemptRepository attemptRepository,
+                          IAttemptHistoryRepository attemptHistoryRepository,
                           TokenProperty tokenProperty) {
         this.sessionRepository = sessionRepository;
         this.sessionHistoryRepository = sessionHistoryRepository;
+        this.attemptRepository = attemptRepository;
+        this.attemptHistoryRepository = attemptHistoryRepository;
         this.tokenProperty = tokenProperty;
     }
 
@@ -153,5 +160,84 @@ public class SessionService {
             e.printStackTrace();
             return Mono.just(Token.builder().lifeTime(0L).build());
         }
+    }
+
+    /**
+     * 方法：查询尝试登录的次数（当日）
+     * @param serialNo 流水号
+     * @param userName 用户名
+     * @param appType 应用类型
+     * @return 尝试登录的次数
+     */
+    public Mono<Long> queryAttemptCount(String serialNo,
+                                        String userName,
+                                        String appType) {
+        Date fromAttemptTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fromAttemptTime);
+        calendar.add(Calendar.DATE, 1);
+
+        return this.attemptRepository
+                .findByUserNameAndAppTypeAndAttemptTimeBetween(userName, appType,
+                        fromAttemptTime, calendar.getTime())
+                .count()
+                .map(c -> {
+                    log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                    log.info(c.toString());
+                    return c;
+                });
+    }
+
+    /**
+     * 方法：创建一条尝试登录的记录
+     * @param serialNo 流水号
+     * @param attempt 尝试登录实体
+     * @return 创建成功的尝试登录实体
+     */
+    public Mono<Attempt> createAttempt(String serialNo,
+                                       Attempt attempt) {
+        return this.attemptRepository
+                .save(attempt.setAttemptTime(new Date()))
+                .map(newAttempt -> {
+                    log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                    log.info(newAttempt.toString());
+                    return newAttempt;
+                });
+    }
+
+    /**
+     * 方法：清理尝试登录的记录，并入历史库
+     * @param serialNo 流水号
+     * @param userName 用户名
+     * @param appType 应用类型
+     * @return 空
+     */
+    public Flux<Void> deleteAttempts(String serialNo,
+                                     String userName,
+                                     String appType) {
+        this.attemptRepository
+                .deleteAllByUserNameAndAppType(userName, appType)
+                .subscribe(attempt -> {
+                    log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                    log.info(attempt.toString());
+
+                    this.attemptHistoryRepository
+                            .save(AttemptHistory.builder()
+                                    .operationType(Constants.SESSION_HISTORY_DELETE)
+                                    .attemptId(attempt.getId())
+                                    .type(attempt.getType())
+                                    .userName(attempt.getUserName())
+                                    .password(attempt.getPassword())
+                                    .mobile(attempt.getMobile())
+                                    .appType(attempt.getAppType())
+                                    .attemptTime(attempt.getAttemptTime())
+                                    .timestamp(new Date())
+                                    .status(attempt.getStatus())
+                                    .serialNo(attempt.getSerialNo())
+                                    .description(attempt.getDescription())
+                                    .build());
+                });
+
+        return Flux.empty();
     }
 }

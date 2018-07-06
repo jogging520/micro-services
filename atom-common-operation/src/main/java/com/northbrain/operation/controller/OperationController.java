@@ -92,7 +92,7 @@ public class OperationController {
      * @param record 明细记录
      * @return 创建成功的明细记录
      */
-    @PostMapping(Constants.OPERATION_HTTP_REQUEST_MAPPING)
+    @PostMapping(Constants.OPERATION_RECORD_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Record>> createRecord(@RequestBody Record record) {
         return ResponseEntity.ok()
                 .body(this.operationService

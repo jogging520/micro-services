@@ -1,4 +1,4 @@
-package com.northbrain.user.model;
+package com.northbrain.storage.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -15,17 +15,19 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Document
-public class Verification {
+public class PictureHistory {
     @Id
     private String                  id;                 //id编号
     @NotNull
-    private String                  type;               //类型
+    private String                  operationType;      //操作类型
     @NotNull
-    private String                  user;               //用户id
+    private String                  pictureId;          //图片id号
     @NotNull
-    private String                  appType;            //应用类型
+    private String                  type;               //类型：png，jpg
     @NotNull
-    private Date                    loginTime;          //登录时间
+    private String                  content;            //图片内容，BASE64格式
+    @NotNull
+    private Date                    createTime;         //创建时间
     @NotNull
     private Date                    timestamp;          //状态时间
     @NotNull

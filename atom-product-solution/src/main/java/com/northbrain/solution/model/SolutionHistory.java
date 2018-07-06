@@ -1,4 +1,4 @@
-package com.northbrain.user.model;
+package com.northbrain.solution.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Map;
 
 @Data
 @Accessors(chain=true)
@@ -15,21 +16,23 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Document
-public class VerificationHistory {
+public class SolutionHistory {
     @Id
     private String                  id;                 //id编号
     @NotNull
     private String                  operationType;      //操作类型
     @NotNull
-    private String                  verificationId;     //校验编号
+    private String                  solutionId;         //id编号
     @NotNull
     private String                  type;               //类型
     @NotNull
-    private String                  user;               //用户id
+    private String[]                organizations;      //适用的组织机构
+    private String[]                schools;            //适用的学校
+    private String[]                families;           //适用的家庭
     @NotNull
-    private String                  appType;            //应用类型
+    private Map<String, String>     items;              //细项 TODO 这个要新建一个类
     @NotNull
-    private Date                    loginTime;          //登录时间
+    private Date                    createTime;         //创建时间
     @NotNull
     private Date                    timestamp;          //状态时间
     @NotNull

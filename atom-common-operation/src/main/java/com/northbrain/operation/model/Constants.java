@@ -21,5 +21,5 @@ public class Constants {
     /**
      * 错误码定义
      */
-    public final static String  OPERATION_ERRORCODE_SUCCESS                     =   "CODE_COMMON_OPERATION_000";
+    public final static String  OPERATION_ERRORCODE_SUCCESS                     =   "SUCCESS";
 }
