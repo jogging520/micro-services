@@ -100,50 +100,55 @@ public class StudentService {
     public Flux<Student> createStudents(String serialNo,
                                         Flux<Student> students) {
         return students
-                .map(student -> student
-                        .setStatus(Constants.STUDENT_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .flatMap(student -> {
-                    log.info(Constants.STUDENT_OPERATION_SERIAL_NO + serialNo);
-                    log.info(student.toString());
+                .flatMap(student -> this.studentRepository
+                        .save(student
+                                .setStatus(Constants.STUDENT_STATUS_ACTIVE)
+                                .setCreateTime(new Date())
+                                .setTimestamp(new Date())
+                                .setSerialNo(serialNo))
+                        .map(newStudent -> {
+                            log.info(Constants.STUDENT_OPERATION_SERIAL_NO + serialNo);
+                            log.info(newStudent.toString());
 
-                    this.studentHistoryRepository
-                            .save(StudentHistory.builder()
-                                    .operationType(Constants.STUDENT_HISTORY_CREATE)
-                                    .studentId(student.getId())
-                                    .type(student.getType())
-                                    .name(student.getName())
-                                    .otherName(student.getOtherName())
-                                    .region(student.getRegion())
-                                    .avatar(student.getAvatar())
-                                    .gender(student.getGender())
-                                    .birthday(student.getBirthday())
-                                    .nationality(student.getNationality())
-                                    .politics(student.getPolitics())
-                                    .isAtSchool(student.getIsAtSchool())
-                                    .health(student.getHealth())
-                                    .family(student.getFamily())
-                                    .school(student.getSchool())
-                                    .grade(student.getGrade())
-                                    .period(student.getPeriod())
-                                    .idCardNo(student.getIdCardNo())
-                                    .schoolRollNo(student.getSchoolRollNo())
-                                    .distanceOfSchoolAndHome(student.getDistanceOfSchoolAndHome())
-                                    .trafficCondition(student.getTrafficCondition())
-                                    .aids(student.getAids())
-                                    .demands(student.getDemands())
-                                    .solutions(student.getSolutions())
-                                    .isPoor(student.getIsPoor())
-                                    .createTime(student.getCreateTime())
-                                    .timestamp(new Date())
-                                    .status(student.getStatus())
-                                    .serialNo(serialNo)
-                                    .description(student.getDescription())
-                                    .build());
+                            this.studentHistoryRepository
+                                    .save(StudentHistory.builder()
+                                            .operationType(Constants.STUDENT_HISTORY_CREATE)
+                                            .studentId(student.getId())
+                                            .type(student.getType())
+                                            .name(student.getName())
+                                            .otherName(student.getOtherName())
+                                            .region(student.getRegion())
+                                            .avatar(student.getAvatar())
+                                            .gender(student.getGender())
+                                            .birthday(student.getBirthday())
+                                            .nationality(student.getNationality())
+                                            .politics(student.getPolitics())
+                                            .isAtSchool(student.getIsAtSchool())
+                                            .health(student.getHealth())
+                                            .family(student.getFamily())
+                                            .school(student.getSchool())
+                                            .grade(student.getGrade())
+                                            .period(student.getPeriod())
+                                            .idCardNo(student.getIdCardNo())
+                                            .schoolRollNo(student.getSchoolRollNo())
+                                            .distanceOfSchoolAndHome(student.getDistanceOfSchoolAndHome())
+                                            .trafficCondition(student.getTrafficCondition())
+                                            .aids(student.getAids())
+                                            .demands(student.getDemands())
+                                            .solutions(student.getSolutions())
+                                            .isPoor(student.getIsPoor())
+                                            .createTime(student.getCreateTime())
+                                            .timestamp(new Date())
+                                            .status(student.getStatus())
+                                            .serialNo(serialNo)
+                                            .description(student.getDescription())
+                                            .build())
+                                    .subscribe(studentHistory -> {
+                                        log.info(Constants.STUDENT_OPERATION_SERIAL_NO + serialNo);
+                                        log.info(studentHistory.toString());
+                                    });
 
-                    return this.studentRepository.save(student);
-                });
+                            return newStudent.setStatus(Constants.STUDENT_ERRORCODE_SUCCESS);
+                        }));
     }
 }

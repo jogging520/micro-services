@@ -32,35 +32,39 @@ public class SchoolService {
     public Flux<School> createSchools(String serialNo,
                                       Flux<School> schools) {
         return schools
-                .map(school -> school
-                        .setStatus(Constants.SCHOOL_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .flatMap(school -> {
-                    log.info(Constants.SCHOOL_OPERATION_SERIAL_NO + serialNo);
-                    log.info(school.toString());
+                .flatMap(school -> this.schoolRepository
+                        .save(school
+                                .setStatus(Constants.SCHOOL_STATUS_ACTIVE)
+                                .setCreateTime(new Date())
+                                .setTimestamp(new Date())
+                                .setSerialNo(serialNo))
+                        .map(newSchool -> {
+                            log.info(Constants.SCHOOL_OPERATION_SERIAL_NO + serialNo);
+                            log.info(newSchool.toString());
 
-                    this.schoolHistoryRepository
-                            .save(SchoolHistory.builder()
-                                    .operationType(Constants.SCHOOL_HISTORY_CREATE)
-                                    .schoolId(school.getId())
-                                    .type(school.getType())
-                                    .name(school.getName())
-                                    .region(school.getRegion())
-                                    .masterName(school.getMasterName())
-                                    .avatar(school.getAvatar())
-                                    .phone(school.getPhone())
-                                    .createTime(school.getCreateTime())
-                                    .timestamp(new Date())
-                                    .status(school.getStatus())
-                                    .serialNo(serialNo)
-                                    .description(school.getDescription())
-                                    .build());
+                            this.schoolHistoryRepository
+                                    .save(SchoolHistory.builder()
+                                            .operationType(Constants.SCHOOL_HISTORY_CREATE)
+                                            .schoolId(school.getId())
+                                            .type(school.getType())
+                                            .name(school.getName())
+                                            .region(school.getRegion())
+                                            .masterName(school.getMasterName())
+                                            .avatar(school.getAvatar())
+                                            .phone(school.getPhone())
+                                            .createTime(school.getCreateTime())
+                                            .timestamp(new Date())
+                                            .status(school.getStatus())
+                                            .serialNo(serialNo)
+                                            .description(school.getDescription())
+                                            .build())
+                                    .subscribe(schoolHistory -> {
+                                        log.info(Constants.SCHOOL_OPERATION_SERIAL_NO + serialNo);
+                                        log.info(schoolHistory.toString());
+                                    });
 
-                    return this.schoolRepository
-                            .save(school);
-                });
+                            return newSchool.setStatus(Constants.SCHOOL_ERRORCODE_SUCCESS);
+                        }));
     }
 
     /**

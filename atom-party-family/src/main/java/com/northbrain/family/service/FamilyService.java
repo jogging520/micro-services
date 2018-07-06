@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -32,33 +33,37 @@ public class FamilyService {
     public Flux<Family> createFamilies(String serialNo,
                                        Flux<Family> families) {
         return families
-                .map(family -> family.
-                        setStatus(Constants.FAMILY_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
-                        .setSerialNo(serialNo))
-                .flatMap(family -> {
-                    log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
-                    log.info(family.toString());
+                .flatMap(family -> this.familyRepository
+                            .save(family
+                                    .setStatus(Constants.FAMILY_STATUS_ACTIVE)
+                                    .setCreateTime(new Date())
+                                    .setTimestamp(new Date())
+                                    .setSerialNo(serialNo))
+                            .map(newFamily -> {
+                                log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
+                                log.info(family.toString());
 
-                    this.familyHistoryRepository
-                            .save(FamilyHistory.builder()
-                                    .operationType(Constants.FAMILY_HISTORY_CREATE)
-                                    .familyId(family.getId())
-                                    .houseHolder(family.getHouseHolder())
-                                    .region(family.getRegion())
-                                    .masterIdCardNo(family.getMasterIdCardNo())
-                                    .phone(family.getPhone())
-                                    .createTime(family.getCreateTime())
-                                    .timestamp(new Date())
-                                    .status(family.getStatus())
-                                    .serialNo(serialNo)
-                                    .description(family.getDescription())
-                                    .build());
+                                this.familyHistoryRepository
+                                        .save(FamilyHistory.builder()
+                                                .operationType(Constants.FAMILY_HISTORY_CREATE)
+                                                .familyId(family.getId())
+                                                .houseHolder(family.getHouseHolder())
+                                                .region(family.getRegion())
+                                                .masterIdCardNo(family.getMasterIdCardNo())
+                                                .phone(family.getPhone())
+                                                .createTime(family.getCreateTime())
+                                                .timestamp(new Date())
+                                                .status(family.getStatus())
+                                                .serialNo(serialNo)
+                                                .description(family.getDescription())
+                                                .build())
+                                        .subscribe(familyHistory -> {
+                                            log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
+                                            log.info(familyHistory.toString());
+                                        });
 
-                    return this.familyRepository
-                            .save(family);
-                });
+                                return newFamily.setStatus(Constants.FAMILY_ERRORCODE_SUCCESS);
+                            }));
     }
 
     /**
