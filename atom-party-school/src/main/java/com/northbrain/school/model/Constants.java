@@ -25,5 +25,5 @@ public class Constants {
      * 错误码定义
      */
     public final static String  SCHOOL_ERRORCODE_SUCCESS                      =   "SUCCESS";
-
+    public final static String  SCHOOL_ERRORCODE_HAS_EXISTS                   =   "ERROR_PARTY_SCHOOL_HAS_EXISTS";
 }

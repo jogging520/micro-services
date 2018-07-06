@@ -26,6 +26,7 @@ public class FamilyService {
 
     /**
      * 方法：新建家庭信息
+     * 根据户主和电话进行过滤，如果已经存在，那么直接报错。
      * @param serialNo 操作流水号
      * @param families 家庭数组
      * @return 创建成功的家庭列表
@@ -34,36 +35,40 @@ public class FamilyService {
                                        Flux<Family> families) {
         return families
                 .flatMap(family -> this.familyRepository
-                            .save(family
-                                    .setStatus(Constants.FAMILY_STATUS_ACTIVE)
-                                    .setCreateTime(new Date())
-                                    .setTimestamp(new Date())
-                                    .setSerialNo(serialNo))
-                            .map(newFamily -> {
-                                log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
-                                log.info(family.toString());
+                        .findByHouseHolderAndPhone(family.getHouseHolder(), family.getPhone())
+                        .map(newFamily -> newFamily.setStatus(Constants.FAMILY_ERRORCODE_HAS_EXISTS))
+                        .switchIfEmpty(this.familyRepository
+                                .save(family
+                                        .setStatus(Constants.FAMILY_STATUS_ACTIVE)
+                                        .setCreateTime(new Date())
+                                        .setTimestamp(new Date())
+                                        .setSerialNo(serialNo))
+                                .map(newFamily -> {
+                                    log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
+                                    log.info(family.toString());
 
-                                this.familyHistoryRepository
-                                        .save(FamilyHistory.builder()
-                                                .operationType(Constants.FAMILY_HISTORY_CREATE)
-                                                .familyId(family.getId())
-                                                .houseHolder(family.getHouseHolder())
-                                                .region(family.getRegion())
-                                                .masterIdCardNo(family.getMasterIdCardNo())
-                                                .phone(family.getPhone())
-                                                .createTime(family.getCreateTime())
-                                                .timestamp(new Date())
-                                                .status(family.getStatus())
-                                                .serialNo(serialNo)
-                                                .description(family.getDescription())
-                                                .build())
-                                        .subscribe(familyHistory -> {
-                                            log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
-                                            log.info(familyHistory.toString());
-                                        });
+                                    this.familyHistoryRepository
+                                            .save(FamilyHistory.builder()
+                                                    .operationType(Constants.FAMILY_HISTORY_CREATE)
+                                                    .familyId(family.getId())
+                                                    .houseHolder(family.getHouseHolder())
+                                                    .region(family.getRegion())
+                                                    .masterIdCardNo(family.getMasterIdCardNo())
+                                                    .phone(family.getPhone())
+                                                    .createTime(family.getCreateTime())
+                                                    .timestamp(new Date())
+                                                    .status(family.getStatus())
+                                                    .serialNo(serialNo)
+                                                    .description(family.getDescription())
+                                                    .build())
+                                            .subscribe(familyHistory -> {
+                                                log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
+                                                log.info(familyHistory.toString());
+                                            });
 
-                                return newFamily.setStatus(Constants.FAMILY_ERRORCODE_SUCCESS);
-                            }));
+                                    return newFamily.setStatus(Constants.FAMILY_ERRORCODE_SUCCESS);
+                                })
+                        ));
     }
 
     /**
