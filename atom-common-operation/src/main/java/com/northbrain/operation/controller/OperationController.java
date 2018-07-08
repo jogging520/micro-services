@@ -69,7 +69,7 @@ public class OperationController {
      * @return 操作记录
      */
     @GetMapping(Constants.OPERATION_SPECIFIED_HTTP_REQUEST_MAPPING)
-    private ResponseEntity<Mono<Operation>> queryOperationById(@RequestParam String serialNo) {
+    public ResponseEntity<Mono<Operation>> queryOperationById(@RequestParam String serialNo) {
         return ResponseEntity.ok()
                 .body(this.operationService
                         .queryOperationById(serialNo));
@@ -81,7 +81,7 @@ public class OperationController {
      * @return 操作详细记录
      */
     @GetMapping(Constants.OPERATION_RECORD_HTTP_REQUEST_MAPPING)
-    private ResponseEntity<Flux<Record>> queryRecordsBySerialNo(@RequestParam String serialNo) {
+    public ResponseEntity<Flux<Record>> queryRecordsBySerialNo(@RequestParam String serialNo) {
         return ResponseEntity.ok()
                 .body(this.operationService
                         .queryRecordsBySerialNo(serialNo));
