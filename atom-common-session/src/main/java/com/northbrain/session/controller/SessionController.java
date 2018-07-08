@@ -41,7 +41,7 @@ public class SessionController {
      * @param mobile 手机号码
      * @return 令牌
      */
-    @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
+    @PostMapping(Constants.SESSION_LOGIN_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Token>> login(@RequestParam String serialNo,
                                              @RequestParam String appType,
                                              @RequestParam String userId,
@@ -53,11 +53,25 @@ public class SessionController {
     }
 
     /**
+     * 方法：登出
+     * @param serialNo 流水号
+     * @param sessionId 会话编号
+     * @return 无
+     */
+    @PostMapping(Constants.SESSION_LOGOUT_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Void>> logout(@RequestParam String serialNo,
+                                             @RequestParam String sessionId) {
+        return ResponseEntity.ok()
+                .body(this.sessionService
+                        .deleteSession(serialNo, sessionId));
+    }
+
+    /**
      * 方法：校验JWT的有效性
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
      */
-    @GetMapping(Constants.SESSION_HTTP_REQUEST_MAPPING_JWT)
+    @GetMapping(Constants.SESSION_JWT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Token>> verifyJWT(@RequestParam String serialNo,
                                                  @RequestParam String jwt) {
         return ResponseEntity.ok()

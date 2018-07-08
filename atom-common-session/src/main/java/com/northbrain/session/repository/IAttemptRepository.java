@@ -12,5 +12,5 @@ public interface IAttemptRepository extends ReactiveCrudRepository<Attempt, Stri
                                                                 Date fromAttemptTime,
                                                                 Date toAttemptTime);
 
-    Flux<Attempt> deleteAllByUserNameAndAppType(String userName, String appType);
+    Flux<Attempt> findAllByUserNameAndAppType(String userName, String appType);
 }

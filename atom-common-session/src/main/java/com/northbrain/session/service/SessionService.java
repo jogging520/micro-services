@@ -125,6 +125,50 @@ public class SessionService {
     }
 
     /**
+     * 方法：删除会话，并移入历史库
+     * @param serialNo 流水号
+     * @param sessionId 会话编号
+     * @return 无
+     */
+    public Mono<Void> deleteSession(String serialNo,
+                                    String sessionId) {
+        this.sessionRepository
+                .findById(sessionId)
+                .subscribe(session -> {
+                    log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                    log.info(session.toString());
+
+                    this.sessionHistoryRepository
+                            .save(SessionHistory.builder()
+                                    .operationType(Constants.SESSION_HISTORY_DELETE)
+                                    .sessionId(sessionId)
+                                    .type(session.getType())
+                                    .appType(session.getAppType())
+                                    .user(session.getUser())
+                                    .userName(session.getUserName())
+                                    .mobile(session.getMobile())
+                                    .loginTime(session.getLoginTime())
+                                    .lifeTime(session.getLifeTime())
+                                    .createTime(session.getCreateTime())
+                                    .timestamp(new Date())
+                                    .status(Constants.SESSION_STATUS_LOGOUT)
+                                    .serialNo(serialNo)
+                                    .description(session.getDescription())
+                                    .build())
+                            .subscribe(sessionHistory -> {
+                                log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                                log.info(sessionHistory.toString());
+                            });
+
+                    this.sessionRepository
+                            .deleteById(sessionId)
+                            .then();
+                });
+
+        return Mono.empty().then();
+    }
+
+    /**
      * 方法：校验JWT的有效性
      * 对于当前未失效的的JWT都可以使用，每次按照ID查找，只要找到其中之一便有效。
      * @param serialNo 流水号
@@ -216,7 +260,7 @@ public class SessionService {
                                      String userName,
                                      String appType) {
         this.attemptRepository
-                .deleteAllByUserNameAndAppType(userName, appType)
+                .findAllByUserNameAndAppType(userName, appType)
                 .subscribe(attempt -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
                     log.info(attempt.toString());
@@ -235,7 +279,16 @@ public class SessionService {
                                     .status(attempt.getStatus())
                                     .serialNo(attempt.getSerialNo())
                                     .description(attempt.getDescription())
-                                    .build());
+                                    .build())
+                            .subscribe(attemptHistory -> {
+                                log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
+                                log.info(attemptHistory.toString());
+                            })
+                    ;
+
+                    this.attemptRepository
+                            .deleteById(attempt.getId())
+                            .then();
                 });
 
         return Flux.empty();
