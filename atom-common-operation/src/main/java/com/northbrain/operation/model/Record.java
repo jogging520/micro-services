@@ -25,6 +25,10 @@ public class Record {
     @NotNull
     private String                      url;                //url
     @NotNull
+    private String                      address;            //IP地址
+    @NotNull
+    private String                      port;               //端口号
+    @NotNull
     private Date                        createTime;         //创建时间
     @NotNull
     private Date                        timestamp;          //状态时间
