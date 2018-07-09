@@ -2,6 +2,8 @@ package com.northbrain.search.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.northbrain.search.model.Constants;
@@ -19,8 +21,8 @@ public class SearchController {
     }
 
     @PostMapping(Constants.SEARCH_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Summary>> createSummaries(String serialNo,
-                                                         Flux<Summary> summaries) {
+    public ResponseEntity<Flux<Summary>> createSummaries(@RequestParam String serialNo,
+                                                         @RequestBody Flux<Summary> summaries) {
         return ResponseEntity.ok()
                 .body(this.searchService
                         .createSummaries(serialNo, summaries));
