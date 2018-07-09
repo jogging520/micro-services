@@ -21,11 +21,11 @@ public class Summary {
     @Id
     private String      id;                 //id
     @Field
-    private String      entityId;           //实体的真实ID
+    private String      entity;             //实体的真实ID
     @Field
-    private String      entityName;         //实体的名称
+    private String      name;               //实体的名称
     @Field
-    private String      entityDescription;  //实体的描述
+    private String      description;        //实体的描述
     @Field
     private Date        createTime;         //创建时间
     @Field
