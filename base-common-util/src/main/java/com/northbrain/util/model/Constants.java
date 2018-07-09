@@ -12,4 +12,6 @@ public class Constants {
     public final static String  UTIL_HTTP_REQUEST_PARAMS                    =   "PARAMS         :";         //请求报文PARAMS
     public final static String  UTIL_HTTP_RESPONSE_BODY                     =   "RESPONSE       :";         //响应报文RESPONSE
     public final static String  UTIL_HTTP_REQUEST_RESPONSE_COST             =   "本次HTTP请求耗时:";         //http的耗时
+
+    public final static String  UTIL_CURATOR_PROPERTY_PREFIX                =   "curator";
 }

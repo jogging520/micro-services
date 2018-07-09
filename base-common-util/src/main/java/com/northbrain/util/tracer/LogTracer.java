@@ -1,12 +1,11 @@
 package com.northbrain.util.tracer;
 
 import com.northbrain.util.model.Constants;
+import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +16,9 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
+@Log
 @Order(1)
 public class LogTracer {
-    private final Logger logger = LoggerFactory.getLogger(LogTracer.class);
 
     /**
      * 定义一个切入点.
@@ -44,12 +43,12 @@ public class LogTracer {
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
 
-        logger.info(Constants.UTIL_INVOKE_METHOD_BEGIN + proceedingJoinPoint.toString());
+        log.info(Constants.UTIL_INVOKE_METHOD_BEGIN + proceedingJoinPoint.toString());
 
         Object result = proceedingJoinPoint.proceed();
 
         long finishTime = System.currentTimeMillis();
-        logger.info(Constants.UTIL_INVOKE_METHOD_END + proceedingJoinPoint.toString() + Constants.UTIL_INVOKE_METHOD_COST + (finishTime-startTime) + "ms");
+        log.info(Constants.UTIL_INVOKE_METHOD_END + proceedingJoinPoint.toString() + Constants.UTIL_INVOKE_METHOD_COST + (finishTime-startTime) + "ms");
 
         return result;
     }
