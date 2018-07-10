@@ -24,4 +24,9 @@ public class TaskController {
     public String hello() {
         return "Hello, " + this.securityProperty.getAppDownPrivateKey();
     }
+
+    @GetMapping("/path")
+    public String hello1() {
+        return "Hello, " + this.name;
+    }
 }
