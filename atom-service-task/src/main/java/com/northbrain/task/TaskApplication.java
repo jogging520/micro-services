@@ -2,10 +2,11 @@ package com.northbrain.task;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan({"com.northbrain"})
 public class TaskApplication {
-	//jk
 	public static void main(String[] args) {
 		SpringApplication.run(TaskApplication.class, args);
 	}
