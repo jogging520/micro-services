@@ -185,7 +185,7 @@ public class SessionService {
                             tokenProperty.getAudience(), tokenProperty.getIssuer());
 
             return this.sessionRepository
-                    .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID))
+                    .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION))
                     .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                     .filter(session -> session.getCreateTime().getTime() + session.getLifeTime() >= System.currentTimeMillis())
                     .switchIfEmpty(Mono.just(Session.builder().build()))

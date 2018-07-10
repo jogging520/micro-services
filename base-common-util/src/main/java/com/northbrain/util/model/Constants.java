@@ -8,12 +8,6 @@ public class Constants {
     public final static String  UTIL_INVOKE_METHOD_END                  =   "<<<<<结束调用:";                   //调用方法结束
     public final static String  UTIL_INVOKE_METHOD_COST                 =   "，总计耗时（毫秒）:";               //调用方法耗时
 
-    public final static String  UTIL_JSON_WEB_TOKEN_KEY                 =   "${jwt.key}";                       //密钥
-    public final static String  UTIL_JSON_WEB_TOKEN_COMPANY             =   "${jwt.company}";                   //公司
-    public final static String  UTIL_JSON_WEB_TOKEN_AUDIENCE            =   "${jwt.audience}";                  //受众
-    public final static String  UTIL_JSON_WEB_TOKEN_ISSUER              =   "${jwt.issuer}";                    //发行者
-    public final static String  UTIL_JSON_WEB_TOKEN_LIFETIME            =   "${jwt.lifeTime}";                  //寿命
-
     public final static String  UTIL_SECURITY_APP_UP_PUBLIC_KEY         =   "${security.app.up.public.key}";    //APP类型应用的上行公钥
     public final static String  UTIL_SECURITY_APP_UP_PRIVATE_KEY        =   "${security.app.up.private.key}";   //APP类型应用的上行私钥
     public final static String  UTIL_SECURITY_APP_DOWN_PUBLIC_KEY       =   "${security.app.down.public.key}";  //APP类型应用的下行公钥

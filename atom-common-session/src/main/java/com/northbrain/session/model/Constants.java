@@ -14,8 +14,13 @@ public class Constants {
 
     public final static String SESSION_TYPE_COMMON                                  =   "COMMON";           //普通类型
 
-    public final static String SESSION_TOKEN_PROPERTY_PREFIX                        =   "session.jwt.token";    //会话令牌的前缀（配置文件）
-    public final static String SESSION_JWT_CLAIMS_SESSION_ID                        =   "sessionId";        //JWT的申明内容的私有部分：会话编号
+    public final static String SESSION_JWT_KEY                                      =   "${jwt.key}";                       //密钥
+    public final static String SESSION_JWT_COMPANY                                  =   "${jwt.company}";                   //公司
+    public final static String SESSION_JWT_AUDIENCE                                 =   "${jwt.audience}";                  //受众
+    public final static String SESSION_JWT_ISSUER                                   =   "${jwt.issuer}";                    //发行者
+    public final static String SESSION_JWT_LIFETIME                                 =   "${jwt.lifeTime}";                  //寿命
+
+    public final static String SESSION_JWT_CLAIMS_SESSION                           =   "session";          //JWT的申明内容的私有部分：会话编号
     public final static String SESSION_JWT_CLAIMS_APP_TYPE                          =   "appType";          //JWT的申明内容的私有部分：应用类型
     public final static String SESSION_JWT_HEADER_PARAM_TYPE_NAME                   =   "typ";              //JWT的申明内容的公共部分：类型
     public final static String SESSION_JWT_HEADER_PARAM_TYPE_VALUE                  =   "JWT";              //JWT的申明内容的公共部分：类型取值

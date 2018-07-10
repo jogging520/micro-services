@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -12,11 +13,16 @@ import org.springframework.context.annotation.Configuration;
 @Accessors(chain=true)
 @ToString
 @NoArgsConstructor
-@ConfigurationProperties(prefix=Constants.SESSION_TOKEN_PROPERTY_PREFIX)
+@RefreshScope
 public class TokenProperty {
+    @Value(Constants.SESSION_JWT_KEY)
     private String  key;            //密钥
+    @Value(Constants.SESSION_JWT_COMPANY)
     private String  company;        //公司
+    @Value(Constants.SESSION_JWT_AUDIENCE)
     private String  audience;       //受众
+    @Value(Constants.SESSION_JWT_ISSUER)
     private String  issuer;         //发行者
+    @Value(Constants.SESSION_JWT_LIFETIME)
     private Long    lifeTime;       //寿命
 }

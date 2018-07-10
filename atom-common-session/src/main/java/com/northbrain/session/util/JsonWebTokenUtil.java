@@ -5,11 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,10 +20,9 @@ import java.util.Map;
  * JWT可以使用HMAC算法对secret进行加密或者使用RSA的公钥私钥对来进行签名。
  *
  */
+@Log
 public class JsonWebTokenUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
-
-    public static String generateJsonWebToken(String sessionId, String appType, String key,
+    public static String generateJsonWebToken(String session, String appType, String key,
                                               String company, String audience, String issuer, Long lifeTime)
             throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -39,7 +36,7 @@ public class JsonWebTokenUtil {
 
         //私有claims部分，目前只保持id号
         Map<String, Object> claims = new HashMap<>();
-        claims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, sessionId);
+        claims.put(Constants.SESSION_JWT_CLAIMS_SESSION, session);
         claims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, appType);
 
         //添加构成JWT的参数
@@ -76,18 +73,18 @@ public class JsonWebTokenUtil {
         if(!claims.getIssuer().equals(issuer) ||
                 !claims.getId().equals(company) ||
                 !claims.getAudience().equals(audience)) {
-            logger.error(Constants.SESSION_HINT_JWT_VERIFY_PUBLIC_CLAIM_FAILURE);
+            log.info(Constants.SESSION_HINT_JWT_VERIFY_PUBLIC_CLAIM_FAILURE);
             throw new RuntimeException(Constants.SESSION_HINT_JWT_VERIFY_PUBLIC_CLAIM_FAILURE);
         }
 
         if(claims.getExpiration().before(new Date())) {
-            logger.error(Constants.SESSION_HINT_JWT_VERIFY_EXPIRATION_FAILURE);
+            log.info(Constants.SESSION_HINT_JWT_VERIFY_EXPIRATION_FAILURE);
             throw new RuntimeException(Constants.SESSION_HINT_JWT_VERIFY_EXPIRATION_FAILURE);
         }
 
         //解析私有claims
         Map<String, String> privateClaims = new HashMap<>();
-        privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION_ID, (String) claims.get(Constants.SESSION_JWT_CLAIMS_SESSION_ID));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION, (String) claims.get(Constants.SESSION_JWT_CLAIMS_SESSION));
         privateClaims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, (String) claims.get(Constants.SESSION_JWT_CLAIMS_APP_TYPE));
 
         return privateClaims;
