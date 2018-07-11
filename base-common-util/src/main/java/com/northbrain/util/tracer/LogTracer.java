@@ -43,12 +43,12 @@ public class LogTracer {
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
 
-        log.info(Constants.UTIL_INVOKE_METHOD_BEGIN + proceedingJoinPoint.toString());
+        log.info(Constants.UTIL_TRACER_INVOKE_METHOD_BEGIN + proceedingJoinPoint.toString());
 
         Object result = proceedingJoinPoint.proceed();
 
         long finishTime = System.currentTimeMillis();
-        log.info(Constants.UTIL_INVOKE_METHOD_END + proceedingJoinPoint.toString() + Constants.UTIL_INVOKE_METHOD_COST + (finishTime-startTime) + "ms");
+        log.info(Constants.UTIL_TRACER_INVOKE_METHOD_END + proceedingJoinPoint.toString() + Constants.UTIL_TRACER_INVOKE_METHOD_COST + (finishTime-startTime) + "ms");
 
         return result;
     }
