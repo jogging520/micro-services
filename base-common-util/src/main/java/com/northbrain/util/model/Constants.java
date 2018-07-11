@@ -45,4 +45,8 @@ public class Constants {
 
     public final static String UTIL_SECURITY_ASYMMETRIC_ALGORITHM       =   "RSA";                              //非对称加解密算法
     public final static String UTIL_SECURITY_SIGNATURE_ALGORITHM        =   "NONEwithRSA";                      //数字签名算法
+    public final static String UTIL_SECURITY_PBKDF2_ALGORITHM           =   "PBKDF2WithHmacSHA1";               //密码加解密算法
+    public final static int    UTIL_SECURITY_PBKDF2_SALT_BYTE_SIZE      =   32/2;                               //盐的长度
+    public final static int    UTIL_SECURITY_PBKDF2_HASH_BIT_SIZE       =   128*4;                              //生成密文的长度
+    public final static int    UTIL_SECURITY_PBKDF2_ITERATIONS          =   1000;                               //迭代次数
 }

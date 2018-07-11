@@ -25,11 +25,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- spring webflux -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
 		<!-- aop aspectj -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

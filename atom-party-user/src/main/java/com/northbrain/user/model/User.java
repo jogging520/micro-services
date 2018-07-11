@@ -45,6 +45,8 @@ public class User {
     private String[]                emails;             //电子邮件
     private String[]                wechates;           //微信号码
     @NotNull
+    private String                  salt;               //加密盐
+    @NotNull
     private Date                    createTime;         //创建时间
     @NotNull
     private Date                    timestamp;          //状态时间
