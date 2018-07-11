@@ -189,6 +189,12 @@ public class Crypt {
         return encrypt(data, base64PublicKey);
     }
 
+    /**
+     * 方法：用户上行加密
+     * @param data 明文
+     * @param appType 应用类型
+     * @return 密文
+     */
     public String encrypt4UserUpStream(String data, String appType) {
         String base64PublicKey;
 
@@ -219,6 +225,12 @@ public class Crypt {
         return encrypt(data, base64PublicKey);
     }
 
+    /**
+     * 方法：用户下行解密
+     * @param data 密文
+     * @param appType 应用类型
+     * @return 明文
+     */
     public String decrypt4UserDownStream(String data, String appType) {
         String base64PrivateKey;
 
@@ -249,6 +261,12 @@ public class Crypt {
         return decrypt(data, base64PrivateKey);
     }
 
+    /**
+     * 方法：用户上行解密
+     * @param data 密文
+     * @param appType 应用类型
+     * @return 明文
+     */
     public String decrypt4UserUpStream(String data, String appType) {
         String base64PrivateKey;
 
@@ -279,12 +297,22 @@ public class Crypt {
         return decrypt(data, base64PrivateKey);
     }
 
+    /**
+     * 方法：系统加密
+     * @param data 明文
+     * @return 密文
+     */
     public String encrypt4System(String data) {
         String base64PublicKey = securityProperty.getSysPublicKey();
 
         return encrypt(data, base64PublicKey);
     }
 
+    /**
+     * 方法：系统解密
+     * @param data 密文
+     * @return 明文
+     */
     public String decrypt4System(String data) {
         String base64PrivateKey = securityProperty.getSysPrivateKey();
 
