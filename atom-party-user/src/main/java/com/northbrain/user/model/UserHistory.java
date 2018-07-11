@@ -28,9 +28,11 @@ public class UserHistory {
     @NotNull
     private String                  type;               //类型
     @NotNull
-    private String                  userName;           //用户名称
+    private String                  name;               //用户名称
     @NotNull
     private String                  password;           //密码
+    @NotNull
+    private String                  salt;               //加密盐
     @NotNull
     private String                  realName;           //真实姓名
     private String                  avatar;             //头像
@@ -43,9 +45,7 @@ public class UserHistory {
     private Map<String, String[]>   affiliations;       //归属
     private String[]                mobiles;            //手机号码
     private String[]                emails;             //电子邮件
-    private String[]                wechates;           //微信号码
-    @NotNull
-    private String                  salt;               //加密盐
+    private String[]                weChats;            //微信号码
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull

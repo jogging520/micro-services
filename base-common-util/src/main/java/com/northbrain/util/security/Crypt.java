@@ -154,42 +154,6 @@ public class Crypt {
     }
 
     /**
-     * 方法：用户下行加密
-     * @param data 明文
-     * @param appType 应用类型
-     * @return 密文
-     */
-    public String encrypt4UserDownStream(String data, String appType) {
-        String base64PublicKey;
-
-        switch (appType) {
-            case Constants.UTIL_SECURITY_APP_TYPE_APP:
-                base64PublicKey = securityProperty.getAppDownPublicKey();
-                break;
-            case Constants.UTIL_SECURITY_APP_TYPE_WEB:
-                base64PublicKey = securityProperty.getWebDownPublicKey();
-                break;
-            case Constants.UTIL_SECURITY_APP_TYPE_CMS:
-                base64PublicKey = securityProperty.getCmsDownPublicKey();
-                break;
-            case Constants.UTIL_SECURITY_APP_TYPE_LED:
-                base64PublicKey = securityProperty.getLedDownPublicKey();
-                break;
-            case Constants.UTIL_SECURITY_APP_TYPE_MON:
-                base64PublicKey = securityProperty.getMonDownPublicKey();
-                break;
-            case Constants.UTIL_SECURITY_APP_TYPE_WCT:
-                base64PublicKey = securityProperty.getWctDownPublicKey();
-                break;
-            default:
-                base64PublicKey = "";
-                break;
-        }
-
-        return encrypt(data, base64PublicKey);
-    }
-
-    /**
      * 方法：用户上行加密
      * @param data 明文
      * @param appType 应用类型
@@ -229,29 +193,48 @@ public class Crypt {
      * 方法：用户下行解密
      * @param data 密文
      * @param appType 应用类型
+     * @param isTemporary 是否为临时
      * @return 明文
      */
-    public String decrypt4UserDownStream(String data, String appType) {
+    public String decrypt4UserDownStream(String data, String appType, Boolean isTemporary) {
         String base64PrivateKey;
 
         switch (appType) {
             case Constants.UTIL_SECURITY_APP_TYPE_APP:
-                base64PrivateKey = securityProperty.getAppDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getAppTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getAppDownPrivateKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_WEB:
-                base64PrivateKey = securityProperty.getWebDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getWebTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getWebDownPrivateKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_CMS:
-                base64PrivateKey = securityProperty.getCmsDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getCmsTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getCmsDownPrivateKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_LED:
-                base64PrivateKey = securityProperty.getLedDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getLedTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getLedDownPrivateKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_MON:
-                base64PrivateKey = securityProperty.getMonDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getMonTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getMonDownPrivateKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
-                base64PrivateKey = securityProperty.getWctDownPrivateKey();
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getWctTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getWctDownPrivateKey();
                 break;
             default:
                 base64PrivateKey = "";
@@ -262,39 +245,38 @@ public class Crypt {
     }
 
     /**
-     * 方法：用户上行解密
-     * @param data 密文
+     * 方法：获取临时加密公钥
      * @param appType 应用类型
-     * @return 明文
+     * @return 临时公钥
      */
-    public String decrypt4UserUpStream(String data, String appType) {
-        String base64PrivateKey;
+    public String getTemporaryPublicKey(String appType) {
+        String temporaryPublicKey;
 
         switch (appType) {
             case Constants.UTIL_SECURITY_APP_TYPE_APP:
-                base64PrivateKey = securityProperty.getAppUpPrivateKey();
+                temporaryPublicKey = securityProperty.getAppTemporaryPublicKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_WEB:
-                base64PrivateKey = securityProperty.getWebUpPrivateKey();
+                temporaryPublicKey = securityProperty.getWebTemporaryPublicKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_CMS:
-                base64PrivateKey = securityProperty.getCmsUpPrivateKey();
+                temporaryPublicKey = securityProperty.getCmsTemporaryPublicKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_LED:
-                base64PrivateKey = securityProperty.getLedUpPrivateKey();
+                temporaryPublicKey = securityProperty.getLedTemporaryPublicKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_MON:
-                base64PrivateKey = securityProperty.getMonUpPrivateKey();
+                temporaryPublicKey = securityProperty.getMonTemporaryPublicKey();
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
-                base64PrivateKey = securityProperty.getWctUpPrivateKey();
+                temporaryPublicKey = securityProperty.getWctTemporaryPublicKey();
                 break;
             default:
-                base64PrivateKey = "";
+                temporaryPublicKey = "";
                 break;
         }
 
-        return decrypt(data, base64PrivateKey);
+        return temporaryPublicKey;
     }
 
     /**
@@ -318,6 +300,4 @@ public class Crypt {
 
         return decrypt(data, base64PrivateKey);
     }
-
-
 }

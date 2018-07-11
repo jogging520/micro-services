@@ -21,7 +21,7 @@ public class UserController {
     /**
      * 方法：通过两种方式验证用户信息，一种是用户名+密码，另一种是手机+验证码
      * @param appType  应用类型
-     * @param userName 用户名
+     * @param name 用户名
      * @param password 密码
      * @param mobile 手机号码
      * @return 校验结果
@@ -29,13 +29,13 @@ public class UserController {
     @GetMapping(Constants.USER_AUTHENTICATION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Authentication>> verifyUser(@RequestParam String serialNo,
                                                            @RequestParam String appType,
-                                                           @RequestParam(required = false) String userName,
+                                                           @RequestParam(required = false) String name,
                                                            @RequestParam(required = false) String password,
                                                            @RequestParam(required = false) String mobile) {
-        if(userName != null && password != null)
+        if(name != null && password != null)
             return ResponseEntity.ok()
                     .body(this.userService
-                            .verifyByUserNameAndPassword(serialNo, appType, userName, password));
+                            .verifyByUserNameAndPassword(serialNo, appType, name, password));
         else if(mobile != null)
             return ResponseEntity.ok()
                     .body(this.userService

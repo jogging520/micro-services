@@ -6,6 +6,8 @@ import com.northbrain.session.repository.IAttemptRepository;
 import com.northbrain.session.repository.ISessionHistoryRepository;
 import com.northbrain.session.repository.ISessionRepository;
 import com.northbrain.session.util.JsonWebTokenUtil;
+import com.northbrain.util.security.Crypt;
+
 import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
@@ -24,17 +26,20 @@ public class SessionService {
     private final IAttemptRepository attemptRepository;
     private final IAttemptHistoryRepository attemptHistoryRepository;
     private final TokenProperty tokenProperty;
+    private final Crypt crypt;
 
     public SessionService(ISessionRepository sessionRepository,
                           ISessionHistoryRepository sessionHistoryRepository,
                           IAttemptRepository attemptRepository,
                           IAttemptHistoryRepository attemptHistoryRepository,
-                          TokenProperty tokenProperty) {
+                          TokenProperty tokenProperty,
+                          Crypt crypt) {
         this.sessionRepository = sessionRepository;
         this.sessionHistoryRepository = sessionHistoryRepository;
         this.attemptRepository = attemptRepository;
         this.attemptHistoryRepository = attemptHistoryRepository;
         this.tokenProperty = tokenProperty;
+        this.crypt = crypt;
     }
 
     /**
@@ -292,5 +297,14 @@ public class SessionService {
                 });
 
         return Flux.empty();
+    }
+
+    /**
+     * 方法：获取临时加密公钥
+     * @param appType 应用类型
+     * @return 临时公钥
+     */
+    public String queryTemporaryPublicKey(String appType) {
+        return this.crypt.getTemporaryPublicKey(appType);
     }
 }

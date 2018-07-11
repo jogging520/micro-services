@@ -46,19 +46,19 @@ public class UserService {
      * 方法：根据用户名+密码验证用户信息
      * @param serialNo 流水号
      * @param appType 应用类型
-     * @param userName 用户名
+     * @param name 用户名
      * @param password 密码
      * @return 校验结果
      */
     public Mono<Authentication> verifyByUserNameAndPassword(String serialNo,
                                                             String appType,
-                                                            String userName,
+                                                            String name,
                                                             String password) {
         return this.userRepository
-                .findByUserName(userName)
+                .findByName(name)
                 .flatMap(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(userName);
+                    log.info(name);
 
                     if(user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
                             user.getAppTypes() != null &&
@@ -128,7 +128,7 @@ public class UserService {
     public Mono<User> createUser(String serialNo,
                                  User user) {
         return this.userRepository
-                .findByIdOrUserName(user.getId(), user.getUserName())
+                .findByIdOrName(user.getId(), user.getName())
                 .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
                 .switchIfEmpty(this.userRepository
                         .save(user
@@ -145,7 +145,7 @@ public class UserService {
                                             .operationType(Constants.USER_HISTORY_CREATE)
                                             .userId(newUser.getId())
                                             .type(newUser.getType())
-                                            .userName(newUser.getUserName())
+                                            .name(newUser.getName())
                                             .password(newUser.getPassword())
                                             .realName(newUser.getRealName())
                                             .avatar(newUser.getAvatar())
@@ -155,7 +155,7 @@ public class UserService {
                                             .affiliations(newUser.getAffiliations())
                                             .mobiles(newUser.getMobiles())
                                             .emails(newUser.getEmails())
-                                            .wechates(newUser.getWechates())
+                                            .weChats(newUser.getWeChats())
                                             .createTime(newUser.getCreateTime())
                                             .timestamp(new Date())
                                             .status(newUser.getStatus())

@@ -118,12 +118,24 @@ public class SessionController {
      */
     @DeleteMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Void> deleteAttempts(@RequestParam String serialNo,
-                                                        @RequestParam String userName,
-                                                        @RequestParam String appType) {
+                                               @RequestParam String userName,
+                                               @RequestParam String appType) {
         this.sessionService
                 .deleteAttempts(serialNo, userName, appType);
 
         return ResponseEntity.ok()
                 .body(null);
+    }
+
+    /**
+     * 方法：获取临时加密公钥
+     * @param appType 应用类型
+     * @return 临时公钥
+     */
+    @GetMapping(Constants.SESSION_TEMPORARY_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<String> queryTemporaryPublicKey(@RequestParam String appType) {
+        return ResponseEntity.ok()
+                .body(this.sessionService
+                        .queryTemporaryPublicKey(appType));
     }
 }

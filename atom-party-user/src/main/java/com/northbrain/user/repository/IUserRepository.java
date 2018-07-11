@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 public interface IUserRepository extends ReactiveCrudRepository<User, String> {
     Mono<User> findByIdAndStatus(String id, String status);
 
-    Mono<User> findByIdOrUserName(String id, String userName);
+    Mono<User> findByIdOrName(String id, String name);
 
-    Mono<User> findByUserName(String userName);
+    Mono<User> findByName(String name);
 
-    Mono<User> findByUserNameAndPassword(String userName, String password);
+    Mono<User> findByNameAndPassword(String name, String password);
 
     Mono<User> findByMobilesContaining(String mobile);
 }

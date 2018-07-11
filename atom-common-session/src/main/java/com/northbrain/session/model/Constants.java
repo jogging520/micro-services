@@ -41,6 +41,7 @@ public class Constants {
     public final static String SESSION_SPECIFIED_HTTP_REQUEST_MAPPING               =   "/sessions/{sessionId}";
     public final static String SESSION_JWT_HTTP_REQUEST_MAPPING                     =   "/sessions/token";
     public final static String SESSION_ATTEMPT_HTTP_REQUEST_MAPPING                 =   "/sessions/attempt";
+    public final static String SESSION_TEMPORARY_HTTP_REQUEST_MAPPING               =   "/sessions/temporary";
 
 
     /**
