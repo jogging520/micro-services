@@ -3,6 +3,7 @@ package com.northbrain.search.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.northbrain.search.model.Condition;
 import com.northbrain.search.model.Constants;
 import com.northbrain.search.model.Summary;
 import com.northbrain.search.repository.ISummaryRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @Log
@@ -21,12 +23,20 @@ public class SearchService {
         this.summaryRepository = summaryRepository;
     }
 
-    public Summary querySummaries(String condition) {
-        return this.summaryRepository
-                .searchSimilar(new QueryStringQueryBuilder(condition), );
+    public Flux<Summary> querySummaries(String serialNo,
+                                        Flux<Condition> conditions) {
+        log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
+
+        return conditions
+                .flatMap(condition -> {
+                    QueryStringQueryBuilder queryStringQueryBuilder =
+                            new QueryStringQueryBuilder(condition.getFilters());
+
+                    return Flux.fromIterable(this.summaryRepository
+                            .search(queryStringQueryBuilder));
+                });
     }
 
-    //是否转换成Flux
     public Flux<Summary> createSummaries(String serialNo,
                                          Flux<Summary> summaries) {
         return Flux.fromIterable(this.summaryRepository
@@ -37,5 +47,15 @@ public class SearchService {
 
                     return summary;
                 });
+    }
+
+    public Flux<Void> deleteSummaries(String serialNo,
+                                      Flux<Summary> summaries) {
+        log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
+
+        this.summaryRepository
+                .deleteAll(summaries.toIterable());
+
+        return Flux.empty();
     }
 }

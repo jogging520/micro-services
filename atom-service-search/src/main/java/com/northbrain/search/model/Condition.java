@@ -1,0 +1,17 @@
+package com.northbrain.search.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain=true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Condition {
+    private String      index;
+    private String      filters;
+}

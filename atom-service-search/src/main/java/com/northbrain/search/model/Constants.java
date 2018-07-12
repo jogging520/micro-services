@@ -4,7 +4,12 @@ public class Constants {
     /**
      * 枚举值定义，如状态、类型
      */
-    public final static String  SEARCH_STATUS_ACTIVE                          =   "ACTIVE";   //用户状态：在用
+    public final static String  SEARCH_STATUS_ACTIVE                    =   "ACTIVE";   //用户状态：在用
+
+    public final static String  SEARCH_SUMMARY_INDEX_NAME               =   "summary";  //index名称
+    public final static Short   SEARCH_SUMMARY_SHARDS                   =   3;          //分配数量
+    public final static Short   SEARCH_SUMMARY_REPLICAS                 =   3;          //副本数量
+    public final static String  SEARCH_SUMMARY_REFRESH_INTERVAL         =   "-1";       //刷新间隔
 
     /**
      * restful资源定义

@@ -16,7 +16,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "summary", shards = 3, replicas = 3, refreshInterval = "-1")
+@Document(indexName = Constants.SEARCH_SUMMARY_INDEX_NAME,
+          shards = 3,
+          replicas = 3,
+          refreshInterval = Constants.SEARCH_SUMMARY_REFRESH_INTERVAL)
 public class Summary {
     @Id
     private String      id;                 //id

@@ -5,6 +5,7 @@ import com.northbrain.util.security.Password;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,16 +22,12 @@ public class TaskController {
     }
 
 
-    @GetMapping("/zookeeper")
-    public String hello() {
-        return this.crypt
-                .encrypt4UserDownStream("abcdef", "app");
-    }
-
     @GetMapping("/decrypt")
-    public String hello2() {
+    public String hello2(@RequestParam String serialNo,
+                         @RequestParam Long ddd) {
         return this.crypt
-                .decrypt4UserDownStream("ZuZ47YNeOoCXhxV6rwNnnUvpSN8E9tJSC52Yg5eOYtxkKTtmSeUD9jQQKvI1JaOp0SLzj9P9Vb0hZkpLTMH+paAtI9wJ/nw/UyqjQrOrBWwoxuGlpFQzoumdIeeRm/ps9CqMVbSL9y/nhMbZRH/GZkct3AAlQvfL0P5SGGsBoXU=", "app");
+                .decrypt4UserDownStream("ZuZ47YNeOoCXhxV6rwNnnUvpSN8E9tJSC52Yg5eOYtxkKTtmSeUD9jQQKvI1JaOp0SLzj9P9Vb0hZkpLTMH+paAtI9wJ/nw/UyqjQrOrBWwoxuGlpFQzoumdIeeRm/ps9CqMVbSL9y/nhMbZRH/GZkct3AAlQvfL0P5SGGsBoXU=", "app",
+                        false);
     }
 
     @GetMapping("/path")

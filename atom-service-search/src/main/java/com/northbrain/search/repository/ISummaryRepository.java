@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ISummaryRepository extends ElasticsearchRepository<Summary, String> {
     List<Summary> findByNameContaining(String name);
+
+    Summary findByEntity(String entity);
 }
