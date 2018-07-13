@@ -5,12 +5,11 @@ import com.northbrain.storage.model.Picture;
 import com.northbrain.storage.model.PictureHistory;
 import com.northbrain.storage.repository.IPictureHistoryRepository;
 import com.northbrain.storage.repository.IPictureRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -56,8 +55,8 @@ public class StorageService {
                                 .save(picture
                                 .setId(null)
                                 .setStatus(Constants.STORAGE_STATUS_ACTIVE)
-                                .setCreateTime(new Date())
-                                .setTimestamp(new Date())
+                                .setCreateTime(Clock.currentTime())
+                                .setTimestamp(Clock.currentTime())
                                 .setSerialNo(serialNo)))
                 .map(newPicture -> {
                     log.info(Constants.STORAGE_OPERATION_SERIAL_NO + serialNo);
@@ -70,7 +69,7 @@ public class StorageService {
                                     .type(newPicture.getType())
                                     .content(newPicture.getContent())
                                     .createTime(newPicture.getCreateTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(newPicture.getStatus())
                                     .serialNo(serialNo)
                                     .description(newPicture.getDescription())

@@ -7,12 +7,11 @@ import com.northbrain.privilege.model.RoleHistory;
 import com.northbrain.privilege.repository.IPermissionRepository;
 import com.northbrain.privilege.repository.IRoleHistoryRepository;
 import com.northbrain.privilege.repository.IRoleRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -62,8 +61,8 @@ public class PrivilegeService {
                         this.roleRepository
                                 .save(role
                                         .setStatus(Constants.PRIVILEGE_STATUS_ACTIVE)
-                                        .setCreateTime(new Date())
-                                        .setTimestamp(new Date())
+                                        .setCreateTime(Clock.currentTime())
+                                        .setTimestamp(Clock.currentTime())
                                         .setSerialNo(serialNo))
                                 .map(newRole -> {
                                     log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
@@ -78,7 +77,7 @@ public class PrivilegeService {
                                                     .appTypes(newRole.getAppTypes())
                                                     .permissions(newRole.getPermissions())
                                                     .createTime(newRole.getCreateTime())
-                                                    .timestamp(new Date())
+                                                    .timestamp(Clock.currentTime())
                                                     .status(newRole.getStatus())
                                                     .serialNo(serialNo)
                                                     .description(newRole.getDescription())

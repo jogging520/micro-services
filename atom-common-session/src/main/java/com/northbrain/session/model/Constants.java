@@ -48,6 +48,7 @@ public class Constants {
      * 操作定义
      */
     public final static String SESSION_OPERATION_SERIAL_NO                          =   "本次操作会话实体的流水号为：";
+    public final static String SESSION_ATTEMPT_TIMES                                =   "今天尝试登录的次数是：";
 
     /**
      * 错误码定义

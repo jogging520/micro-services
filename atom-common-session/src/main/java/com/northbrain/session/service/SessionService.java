@@ -8,14 +8,13 @@ import com.northbrain.session.repository.ISessionRepository;
 import com.northbrain.session.util.JsonWebTokenUtil;
 import com.northbrain.util.security.Crypt;
 
+import com.northbrain.util.timer.Clock;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -87,9 +86,9 @@ public class SessionService {
                                 .user(user)
                                 .userName(userName)
                                 .mobile(mobile)
-                                .createTime(new Date())
-                                .loginTime(new Date())
-                                .timestamp(new Date())
+                                .createTime(Clock.currentTime())
+                                .loginTime(Clock.currentTime())
+                                .timestamp(Clock.currentTime())
                                 .status(Constants.SESSION_STATUS_LOGIN)
                                 .lifeTime(this.tokenProperty.getLifeTime())
                                 .build()))
@@ -102,8 +101,8 @@ public class SessionService {
                         .userName(userName)
                         .mobile(mobile)
                         .createTime(session.getCreateTime())
-                        .loginTime(new Date())
-                        .timestamp(new Date())
+                        .loginTime(Clock.currentTime())
+                        .timestamp(Clock.currentTime())
                         .status(Constants.SESSION_STATUS_LOGIN)
                         .lifeTime(this.tokenProperty.getLifeTime())
                         .build())
@@ -155,7 +154,7 @@ public class SessionService {
                                     .loginTime(session.getLoginTime())
                                     .lifeTime(session.getLifeTime())
                                     .createTime(session.getCreateTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(Constants.SESSION_STATUS_LOGOUT)
                                     .serialNo(serialNo)
                                     .description(session.getDescription())
@@ -221,18 +220,13 @@ public class SessionService {
     public Mono<Long> queryAttemptCount(String serialNo,
                                         String userName,
                                         String appType) {
-        Date fromAttemptTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fromAttemptTime);
-        calendar.add(Calendar.DATE, 1);
-
         return this.attemptRepository
                 .findByUserNameAndAppTypeAndAttemptTimeBetween(userName, appType,
-                        fromAttemptTime, calendar.getTime())
+                        Clock.currentDate(), Clock.tomorrowDate())
                 .count()
                 .map(c -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
-                    log.info(c.toString());
+                    log.info(Constants.SESSION_ATTEMPT_TIMES + c.toString());
                     return c;
                 });
     }
@@ -246,7 +240,9 @@ public class SessionService {
     public Mono<Attempt> createAttempt(String serialNo,
                                        Attempt attempt) {
         return this.attemptRepository
-                .save(attempt.setAttemptTime(new Date()))
+                .save(attempt
+                        .setAttemptTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime()))
                 .map(newAttempt -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
                     log.info(newAttempt.toString());
@@ -280,7 +276,7 @@ public class SessionService {
                                     .mobile(attempt.getMobile())
                                     .appType(attempt.getAppType())
                                     .attemptTime(attempt.getAttemptTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(attempt.getStatus())
                                     .serialNo(attempt.getSerialNo())
                                     .description(attempt.getDescription())

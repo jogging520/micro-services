@@ -5,13 +5,11 @@ import com.northbrain.organization.repository.IOrganizationHistoryRepository;
 import com.northbrain.organization.repository.IOrganizationRepository;
 import com.northbrain.organization.repository.IRegionHistoryRepository;
 import com.northbrain.organization.repository.IRegionRepository;
-import com.sun.org.apache.regexp.internal.RE;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -72,8 +70,8 @@ public class OrganizationService {
         return this.organizationRepository
                 .save(organization
                         .setStatus(Constants.ORGANIZATION_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
+                        .setCreateTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime())
                         .setSerialNo(serialNo))
                 .map(newOrganization -> {
                     log.info(Constants.ORGANIZATION_OPERATION_SERIAL_NO + serialNo);
@@ -88,7 +86,7 @@ public class OrganizationService {
                                     .region(newOrganization.getRegion())
                                     .parent(newOrganization.getParent())
                                     .createTime(newOrganization.getCreateTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(newOrganization.getStatus())
                                     .serialNo(serialNo)
                                     .description(newOrganization.getDescription())
@@ -114,8 +112,8 @@ public class OrganizationService {
         return this.regionRepository
                 .save(region
                         .setStatus(Constants.ORGANIZATION_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
+                        .setCreateTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime())
                         .setSerialNo(serialNo))
                 .map(newRegion -> {
                     log.info(Constants.ORGANIZATION_OPERATION_SERIAL_NO + serialNo);
@@ -131,7 +129,7 @@ public class OrganizationService {
                                     .longitude(newRegion.getLongitude())
                                     .latitude(newRegion.getLatitude())
                                     .createTime(newRegion.getCreateTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(newRegion.getStatus())
                                     .serialNo(serialNo)
                                     .description(newRegion.getDescription())

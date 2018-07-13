@@ -5,12 +5,11 @@ import com.northbrain.school.model.School;
 import com.northbrain.school.model.SchoolHistory;
 import com.northbrain.school.repository.ISchoolHistoryRepository;
 import com.northbrain.school.repository.ISchoolRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -38,8 +37,8 @@ public class SchoolService {
                         .switchIfEmpty(this.schoolRepository
                                 .save(school
                                         .setStatus(Constants.SCHOOL_STATUS_ACTIVE)
-                                        .setCreateTime(new Date())
-                                        .setTimestamp(new Date())
+                                        .setCreateTime(Clock.currentTime())
+                                        .setTimestamp(Clock.currentTime())
                                         .setSerialNo(serialNo))
                                 .map(newSchool -> {
                                     log.info(Constants.SCHOOL_OPERATION_SERIAL_NO + serialNo);
@@ -56,7 +55,7 @@ public class SchoolService {
                                                     .avatar(newSchool.getAvatar())
                                                     .phone(newSchool.getPhone())
                                                     .createTime(newSchool.getCreateTime())
-                                                    .timestamp(new Date())
+                                                    .timestamp(Clock.currentTime())
                                                     .status(newSchool.getStatus())
                                                     .serialNo(serialNo)
                                                     .description(newSchool.getDescription())

@@ -1,6 +1,7 @@
 package com.northbrain.user.service;
 
 import com.northbrain.user.model.*;
+import com.northbrain.util.timer.Clock;
 import org.springframework.stereotype.Service;
 
 import com.northbrain.user.repository.IUserHistoryRepository;
@@ -10,7 +11,6 @@ import lombok.extern.java.Log;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
-import java.util.Date;
 
 @Service
 @Log
@@ -133,8 +133,8 @@ public class UserService {
                 .switchIfEmpty(this.userRepository
                         .save(user
                                 .setStatus(Constants.USER_STATUS_ACTIVE)
-                                .setCreateTime(new Date())
-                                .setTimestamp(new Date())
+                                .setCreateTime(Clock.currentTime())
+                                .setTimestamp(Clock.currentTime())
                                 .setSerialNo(serialNo))
                         .map(newUser -> {
                             log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
@@ -157,7 +157,7 @@ public class UserService {
                                             .emails(newUser.getEmails())
                                             .weChats(newUser.getWeChats())
                                             .createTime(newUser.getCreateTime())
-                                            .timestamp(new Date())
+                                            .timestamp(Clock.currentTime())
                                             .status(newUser.getStatus())
                                             .serialNo(serialNo)
                                             .description(newUser.getDescription())

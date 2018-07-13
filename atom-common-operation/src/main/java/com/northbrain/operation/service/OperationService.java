@@ -5,6 +5,7 @@ import com.northbrain.operation.model.Operation;
 import com.northbrain.operation.model.Record;
 import com.northbrain.operation.repository.IOperationRepository;
 import com.northbrain.operation.repository.IRecordRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -120,8 +121,8 @@ public class OperationService {
         return this.operationRepository
                 .save(operation
                         .setStatus(Constants.OPERATION_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date()))
+                        .setCreateTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime()))
                 .map(newOperation -> newOperation
                         .setStatus(Constants.OPERATION_ERRORCODE_SUCCESS));
     }
@@ -137,8 +138,8 @@ public class OperationService {
         return this.recordRepository
                 .save(record
                         .setStatus(Constants.OPERATION_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date()))
+                        .setCreateTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime()))
                 .map(newRecord -> newRecord
                         .setStatus(Constants.OPERATION_ERRORCODE_SUCCESS));
     }

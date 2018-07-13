@@ -5,13 +5,11 @@ import com.northbrain.family.model.Family;
 import com.northbrain.family.model.FamilyHistory;
 import com.northbrain.family.repository.IFamilyHistoryRepository;
 import com.northbrain.family.repository.IFamilyRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Calendar;
-import java.util.Date;
 
 @Service
 @Log
@@ -40,8 +38,8 @@ public class FamilyService {
                         .switchIfEmpty(this.familyRepository
                                 .save(family
                                         .setStatus(Constants.FAMILY_STATUS_ACTIVE)
-                                        .setCreateTime(new Date())
-                                        .setTimestamp(new Date())
+                                        .setCreateTime(Clock.currentTime())
+                                        .setTimestamp(Clock.currentTime())
                                         .setSerialNo(serialNo))
                                 .map(newFamily -> {
                                     log.info(Constants.FAMILY_OPERATION_SERIAL_NO + serialNo);
@@ -56,7 +54,7 @@ public class FamilyService {
                                                     .masterIdCardNo(newFamily.getMasterIdCardNo())
                                                     .phone(newFamily.getPhone())
                                                     .createTime(newFamily.getCreateTime())
-                                                    .timestamp(new Date())
+                                                    .timestamp(Clock.currentTime())
                                                     .status(newFamily.getStatus())
                                                     .serialNo(serialNo)
                                                     .description(newFamily.getDescription())

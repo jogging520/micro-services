@@ -5,12 +5,11 @@ import com.northbrain.student.model.Student;
 import com.northbrain.student.model.StudentHistory;
 import com.northbrain.student.repository.IStudentHistoryRepository;
 import com.northbrain.student.repository.IStudentRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -106,8 +105,8 @@ public class StudentService {
                         .switchIfEmpty(this.studentRepository
                                 .save(student
                                         .setStatus(Constants.STUDENT_STATUS_ACTIVE)
-                                        .setCreateTime(new Date())
-                                        .setTimestamp(new Date())
+                                        .setCreateTime(Clock.currentTime())
+                                        .setTimestamp(Clock.currentTime())
                                         .setSerialNo(serialNo))
                                 .map(newStudent -> {
                                     log.info(Constants.STUDENT_OPERATION_SERIAL_NO + serialNo);
@@ -141,7 +140,7 @@ public class StudentService {
                                                     .solutions(newStudent.getSolutions())
                                                     .isPoor(newStudent.getIsPoor())
                                                     .createTime(newStudent.getCreateTime())
-                                                    .timestamp(new Date())
+                                                    .timestamp(Clock.currentTime())
                                                     .status(newStudent.getStatus())
                                                     .serialNo(serialNo)
                                                     .description(newStudent.getDescription())

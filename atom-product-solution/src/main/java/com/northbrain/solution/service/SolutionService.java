@@ -5,11 +5,10 @@ import com.northbrain.solution.model.Solution;
 import com.northbrain.solution.model.SolutionHistory;
 import com.northbrain.solution.repository.ISolutionHistoryRepository;
 import com.northbrain.solution.repository.ISolutionRepository;
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -50,8 +49,8 @@ public class SolutionService {
                 .flatMap(solution -> this.solutionRepository
                         .save(solution
                                 .setStatus(Constants.SOLUTION_STATUS_ACTIVE)
-                                .setCreateTime(new Date())
-                                .setTimestamp(new Date())
+                                .setCreateTime(Clock.currentTime())
+                                .setTimestamp(Clock.currentTime())
                                 .setSerialNo(serialNo))
                         .map(newSolution -> {
                             log.info(Constants.SOLUTION_OPERATION_SERIAL_NO + serialNo);
@@ -67,7 +66,7 @@ public class SolutionService {
                                             .families(newSolution.getFamilies())
                                             .items(newSolution.getItems())
                                             .createTime(newSolution.getCreateTime())
-                                            .timestamp(new Date())
+                                            .timestamp(Clock.currentTime())
                                             .status(newSolution.getStatus())
                                             .serialNo(serialNo)
                                             .description(newSolution.getDescription())

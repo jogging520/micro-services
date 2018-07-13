@@ -1,5 +1,6 @@
 package com.northbrain.strategy.service;
 
+import com.northbrain.util.timer.Clock;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,6 @@ import com.northbrain.strategy.repository.IStrategyHistoryRepository;
 import com.northbrain.strategy.repository.IStrategyRepository;
 
 import reactor.core.publisher.Flux;
-
-import java.util.Date;
 
 @Service
 @Log
@@ -67,8 +66,8 @@ public class StrategyService {
         return strategies
                 .map(strategy -> strategy.
                         setStatus(Constants.STRATEGY_STATUS_ACTIVE)
-                        .setCreateTime(new Date())
-                        .setTimestamp(new Date())
+                        .setCreateTime(Clock.currentTime())
+                        .setTimestamp(Clock.currentTime())
                         .setSerialNo(serialNo))
                 .flatMap(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
@@ -82,7 +81,7 @@ public class StrategyService {
                                     .name(strategy.getName())
                                     .parameters(strategy.getParameters())
                                     .createTime(strategy.getCreateTime())
-                                    .timestamp(new Date())
+                                    .timestamp(Clock.currentTime())
                                     .status(strategy.getStatus())
                                     .serialNo(serialNo)
                                     .description(strategy.getDescription())
