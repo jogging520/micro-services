@@ -221,8 +221,9 @@ public class SessionService {
                                         String userName,
                                         String appType) {
         return this.attemptRepository
-                .findByUserNameAndAppTypeAndAttemptTimeBetween(userName, appType,
-                        Clock.currentDate(), Clock.tomorrowDate())
+                .findByUserNameAndAppTypeAndAttemptTimeBetween(
+                        this.crypt.decrypt4UserDownStream(userName, appType, true),
+                        appType, Clock.currentDate(), Clock.tomorrowDate())
                 .count()
                 .map(c -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
@@ -239,8 +240,12 @@ public class SessionService {
      */
     public Mono<Attempt> createAttempt(String serialNo,
                                        Attempt attempt) {
+
+        log.info(attempt.toString());
         return this.attemptRepository
                 .save(attempt
+                        .setUserName(this.crypt.decrypt4UserDownStream(attempt.getUserName(),
+                                attempt.getAppType(), true))
                         .setAttemptTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime()))
                 .map(newAttempt -> {

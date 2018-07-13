@@ -1,6 +1,7 @@
 package com.northbrain.user.service;
 
 import com.northbrain.user.model.*;
+import com.northbrain.util.security.Crypt;
 import com.northbrain.util.timer.Clock;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,14 @@ import java.util.Arrays;
 public class UserService {
     private final IUserRepository userRepository;
     private final IUserHistoryRepository userHistoryRepository;
+    private final Crypt crypt;
 
     public UserService(IUserRepository userRepository,
-                       IUserHistoryRepository userHistoryRepository) {
+                       IUserHistoryRepository userHistoryRepository,
+                       Crypt crypt) {
         this.userRepository = userRepository;
         this.userHistoryRepository = userHistoryRepository;
+        this.crypt = crypt;
     }
 
     /**
@@ -55,10 +59,10 @@ public class UserService {
                                                             String name,
                                                             String password) {
         return this.userRepository
-                .findByName(name)
+                .findByName(this.crypt.decrypt4UserDownStream(name, appType, true))
                 .flatMap(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(name);
+                    log.info(user.getName());
 
                     if(user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
                             user.getAppTypes() != null &&

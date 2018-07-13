@@ -54,10 +54,12 @@ public class Constants {
     public final static String UTIL_SECURITY_APP_TYPE_LED               =   "led";                                      //大屏应用类型
     public final static String UTIL_SECURITY_APP_TYPE_MON               =   "mon";                                      //监控系统应用类型
     public final static String UTIL_SECURITY_APP_TYPE_WCT               =   "wct";                                      //微信应用类型
-    public final static String UTIL_SECURITY_APP_TYPE_TMP               =   "tmp";                                      //临时应用类型
 
+    public final static int    UTIL_SECURITY_ASYMMETRIC_KEY_LENGTH      =   1024;                                       //非对称加解密的密钥对长度
     public final static String UTIL_SECURITY_ASYMMETRIC_ALGORITHM       =   "RSA";                                      //非对称加解密算法
     public final static String UTIL_SECURITY_SIGNATURE_ALGORITHM        =   "NONEwithRSA";                              //数字签名算法
+    public final static String UTIL_SECURITY_ASYMMETRIC_PUBLIC_KEY      =   "公钥：";
+    public final static String UTIL_SECURITY_ASYMMETRIC_PRIVATE_KEY     =   "私钥：";
     public final static String UTIL_SECURITY_PBKDF2_ALGORITHM           =   "PBKDF2WithHmacSHA1";                       //密码加解密算法
     public final static int    UTIL_SECURITY_PBKDF2_SALT_BYTE_SIZE      =   32/2;                                       //盐的长度
     public final static int    UTIL_SECURITY_PBKDF2_HASH_BIT_SIZE       =   128*4;                                      //生成密文的长度

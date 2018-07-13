@@ -27,6 +27,30 @@ public class Crypt {
     }
 
     /**
+     * 方法：获取非对称加密的密钥对
+     */
+    public static void generateRSAKeyPair() {
+        try {
+            KeyPairGenerator keyPairGenerator =
+                    KeyPairGenerator.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
+            keyPairGenerator.initialize(Constants.UTIL_SECURITY_ASYMMETRIC_KEY_LENGTH);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            Key publicKey = keyPair.getPublic();
+            String base64PublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+
+            Key privateKey = keyPair.getPrivate();
+            String base64PrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+
+            log.info(Constants.UTIL_SECURITY_ASYMMETRIC_PUBLIC_KEY + base64PublicKey);
+            log.info(Constants.UTIL_SECURITY_ASYMMETRIC_PRIVATE_KEY + base64PrivateKey);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 方法：获取公钥
      * @param base64PublicKey BASE64编码后的公钥字符串
      * @return 公钥

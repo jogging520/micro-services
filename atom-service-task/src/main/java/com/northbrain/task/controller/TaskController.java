@@ -62,4 +62,9 @@ public class TaskController {
 
         return "Hello, salt=" + verified;
     }
+
+    @GetMapping("/keypair")
+    public void hello6() {
+        Crypt.generateRSAKeyPair();
+    }
 }
