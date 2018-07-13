@@ -48,15 +48,17 @@ public class UserController {
     /**
      * 方法：创建新用户
      * @param serialNo 流水号
+     * @param appType 应用类型
      * @param user 用户
      * @return 新用户
      */
     @PostMapping(Constants.USER_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<User>> createUser(@RequestParam String serialNo,
+                                                 @RequestParam String appType,
                                                  @RequestBody User user) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .createUser(serialNo, user));
+                        .createUser(serialNo, appType, user));
     }
 
     /**

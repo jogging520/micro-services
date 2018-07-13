@@ -1,8 +1,5 @@
 package com.northbrain.search.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.northbrain.search.model.Condition;
 import com.northbrain.search.model.Constants;
 import com.northbrain.search.model.Summary;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Service
 @Log

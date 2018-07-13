@@ -2,6 +2,7 @@ package com.northbrain.user.service;
 
 import com.northbrain.user.model.*;
 import com.northbrain.util.security.Crypt;
+import com.northbrain.util.security.Password;
 import com.northbrain.util.timer.Clock;
 import org.springframework.stereotype.Service;
 
@@ -62,12 +63,13 @@ public class UserService {
                 .findByName(this.crypt.decrypt4UserDownStream(name, appType, true))
                 .flatMap(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(user.getName());
 
                     if(user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
                             user.getAppTypes() != null &&
                             Arrays.asList(user.getAppTypes()).contains(appType) &&
-                            user.getPassword().equalsIgnoreCase(password)) {
+                            Password.verify(user.getPassword(),
+                                    this.crypt.decrypt4UserDownStream(password, appType, true),
+                                    this.crypt.decrypt4System(user.getSalt()))) {
                         return Mono.just(Authentication
                                 .builder()
                                 .user(user.getId())
@@ -126,23 +128,33 @@ public class UserService {
     /**
      * 方法：创建新用户
      * @param serialNo 流水号
+     * @param appType 应用类型
      * @param user 用户
      * @return 新用户
      */
     public Mono<User> createUser(String serialNo,
+                                 String appType,
                                  User user) {
+        String salt = Password.generateSalt();
+        log.info(user.toString());
+
         return this.userRepository
-                .findByIdOrName(user.getId(), user.getName())
+                .findByIdOrName(user.getId(), this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
                 .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
                 .switchIfEmpty(this.userRepository
                         .save(user
+                                .setName(this.crypt.encrypt4System(
+                                        this.crypt.decrypt4UserDownStream(user.getName(), appType, false)))
+                                .setPassword(Password.encrypt(this.crypt.decrypt4UserDownStream(user.getPassword(), appType, false), salt))
+                                .setSalt(this.crypt.encrypt4System(salt))
+                                .setRealName(this.crypt.encrypt4System(
+                                        this.crypt.decrypt4UserDownStream(user.getRealName(), appType, false)))
                                 .setStatus(Constants.USER_STATUS_ACTIVE)
                                 .setCreateTime(Clock.currentTime())
                                 .setTimestamp(Clock.currentTime())
                                 .setSerialNo(serialNo))
                         .map(newUser -> {
                             log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                            log.info(newUser.toString());
 
                             this.userHistoryRepository
                                     .save(UserHistory.builder()
