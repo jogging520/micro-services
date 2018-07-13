@@ -183,7 +183,12 @@ public class UserService {
                                         log.info(userHistory.toString());
                                     });
 
-                            return newUser.setStatus(Constants.USER_ERRORCODE_SUCCESS);
+                            return newUser
+                                    .setName(null)
+                                    .setPassword(null)
+                                    .setSalt(null)
+                                    .setRealName(null)
+                                    .setStatus(Constants.USER_ERRORCODE_SUCCESS);
                         }));
     }
 }
