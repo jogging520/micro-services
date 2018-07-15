@@ -119,6 +119,8 @@ public class SessionService {
                                                 .jwt(JsonWebTokenUtil.generateJsonWebToken(session.getId(), appType,
                                                         tokenProperty.getKey(), tokenProperty.getCompany(), tokenProperty.getAudience(),
                                                         tokenProperty.getIssuer(), tokenProperty.getLifeTime()))
+                                                .downPublicKey(this.crypt.getDownPublicKey(appType))
+                                                .upPrivateKey(this.crypt.getUpPrivateKey(appType))
                                                 .build()
                                         );
                             } catch (Exception e) {

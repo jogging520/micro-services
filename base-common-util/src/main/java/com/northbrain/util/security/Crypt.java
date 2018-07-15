@@ -305,6 +305,76 @@ public class Crypt {
     }
 
     /**
+     * 方法：获取下行加密公钥
+     * @param appType 应用类型
+     * @return 下行公钥
+     */
+    public String getDownPublicKey(String appType) {
+        String downPublicKey;
+
+        switch (appType) {
+            case Constants.UTIL_SECURITY_APP_TYPE_APP:
+                downPublicKey = securityProperty.getAppDownPublicKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WEB:
+                downPublicKey = securityProperty.getWebDownPublicKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_CMS:
+                downPublicKey = securityProperty.getCmsDownPublicKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_LED:
+                downPublicKey = securityProperty.getLedDownPublicKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_MON:
+                downPublicKey = securityProperty.getMonDownPublicKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCT:
+                downPublicKey = securityProperty.getWctDownPublicKey();
+                break;
+            default:
+                downPublicKey = "";
+                break;
+        }
+
+        return downPublicKey;
+    }
+
+    /**
+     * 方法：获取上行解密私钥
+     * @param appType 应用类型
+     * @return 解密私钥
+     */
+    public String getUpPrivateKey(String appType) {
+        String upPrivateKey;
+
+        switch (appType) {
+            case Constants.UTIL_SECURITY_APP_TYPE_APP:
+                upPrivateKey = securityProperty.getAppUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WEB:
+                upPrivateKey = securityProperty.getWebUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_CMS:
+                upPrivateKey = securityProperty.getCmsUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_LED:
+                upPrivateKey = securityProperty.getLedUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_MON:
+                upPrivateKey = securityProperty.getMonUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCT:
+                upPrivateKey = securityProperty.getWctUpPrivateKey();
+                break;
+            default:
+                upPrivateKey = "";
+                break;
+        }
+
+        return upPrivateKey;
+    }
+
+    /**
      * 方法：系统加密
      * @param data 明文
      * @return 密文

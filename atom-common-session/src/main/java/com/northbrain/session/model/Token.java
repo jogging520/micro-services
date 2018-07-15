@@ -25,4 +25,8 @@ public class Token {
     private Long    lifeTime;           //寿命时长
     @NotNull
     private String  jwt;                //jwt
+    @NotNull
+    private String  downPublicKey;      //下行加密密钥（公钥）
+    @NotNull
+    private String  upPrivateKey;       //上行解密密钥（私钥）
 }
