@@ -32,17 +32,23 @@ public class UserService {
     /**
      * 方法：根据ID号查找用户信息
      * @param serialNo 流水号
+     * @param appType 应用类型
      * @param userId 用户编号
      * @return 用户信息
      */
     public Mono<User> queryUserById(String serialNo,
+                                    String appType,
                                     String userId) {
         return this.userRepository
                 .findByIdAndStatus(userId, Constants.USER_STATUS_ACTIVE)
                 .map(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
                     log.info(user.toString());
-                    return user.setPassword(null)
+                    return user
+                            .setName(this.crypt.encrypt4UserUpStream(this.crypt.decrypt4System(user.getName()), appType))
+                            .setPassword(null)
+                            .setSalt(null)
+                            .setRealName(this.crypt.encrypt4UserUpStream(this.crypt.decrypt4System(user.getRealName()), appType))
                             .setStatus(null);
                 });
     }

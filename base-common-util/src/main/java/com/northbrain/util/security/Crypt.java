@@ -96,14 +96,14 @@ public class Crypt {
      * @param base64PublicKey BASE64编码后的公钥字符串
      * @return 密文（BASE64编码）
      */
-    private String encrypt(byte[] data, String base64PublicKey) {
+    private String encrypt(String data, String base64PublicKey) {
         String encryptedData = null;
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(base64PublicKey));
 
-            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data));
+            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes()));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
@@ -117,14 +117,14 @@ public class Crypt {
      * @param base64PrivateKey BASE64编码后的私钥字符串
      * @return 明文
      */
-    private String decrypt(byte[] data, String base64PrivateKey) {
+    private String decrypt(String data, String base64PrivateKey) {
         String decryptedData = "";
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(base64PrivateKey));
 
-            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data)));
+            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes())));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
@@ -210,7 +210,7 @@ public class Crypt {
                 break;
         }
 
-        return encrypt(Base64.getEncoder().encode(data.getBytes()),
+        return encrypt(data,
                 base64PublicKey);
     }
 
@@ -266,9 +266,7 @@ public class Crypt {
                 break;
         }
 
-        return Base64.getDecoder()
-                .decode(decrypt(data.getBytes(), base64PrivateKey))
-                .toString();
+        return decrypt(data, base64PrivateKey);
     }
 
     /**
@@ -313,7 +311,7 @@ public class Crypt {
      */
     public String encrypt4System(String data) {
         return encrypt(
-                Base64.getEncoder().encode(data.getBytes()),
+                data,
                 securityProperty.getSysPublicKey());
     }
 
@@ -323,9 +321,7 @@ public class Crypt {
      * @return 明文
      */
     public String decrypt4System(String data) {
-        return Base64.getDecoder()
-                .decode(decrypt(data.getBytes(),
-                        securityProperty.getSysPrivateKey()))
-                .toString();
+        return decrypt(data,
+                        securityProperty.getSysPrivateKey());
     }
 }

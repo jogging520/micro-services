@@ -64,15 +64,17 @@ public class UserController {
     /**
      * 方法：根据ID号查找用户信息
      * @param serialNo 流水号
+     * @param appType 应用类型
      * @param userId 用户编号
      * @return 用户信息
      */
     @GetMapping(Constants.USER_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<User>> queryUser(@RequestParam String serialNo,
+                                                @RequestParam String appType,
                                                 @RequestParam String userId) {
         return ResponseEntity.ok()
                 .body(this.userService
-                        .queryUserById(serialNo, userId));
+                        .queryUserById(serialNo, appType, userId));
     }
 
 }
