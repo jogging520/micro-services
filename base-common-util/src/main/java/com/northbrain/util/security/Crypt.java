@@ -61,7 +61,7 @@ public class Crypt {
 
         try {
             X509EncodedKeySpec keySpec =
-                    new X509EncodedKeySpec(getDecoder().decode(base64PublicKey.getBytes()));
+                    new X509EncodedKeySpec(Base64.getDecoder().decode(base64PublicKey.getBytes()));
             KeyFactory keyFactory = KeyFactory.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             publicKey = keyFactory.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -81,7 +81,7 @@ public class Crypt {
 
         try {
             PKCS8EncodedKeySpec keySpec =
-                    new PKCS8EncodedKeySpec(getDecoder().decode(base64PrivateKey.getBytes()));
+                    new PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64PrivateKey.getBytes()));
             KeyFactory keyFactory = KeyFactory.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             privateKey = keyFactory.generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -96,14 +96,14 @@ public class Crypt {
      * @param base64PublicKey BASE64编码后的公钥字符串
      * @return 密文（BASE64编码）
      */
-    private String encrypt(String data, String base64PublicKey) {
+    private String encrypt(byte[] data, String base64PublicKey) {
         String encryptedData = null;
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(base64PublicKey));
 
-            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes()));
+            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
@@ -117,14 +117,14 @@ public class Crypt {
      * @param base64PrivateKey BASE64编码后的私钥字符串
      * @return 明文
      */
-    private String decrypt(String data, String base64PrivateKey) {
+    private String decrypt(byte[] data, String base64PrivateKey) {
         String decryptedData = "";
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(base64PrivateKey));
 
-            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes())));
+            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data)));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
@@ -210,7 +210,8 @@ public class Crypt {
                 break;
         }
 
-        return encrypt(data, base64PublicKey);
+        return encrypt(Base64.getEncoder().encode(data.getBytes()),
+                base64PublicKey);
     }
 
     /**
@@ -265,7 +266,9 @@ public class Crypt {
                 break;
         }
 
-        return decrypt(data, base64PrivateKey);
+        return Base64.getDecoder()
+                .decode(decrypt(data.getBytes(), base64PrivateKey))
+                .toString();
     }
 
     /**
@@ -309,9 +312,9 @@ public class Crypt {
      * @return 密文
      */
     public String encrypt4System(String data) {
-        String base64PublicKey = securityProperty.getSysPublicKey();
-
-        return encrypt(data, base64PublicKey);
+        return encrypt(
+                Base64.getEncoder().encode(data.getBytes()),
+                securityProperty.getSysPublicKey());
     }
 
     /**
@@ -320,8 +323,9 @@ public class Crypt {
      * @return 明文
      */
     public String decrypt4System(String data) {
-        String base64PrivateKey = securityProperty.getSysPrivateKey();
-
-        return decrypt(data, base64PrivateKey);
+        return Base64.getDecoder()
+                .decode(decrypt(data.getBytes(),
+                        securityProperty.getSysPrivateKey()))
+                .toString();
     }
 }
