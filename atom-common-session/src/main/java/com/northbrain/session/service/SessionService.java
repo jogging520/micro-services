@@ -9,6 +9,7 @@ import com.northbrain.session.util.JsonWebTokenUtil;
 import com.northbrain.util.security.Crypt;
 
 import com.northbrain.util.timer.Clock;
+import com.northbrain.util.tracer.StackTracer;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
@@ -121,7 +122,7 @@ public class SessionService {
                                                 .build()
                                         );
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                StackTracer.printException(e);
                                 return Mono.just(Token.builder().lifeTime(0L).build());
                             }
                         }
@@ -205,7 +206,7 @@ public class SessionService {
                                 .build());
                     });
         } catch (Exception e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
             return Mono.just(Token.builder().lifeTime(0L).build());
         }
     }

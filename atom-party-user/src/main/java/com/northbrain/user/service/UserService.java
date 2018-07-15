@@ -45,7 +45,7 @@ public class UserService {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
                     log.info(user.toString());
                     return user
-                            .setName(this.crypt.encrypt4UserUpStream(this.crypt.decrypt4System(user.getName()), appType))
+                            .setName(this.crypt.encrypt4UserUpStream(user.getName(), appType))
                             .setPassword(null)
                             .setSalt(null)
                             .setRealName(this.crypt.encrypt4UserUpStream(this.crypt.decrypt4System(user.getRealName()), appType))
@@ -66,7 +66,8 @@ public class UserService {
                                                             String name,
                                                             String password) {
         return this.userRepository
-                .findByName(this.crypt.decrypt4UserDownStream(name, appType, true))
+                .findByName(
+                        this.crypt.decrypt4UserDownStream(name, appType, true))
                 .flatMap(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
 
@@ -149,8 +150,7 @@ public class UserService {
                 .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
                 .switchIfEmpty(this.userRepository
                         .save(user
-                                .setName(this.crypt.encrypt4System(
-                                        this.crypt.decrypt4UserDownStream(user.getName(), appType, false)))
+                                .setName(this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
                                 .setPassword(Password.encrypt(this.crypt.decrypt4UserDownStream(user.getPassword(), appType, false), salt))
                                 .setSalt(this.crypt.encrypt4System(salt))
                                 .setRealName(this.crypt.encrypt4System(

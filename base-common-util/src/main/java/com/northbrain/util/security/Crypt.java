@@ -2,6 +2,7 @@ package com.northbrain.util.security;
 
 import com.northbrain.util.model.Constants;
 import com.northbrain.util.model.SecurityProperty;
+import com.northbrain.util.tracer.StackTracer;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-
-import static java.util.Base64.getDecoder;
 
 @Component
 @Log
@@ -46,7 +45,7 @@ public class Crypt {
             log.info(Constants.UTIL_SECURITY_ASYMMETRIC_PRIVATE_KEY + base64PrivateKey);
 
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
     }
 
@@ -65,7 +64,7 @@ public class Crypt {
             KeyFactory keyFactory = KeyFactory.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             publicKey = keyFactory.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return publicKey;
@@ -85,7 +84,7 @@ public class Crypt {
             KeyFactory keyFactory = KeyFactory.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             privateKey = keyFactory.generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
         return privateKey;
     }
@@ -96,16 +95,16 @@ public class Crypt {
      * @param base64PublicKey BASE64编码后的公钥字符串
      * @return 密文（BASE64编码）
      */
-    private String encrypt(String data, String base64PublicKey) {
+    private String encrypt(byte[] data, String base64PublicKey) {
         String encryptedData = null;
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(base64PublicKey));
 
-            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes()));
+            encryptedData = Base64.getEncoder().encodeToString(cipher.doFinal(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | InvalidKeyException | IllegalBlockSizeException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return encryptedData;
@@ -117,16 +116,16 @@ public class Crypt {
      * @param base64PrivateKey BASE64编码后的私钥字符串
      * @return 明文
      */
-    private String decrypt(String data, String base64PrivateKey) {
+    private String decrypt(byte[] data, String base64PrivateKey) {
         String decryptedData = "";
 
         try {
             Cipher cipher = Cipher.getInstance(Constants.UTIL_SECURITY_ASYMMETRIC_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(base64PrivateKey));
 
-            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes())));
+            decryptedData = new String(cipher.doFinal(Base64.getDecoder().decode(data)));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return decryptedData;
@@ -148,7 +147,7 @@ public class Crypt {
 
             signedData = Base64.getEncoder().encodeToString(signature.sign());
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return signedData;
@@ -171,7 +170,7 @@ public class Crypt {
 
             verifiedResult = signature.verify(Base64.getDecoder().decode(signedData.getBytes()));
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return verifiedResult;
@@ -210,7 +209,7 @@ public class Crypt {
                 break;
         }
 
-        return encrypt(data,
+        return encrypt(Base64.getEncoder().encode(data.getBytes()),
                 base64PublicKey);
     }
 
@@ -266,7 +265,8 @@ public class Crypt {
                 break;
         }
 
-        return decrypt(data, base64PrivateKey);
+        return new String(Base64.getDecoder()
+                .decode(decrypt(data.getBytes(), base64PrivateKey)));
     }
 
     /**
@@ -311,7 +311,7 @@ public class Crypt {
      */
     public String encrypt4System(String data) {
         return encrypt(
-                data,
+                Base64.getEncoder().encode(data.getBytes()),
                 securityProperty.getSysPublicKey());
     }
 
@@ -321,7 +321,8 @@ public class Crypt {
      * @return 明文
      */
     public String decrypt4System(String data) {
-        return decrypt(data,
-                        securityProperty.getSysPrivateKey());
+        return new String(Base64.getDecoder()
+                .decode(decrypt(data.getBytes(),
+                        securityProperty.getSysPrivateKey())));
     }
 }

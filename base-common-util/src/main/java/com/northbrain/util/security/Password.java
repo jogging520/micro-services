@@ -1,6 +1,7 @@
 package com.northbrain.util.security;
 
 import com.northbrain.util.model.Constants;
+import com.northbrain.util.tracer.StackTracer;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class Password {
 
             encryptedPassword = toHex(secretKeyFactory.generateSecret(pbeKeySpec).getEncoded());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return encryptedPassword;
@@ -45,15 +46,15 @@ public class Password {
 
     /**
      * 方法：密码验证
-     * @param password 待验证密码明文
-     * @param passwordToBeVerified 用户密码密文
+     * @param password 用户密码密文
+     * @param passwordToBeVerified 待验证密码明文
      * @param salt 用户盐
      * @return 验证结果
      */
     public static Boolean verify(String password, String passwordToBeVerified, String salt) {
-        String encryptedPassword = encrypt(password, salt);
+        String encryptedPassword = encrypt(passwordToBeVerified, salt);
 
-        return encryptedPassword.equals(passwordToBeVerified);
+        return encryptedPassword.equals(password);
     }
 
     public static String generateSalt() {
@@ -63,7 +64,7 @@ public class Password {
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
             secureRandom.nextBytes(salt);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            StackTracer.printException(e);
         }
 
         return toHex(salt);
