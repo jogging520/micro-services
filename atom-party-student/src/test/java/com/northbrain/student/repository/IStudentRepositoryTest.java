@@ -12,6 +12,7 @@ import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -42,8 +43,7 @@ public class IStudentRepositoryTest {
                 .recordWith(ArrayList::new)
                 .expectNextCount(2)
                 .consumeRecordedWith(students -> {
-                    assertThat(students.size(), 3).;
-
+                    assertThat(students.size(), is(3));
                 })
         .expectComplete()
         .verify();
@@ -59,6 +59,15 @@ public class IStudentRepositoryTest {
 
     @Test
     public void findByNameAndFamily() throws Exception {
+        StepVerifier.create(
+                this.studentRepository
+                .findByNameAndFamily("test", "testFamily"))
+                .expectNextMatches(student -> {
+                    assertThat(student.getName(), equalTo("test"));
+                    assertThat(student.getFamily(), containsString("Family"));
+
+                    return true;
+                });
     }
 
 }
