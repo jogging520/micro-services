@@ -23,6 +23,10 @@ public class Region {
     @NotNull
     private String              name;                           //名称
     @NotNull
+    private String              type;                           //类型
+    @NotNull
+    private String              category;                       //类别（企业）
+    @NotNull
     private String              level;                          //级别
     @NotNull
     private Float               longitude;                      //中心经度

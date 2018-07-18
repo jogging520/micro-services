@@ -30,15 +30,17 @@ public class PrivilegeService {
     /**
      * 方法：根据应用类型查找角色清单
      * @param serialNo 流水号
-     * @param roles 角色
      * @param appType 应用类型
+     * @param category 类别（企业）
+     * @param roles 角色
      * @return 权限实体数组
      */
     public Flux<Role> queryRolesByAppType(String serialNo,
-                                          String[] roles,
-                                          String appType) {
+                                          String appType,
+                                          String category,
+                                          String[] roles) {
         return this.roleRepository
-                .findByIdInAndAppTypesContaining(roles, appType)
+                .findByIdInAndAppTypesContainingAndCategory(roles, appType, category)
                 .map(role -> {
                     log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
                     log.info(role.toString());
@@ -49,10 +51,12 @@ public class PrivilegeService {
     /**
      * 方法：创建角色
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param role 角色
      * @return 创建成功的角色
      */
     public Mono<Role> createRole(String serialNo,
+                                 String category,
                                  Role role) {
         return this.roleRepository
                 .findById(role.getId())
@@ -60,6 +64,7 @@ public class PrivilegeService {
                 .switchIfEmpty(
                         this.roleRepository
                                 .save(role
+                                        .setCategory(category)
                                         .setStatus(Constants.PRIVILEGE_STATUS_ACTIVE)
                                         .setCreateTime(Clock.currentTime())
                                         .setTimestamp(Clock.currentTime())
@@ -75,6 +80,7 @@ public class PrivilegeService {
                                                     .type(newRole.getType())
                                                     .name(newRole.getName())
                                                     .appTypes(newRole.getAppTypes())
+                                                    .category(newRole.getCategory())
                                                     .permissions(newRole.getPermissions())
                                                     .createTime(newRole.getCreateTime())
                                                     .timestamp(Clock.currentTime())
@@ -90,13 +96,15 @@ public class PrivilegeService {
     /**
      * 方法：按照ID号查询权限实体信息
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param permissions 权限实体编号数组
      * @return 权限清单
      */
     public Flux<Permission> queryPermissionsByIds(String serialNo,
+                                                  String category,
                                                   String[] permissions) {
         return this.permissionRepository
-                .findByIdIn(permissions)
+                .findByIdInAndCategory(permissions, category)
                 .map(permission -> {
                     log.info(Constants.PRIVILEGE_OPERATION_SERIAL_NO + serialNo);
                     log.info(permission.toString());

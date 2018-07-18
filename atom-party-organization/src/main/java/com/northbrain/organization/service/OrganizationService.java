@@ -32,11 +32,13 @@ public class OrganizationService {
     /**
      * 方法：查找区域信息
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @return 区域信息
      */
-    public Flux<Region> queryRegions(String serialNo) {
+    public Flux<Region> queryRegions(String serialNo,
+                                     String category) {
         return this.regionRepository
-                .findAll()
+                .findByCategory(category)
                 .map(region -> {
                     log.info(Constants.ORGANIZATION_OPERATION_SERIAL_NO + serialNo);
                     log.info(region.toString());
@@ -47,11 +49,13 @@ public class OrganizationService {
     /**
      * 方法：查询组织机构信息
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @return 组织机构信息
      */
-    public Flux<Organization> queryOrganizations(String serialNo) {
+    public Flux<Organization> queryOrganizations(String serialNo,
+                                                 String category) {
         return this.organizationRepository
-                .findAll()
+                .findByCategory(category)
                 .map(organization -> {
                     log.info(Constants.ORGANIZATION_OPERATION_SERIAL_NO + serialNo);
                     log.info(organization.toString());
@@ -62,13 +66,16 @@ public class OrganizationService {
     /**
      * 创建组织机构
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param organization 组织机构
      * @return 创建成功的组织机构
      */
     public Mono<Organization> createOrganization(String serialNo,
+                                                 String category,
                                                  Organization organization) {
         return this.organizationRepository
                 .save(organization
+                        .setCategory(category)
                         .setStatus(Constants.ORGANIZATION_STATUS_ACTIVE)
                         .setCreateTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime())
@@ -83,6 +90,8 @@ public class OrganizationService {
                                     .organizationId(newOrganization.getId())
                                     .code(newOrganization.getCode())
                                     .name(newOrganization.getName())
+                                    .type(newOrganization.getType())
+                                    .category(newOrganization.getCategory())
                                     .region(newOrganization.getRegion())
                                     .parent(newOrganization.getParent())
                                     .createTime(newOrganization.getCreateTime())
@@ -104,13 +113,16 @@ public class OrganizationService {
     /**
      * 方法：创建区域信息
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param region 区域对象
      * @return 创建成功的区域信息
      */
     public Mono<Region> createRegion(String serialNo,
+                                     String category,
                                      Region region) {
         return this.regionRepository
                 .save(region
+                        .setCategory(category)
                         .setStatus(Constants.ORGANIZATION_STATUS_ACTIVE)
                         .setCreateTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime())
@@ -125,6 +137,7 @@ public class OrganizationService {
                                     .regionId(newRegion.getId())
                                     .code(newRegion.getCode())
                                     .name(newRegion.getName())
+                                    .category(newRegion.getCategory())
                                     .level(newRegion.getLevel())
                                     .longitude(newRegion.getLongitude())
                                     .latitude(newRegion.getLatitude())

@@ -7,10 +7,13 @@ import reactor.core.publisher.Flux;
 import java.util.Date;
 
 public interface IAttemptRepository extends ReactiveCrudRepository<Attempt, String> {
-    Flux<Attempt> findByUserNameAndAppTypeAndAttemptTimeBetween(String userName,
-                                                                String appType,
-                                                                Date fromAttemptTime,
-                                                                Date toAttemptTime);
+    Flux<Attempt> findByUserNameAndAppTypeAndCategoryAndAttemptTimeBetween(String userName,
+                                                                           String appType,
+                                                                           String category,
+                                                                           Date fromAttemptTime,
+                                                                           Date toAttemptTime);
 
-    Flux<Attempt> findAllByUserNameAndAppType(String userName, String appType);
+    Flux<Attempt> findAllByUserNameAndAppTypeAndCategory(String userName,
+                                                         String appType,
+                                                         String category);
 }

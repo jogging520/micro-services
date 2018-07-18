@@ -5,5 +5,5 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 
 public interface IFamilyRepository extends ReactiveCrudRepository<Family, String> {
-    Mono<Family> findByHouseHolderAndPhone(String houseHolder, String phone);
+    Mono<Family> findByCategoryAndHouseHolderAndPhone(String category, String houseHolder, String phone);
 }

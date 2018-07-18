@@ -29,6 +29,10 @@ public class StrategyHistory {
     private String                  type;               //类型
     @NotNull
     private String                  name;               //策略名称
+    @NotNull
+    private String                  appType;            //应用程序类型
+    @NotNull
+    private String                  category;           //类别（企业）
     private Map<String, String>     parameters;         //参数
     @NotNull
     private Date                    createTime;         //创建时间

@@ -6,5 +6,5 @@ import com.northbrain.strategy.model.Strategy;
 import reactor.core.publisher.Flux;
 
 public interface IStrategyRepository extends ReactiveCrudRepository<Strategy, String> {
-    Flux<Strategy> findByStatusAndType(String status, String type);
+    Flux<Strategy> findByStatusAndTypeAndAppTypeAndCategory(String status, String type, String appType, String category);
 }

@@ -22,6 +22,7 @@ public class OperationController {
     /**
      * 方法：根据各类组合信息查询操作记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param user 用户信息
      * @param fromCreateTime 查询开始时间
      * @param toCreateTime 查询结束时间
@@ -29,38 +30,43 @@ public class OperationController {
      */
     @GetMapping(Constants.OPERATION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Flux<Operation>> queryOperations(@RequestParam String serialNo,
+                                                           @RequestParam String category,
                                                            @RequestParam(required = false) String user,
                                                            @RequestParam(required = false) Date fromCreateTime,
                                                            @RequestParam(required = false) Date toCreateTime) {
         if(user != null && fromCreateTime != null && toCreateTime != null)
             return ResponseEntity.ok()
                     .body(this.operationService
-                            .queryOperationByUserAndCreateTime(serialNo, user,
+                            .queryOperationByUserAndCreateTime(serialNo, category, user,
                                     fromCreateTime, toCreateTime));
 
         if(user == null && fromCreateTime != null && toCreateTime != null)
             return ResponseEntity.ok()
                     .body(this.operationService
-                            .queryOperationByCreateTime(serialNo, fromCreateTime, toCreateTime));
+                            .queryOperationByCreateTime(serialNo, category, fromCreateTime, toCreateTime));
 
         if(user != null && fromCreateTime == null && toCreateTime == null)
             return ResponseEntity.ok()
                     .body(this.operationService
-                            .queryOperationsByUser(serialNo, user));
+                            .queryOperationsByUser(serialNo, category, user));
 
         return ResponseEntity.badRequest().body(null);
     }
 
     /**
      * 方法：创建一条操作记录
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param operation 操作记录
      * @return 创建成功的操作记录
      */
     @PostMapping(Constants.OPERATION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Operation>> createOperation(@RequestBody Operation operation) {
+    public ResponseEntity<Mono<Operation>> createOperation(@RequestParam String appType,
+                                                           @RequestParam String category,
+                                                           @RequestBody Operation operation) {
         return ResponseEntity.ok()
                 .body(this.operationService
-                        .createOperation(operation));
+                        .createOperation(appType, category, operation));
     }
 
     /**
@@ -78,24 +84,30 @@ public class OperationController {
     /**
      * 方法：根据流水号查找操作详细记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @return 操作详细记录
      */
     @GetMapping(Constants.OPERATION_RECORD_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Record>> queryRecordsBySerialNo(@RequestParam String serialNo) {
+    public ResponseEntity<Flux<Record>> queryRecordsBySerialNo(@RequestParam String serialNo,
+                                                               @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.operationService
-                        .queryRecordsBySerialNo(serialNo));
+                        .queryRecordsBySerialNo(serialNo, category));
     }
 
     /**
      * 方法：创建新记录（操作明细）
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param record 明细记录
      * @return 创建成功的明细记录
      */
     @PostMapping(Constants.OPERATION_RECORD_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Record>> createRecord(@RequestBody Record record) {
+    public ResponseEntity<Mono<Record>> createRecord(@RequestParam String appType,
+                                                     @RequestParam String category,
+                                                     @RequestBody Record record) {
         return ResponseEntity.ok()
                 .body(this.operationService
-                        .createRecord(record));
+                        .createRecord(appType, category, record));
     }
 }

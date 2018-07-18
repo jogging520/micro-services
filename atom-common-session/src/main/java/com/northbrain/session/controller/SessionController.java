@@ -36,6 +36,7 @@ public class SessionController {
     /**
      * 方法：登录
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param userId 用户编号
      * @param userName 用户姓名
      * @param mobile 手机号码
@@ -44,39 +45,49 @@ public class SessionController {
     @PostMapping(Constants.SESSION_LOGIN_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Token>> login(@RequestParam String serialNo,
                                              @RequestParam String appType,
+                                             @RequestParam String category,
                                              @RequestParam String userId,
                                              @RequestParam(required = false) String userName,
                                              @RequestParam(required = false) String mobile) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .createSession(serialNo, appType, userId, userName, mobile));
+                        .createSession(serialNo, appType, category, userId, userName, mobile));
     }
 
     /**
      * 方法：登出
      * @param serialNo 流水号
      * @param sessionId 会话编号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 无
      */
     @PostMapping(Constants.SESSION_LOGOUT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Void>> logout(@RequestParam String serialNo,
-                                             @RequestParam String sessionId) {
+                                             @RequestParam String sessionId,
+                                             @RequestParam String appType,
+                                             @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .deleteSession(serialNo, sessionId));
+                        .deleteSession(serialNo, sessionId, appType, category));
     }
 
     /**
      * 方法：校验JWT的有效性
+     * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
      */
     @GetMapping(Constants.SESSION_JWT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Token>> verifyJWT(@RequestParam String serialNo,
+                                                 @RequestParam String appType,
+                                                 @RequestParam String category,
                                                  @RequestParam String jwt) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .verifyJWT(serialNo, jwt));
+                        .verifyJWT(serialNo, appType, category, jwt));
     }
 
     /**
@@ -84,29 +95,35 @@ public class SessionController {
      * @param serialNo 流水号
      * @param userName 用户名
      * @param appType 应用类型
+     * @param category 类别（企业
      * @return 尝试登录的次数
      */
     @GetMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Long>> queryAttemptCount(@RequestParam String serialNo,
                                                         @RequestParam String userName,
-                                                        @RequestParam String appType) {
+                                                        @RequestParam String appType,
+                                                        @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .queryAttemptCount(serialNo, userName, appType));
+                        .queryAttemptCount(serialNo, userName, appType, category));
     }
 
     /**
      * 方法：创建一条尝试登录的记录
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param attempt 尝试登录实体
      * @return 创建成功的尝试登录实体
      */
     @PostMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Attempt>> createAttempt(@RequestParam String serialNo,
+                                                       @RequestParam String appType,
+                                                       @RequestParam String category,
                                                        @RequestBody Attempt attempt) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .createAttempt(serialNo, attempt));
+                        .createAttempt(serialNo, appType, category, attempt));
     }
 
     /**
@@ -114,14 +131,16 @@ public class SessionController {
      * @param serialNo 流水号
      * @param userName 用户名
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 空
      */
     @DeleteMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Void> deleteAttempts(@RequestParam String serialNo,
                                                @RequestParam String userName,
-                                               @RequestParam String appType) {
+                                               @RequestParam String appType,
+                                               @RequestParam String category) {
         this.sessionService
-                .deleteAttempts(serialNo, userName, appType);
+                .deleteAttempts(serialNo, userName, appType, category);
 
         return ResponseEntity.ok()
                 .body(null);

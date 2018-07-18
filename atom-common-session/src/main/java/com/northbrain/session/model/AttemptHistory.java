@@ -30,6 +30,8 @@ public class AttemptHistory {
     @NotNull
     private String                  appType;            //应用类型
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private Date                    attemptTime;        //尝试登录时间
     @NotNull
     private Date                    timestamp;          //状态时间

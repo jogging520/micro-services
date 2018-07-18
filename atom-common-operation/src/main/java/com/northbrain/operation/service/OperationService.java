@@ -27,13 +27,15 @@ public class OperationService {
     /**
      * 方法：根据用户查找操作记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param user 用户信息
      * @return 流水记录
      */
     public Flux<Operation> queryOperationsByUser(String serialNo,
+                                                 String category,
                                                  String user) {
         return this.operationRepository
-                .findByStatusAndUser(Constants.OPERATION_STATUS_ACTIVE, user)
+                .findByCategoryAndStatusAndUser(category, Constants.OPERATION_STATUS_ACTIVE, user)
                 .map(operation -> {
                     log.info(Constants.OPERATION_OPERATION_SERIAL_NO + serialNo);
                     log.info(operation.toString());
@@ -44,15 +46,17 @@ public class OperationService {
     /**
      * 方法：根据时间段查找操作记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param fromCreateTime 开始时间
      * @param toCreateTime 结束时间
      * @return 流水记录
      */
     public Flux<Operation> queryOperationByCreateTime(String serialNo,
+                                                      String category,
                                                       Date fromCreateTime,
                                                       Date toCreateTime) {
         return this.operationRepository
-                .findByStatusAndCreateTimeBetween(Constants.OPERATION_STATUS_ACTIVE,
+                .findByCategoryAndStatusAndCreateTimeBetween(category, Constants.OPERATION_STATUS_ACTIVE,
                         fromCreateTime, toCreateTime)
                 .map(operation -> {
                     log.info(Constants.OPERATION_OPERATION_SERIAL_NO + serialNo);
@@ -65,17 +69,19 @@ public class OperationService {
     /**
      * 方法：根据用户和时间段查找操作记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param user 用户
      * @param fromCreateTime 开始时间
      * @param toCreateTime 结束时间
      * @return 操作记录
      */
     public Flux<Operation> queryOperationByUserAndCreateTime(String serialNo,
+                                                             String category,
                                                              String user,
                                                              Date fromCreateTime,
                                                              Date toCreateTime) {
         return this.operationRepository
-                .findByStatusAndUserAndCreateTimeBetween(Constants.OPERATION_STATUS_ACTIVE,
+                .findByCategoryAndStatusAndUserAndCreateTimeBetween(category, Constants.OPERATION_STATUS_ACTIVE,
                         user, fromCreateTime, toCreateTime)
                 .map(operation -> {
                     log.info(Constants.OPERATION_OPERATION_SERIAL_NO + serialNo);
@@ -98,11 +104,13 @@ public class OperationService {
     /**
      * 方法：根据流水号查找详细流水记录
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @return 流水记录
      */
-    public Flux<Record> queryRecordsBySerialNo(String serialNo) {
+    public Flux<Record> queryRecordsBySerialNo(String serialNo,
+                                               String category) {
         return this.recordRepository
-                .findByStatusAndSerialNo(Constants.OPERATION_STATUS_ACTIVE, serialNo)
+                .findByCategoryAndStatusAndSerialNo(category, Constants.OPERATION_STATUS_ACTIVE, serialNo)
                 .map(record -> {
                     log.info(Constants.OPERATION_OPERATION_SERIAL_NO + serialNo);
                     log.info(record.toString());
@@ -112,14 +120,20 @@ public class OperationService {
 
     /**
      * 方法：创建操作记录
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param operation 操作记录
      * @return 创建成功的操作记录
      */
-    public Mono<Operation> createOperation(Operation operation) {
+    public Mono<Operation> createOperation(String appType,
+                                           String category,
+                                           Operation operation) {
         log.info(operation.toString());
 
         return this.operationRepository
                 .save(operation
+                        .setAppType(appType)
+                        .setCategory(category)
                         .setStatus(Constants.OPERATION_STATUS_ACTIVE)
                         .setCreateTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime()))
@@ -129,14 +143,20 @@ public class OperationService {
 
     /**
      * 方法：创建新记录（操作明细）
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param record 明细记录
      * @return 创建成功的明细记录
      */
-    public Mono<Record> createRecord(Record record) {
+    public Mono<Record> createRecord(String appType,
+                                     String category,
+                                     Record record) {
         log.info(record.toString());
 
         return this.recordRepository
                 .save(record
+                        .setAppType(appType)
+                        .setCategory(category)
                         .setStatus(Constants.OPERATION_STATUS_ACTIVE)
                         .setCreateTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime()))

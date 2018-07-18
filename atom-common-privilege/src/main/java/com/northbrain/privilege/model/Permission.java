@@ -27,13 +27,15 @@ public class Permission {
     @Id
     private Integer                 id;                 //id编号
     @NotNull
-    private String                  appType;            //应用类型
-    @NotNull
-    private String                  domain;             //归属域，如菜单、列表、按钮等
-    @NotNull
     private String                  type;               //类型，增删改查
     @NotNull
     private String                  name;               //名称
+    @NotNull
+    private String                  domain;             //归属域，如菜单、列表、按钮等
+    @NotNull
+    private String                  appType;            //应用类型
+    @NotNull
+    private String                  category;           //类别（企业）
     @NotNull
     private Date                    createTime;         //创建时间
     @NotNull

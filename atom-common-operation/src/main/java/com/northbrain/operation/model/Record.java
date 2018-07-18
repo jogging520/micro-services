@@ -21,6 +21,10 @@ public class Record {
     @NotNull
     private String                      type;               //类型
     @NotNull
+    private String                      appType;            //应用程序类型
+    @NotNull
+    private String                      category;           //类别（企业）
+    @NotNull
     private String                      businessType;       //业务类型
     @NotNull
     private String                      url;                //url

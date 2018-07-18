@@ -21,39 +21,51 @@ public class StrategyController {
     /**
      * 方法：查询应用程序策略信息
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 应用程序策略列表
      */
     @GetMapping(Constants.STRATEGY_APPLICATION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Strategy>> queryApplicationStrategies(@RequestParam String serialNo) {
+    public ResponseEntity<Flux<Strategy>> queryApplicationStrategies(@RequestParam String serialNo,
+                                                                     @RequestParam String appType,
+                                                                     @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.strategyService
-                        .queryApplicationStrategies(serialNo));
+                        .queryApplicationStrategies(serialNo, appType, category));
     }
 
     /**
      * 方法：查询错误码策略信息
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 错误码策略列表
      */
     @GetMapping(Constants.STRATEGY_ERRORCODE_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Strategy>> queryErrorCodeStrategies(@RequestParam String serialNo) {
+    public ResponseEntity<Flux<Strategy>> queryErrorCodeStrategies(@RequestParam String serialNo,
+                                                                   @RequestParam String appType,
+                                                                   @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.strategyService
-                        .queryErrorCodeStrategies(serialNo));
+                        .queryErrorCodeStrategies(serialNo, appType, category));
     }
 
     /**
      * 方法：创建策略
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param strategies 策略
      * @return 创建成功的策略
      */
     @PostMapping(Constants.STRATEGY_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Flux<Strategy>> createStrategies(@RequestParam String serialNo,
+                                                           @RequestParam String appType,
+                                                           @RequestParam String category,
                                                            @RequestBody Flux<Strategy> strategies) {
         return ResponseEntity.ok()
                 .body(this.strategyService
-                        .createStrategies(serialNo, strategies));
+                        .createStrategies(serialNo, appType, category, strategies));
     }
 
 }

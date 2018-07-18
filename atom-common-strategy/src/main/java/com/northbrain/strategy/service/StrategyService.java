@@ -26,12 +26,16 @@ public class StrategyService {
     /**
      * 方法：查询应用程序策略信息
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 应用程序策略列表
      */
-    public Flux<Strategy> queryApplicationStrategies(String serialNo) {
+    public Flux<Strategy> queryApplicationStrategies(String serialNo,
+                                                     String appType,
+                                                     String category) {
         return this.strategyRepository
-                .findByStatusAndType(Constants.STRATEGY_STATUS_ACTIVE,
-                        Constants.STRATEGY_TYPE_APPLICATION)
+                .findByStatusAndTypeAndAppTypeAndCategory(Constants.STRATEGY_STATUS_ACTIVE,
+                        Constants.STRATEGY_TYPE_APPLICATION, appType, category)
                 .map(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
                     log.info(strategy.toString());
@@ -42,12 +46,16 @@ public class StrategyService {
     /**
      * 方法：查询错误码策略信息
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 错误码策略列表
      */
-    public Flux<Strategy> queryErrorCodeStrategies(String serialNo) {
+    public Flux<Strategy> queryErrorCodeStrategies(String serialNo,
+                                                   String appType,
+                                                   String category) {
         return this.strategyRepository
-                .findByStatusAndType(Constants.STRATEGY_STATUS_ACTIVE,
-                        Constants.STRATEGY_TYPE_ERRORCODE)
+                .findByStatusAndTypeAndAppTypeAndCategory(Constants.STRATEGY_STATUS_ACTIVE,
+                        Constants.STRATEGY_TYPE_ERRORCODE, appType, category)
                 .map(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
                     log.info(strategy.toString());
@@ -58,14 +66,20 @@ public class StrategyService {
     /**
      * 方法：创建策略
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param strategies 策略
      * @return 创建成功的策略
      */
     public Flux<Strategy> createStrategies(String serialNo,
+                                           String appType,
+                                           String category,
                                            Flux<Strategy> strategies) {
         return strategies
-                .map(strategy -> strategy.
-                        setStatus(Constants.STRATEGY_STATUS_ACTIVE)
+                .map(strategy -> strategy
+                        .setAppType(appType)
+                        .setCategory(category)
+                        .setStatus(Constants.STRATEGY_STATUS_ACTIVE)
                         .setCreateTime(Clock.currentTime())
                         .setTimestamp(Clock.currentTime())
                         .setSerialNo(serialNo))
@@ -79,6 +93,8 @@ public class StrategyService {
                                     .strategyId(strategy.getId())
                                     .type(strategy.getType())
                                     .name(strategy.getName())
+                                    .appType(appType)
+                                    .category(category)
                                     .parameters(strategy.getParameters())
                                     .createTime(strategy.getCreateTime())
                                     .timestamp(Clock.currentTime())

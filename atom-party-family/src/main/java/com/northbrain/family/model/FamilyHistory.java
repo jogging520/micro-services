@@ -25,6 +25,8 @@ public class FamilyHistory {
     @NotNull
     private String                  familyId;           //家庭编号
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  houseHolder;        //户主姓名
     @NotNull
     private String                  region;             //归属行政区域编号

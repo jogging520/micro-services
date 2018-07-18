@@ -27,6 +27,10 @@ public class OrganizationHistory {
     @NotNull
     private String              name;                           //组织机构名称
     @NotNull
+    private String              type;                           //类型
+    @NotNull
+    private String              category;                       //类别（企业）
+    @NotNull
     private String              region;                         //组织机构归谁行政区域
     private String              parent;                         //组织机构父组织
     @NotNull

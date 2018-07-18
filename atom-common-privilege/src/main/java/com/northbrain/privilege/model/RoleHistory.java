@@ -31,6 +31,8 @@ public class RoleHistory {
     @NotNull
     private String[]                appTypes;           //应用类型
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private Integer[]               permissions;        //权限
     @NotNull
     private Date createTime;         //创建时间

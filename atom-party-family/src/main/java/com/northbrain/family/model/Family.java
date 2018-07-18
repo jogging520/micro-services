@@ -19,6 +19,8 @@ public class Family {
     @Id
     private String                  id;                 //id号
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  houseHolder;        //户主姓名
     @NotNull
     private String                  region;             //归属行政区域编号

@@ -64,6 +64,7 @@ public class SessionService {
      * 方法：创建会话
      * @param serialNo 流水号
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param user 用户编号
      * @param userName 用户名
      * @param mobile 手机号码
@@ -71,19 +72,21 @@ public class SessionService {
      */
     public Mono<Token> createSession(String serialNo,
                                      String appType,
+                                     String category,
                                      String user,
                                      String userName,
                                      String mobile) {
         log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
 
         return this.sessionRepository
-                .findByAppTypeAndUserName(appType, userName)
+                .findByAppTypeAndCategoryAndUserName(appType, category, userName)
                 .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                 .switchIfEmpty(
                         this.sessionRepository.save(Session
                                 .builder()
                                 .type(Constants.SESSION_TYPE_COMMON)
                                 .appType(appType)
+                                .category(category)
                                 .user(user)
                                 .userName(userName)
                                 .mobile(mobile)
@@ -98,6 +101,7 @@ public class SessionService {
                         .id(session.getId())
                         .type(Constants.SESSION_TYPE_COMMON)
                         .appType(appType)
+                        .category(category)
                         .user(user)
                         .userName(userName)
                         .mobile(mobile)
@@ -135,12 +139,18 @@ public class SessionService {
      * 方法：删除会话，并移入历史库
      * @param serialNo 流水号
      * @param sessionId 会话编号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 无
      */
     public Mono<Void> deleteSession(String serialNo,
-                                    String sessionId) {
+                                    String sessionId,
+                                    String appType,
+                                    String category) {
         this.sessionRepository
                 .findById(sessionId)
+                .filter(session -> session.getAppType().equalsIgnoreCase(appType))
+                .filter(session -> session.getCategory().equalsIgnoreCase(category))
                 .subscribe(session -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
                     log.info(session.toString());
@@ -151,6 +161,7 @@ public class SessionService {
                                     .sessionId(sessionId)
                                     .type(session.getType())
                                     .appType(session.getAppType())
+                                    .category(session.getCategory())
                                     .user(session.getUser())
                                     .userName(session.getUserName())
                                     .mobile(session.getMobile())
@@ -179,10 +190,14 @@ public class SessionService {
      * 方法：校验JWT的有效性
      * 对于当前未失效的的JWT都可以使用，每次按照ID查找，只要找到其中之一便有效。
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
      */
     public Mono<Token> verifyJWT(String serialNo,
+                                 String appType,
+                                 String category,
                                  String jwt) {
         log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
 
@@ -194,6 +209,8 @@ public class SessionService {
             return this.sessionRepository
                     .findById(claims.get(Constants.SESSION_JWT_CLAIMS_SESSION))
                     .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
+                    .filter(session -> session.getAppType().equalsIgnoreCase(appType))
+                    .filter(session -> session.getCategory().equalsIgnoreCase(category))
                     .filter(session -> session.getCreateTime().getTime() + session.getLifeTime() >= System.currentTimeMillis())
                     .switchIfEmpty(Mono.just(Session.builder().build()))
                     .flatMap(session -> {
@@ -218,15 +235,17 @@ public class SessionService {
      * @param serialNo 流水号
      * @param userName 用户名
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 尝试登录的次数
      */
     public Mono<Long> queryAttemptCount(String serialNo,
                                         String userName,
-                                        String appType) {
+                                        String appType,
+                                        String category) {
         return this.attemptRepository
-                .findByUserNameAndAppTypeAndAttemptTimeBetween(
+                .findByUserNameAndAppTypeAndCategoryAndAttemptTimeBetween(
                         this.crypt.decrypt4UserDownStream(userName, appType, true),
-                        appType, Clock.currentDate(), Clock.tomorrowDate())
+                        appType, category, Clock.currentDate(), Clock.tomorrowDate())
                 .count()
                 .map(c -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
@@ -238,15 +257,21 @@ public class SessionService {
     /**
      * 方法：创建一条尝试登录的记录
      * @param serialNo 流水号
+     * @param appType 应用类型
+     * @param category 类别（企业）
      * @param attempt 尝试登录实体
      * @return 创建成功的尝试登录实体
      */
     public Mono<Attempt> createAttempt(String serialNo,
+                                       String appType,
+                                       String category,
                                        Attempt attempt) {
 
         log.info(attempt.toString());
         return this.attemptRepository
                 .save(attempt
+                        .setAppType(appType)
+                        .setCategory(category)
                         .setUserName(this.crypt.decrypt4UserDownStream(attempt.getUserName(),
                                 attempt.getAppType(), true))
                         .setAttemptTime(Clock.currentTime())
@@ -263,13 +288,15 @@ public class SessionService {
      * @param serialNo 流水号
      * @param userName 用户名
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @return 空
      */
     public Flux<Void> deleteAttempts(String serialNo,
                                      String userName,
-                                     String appType) {
+                                     String appType,
+                                     String category) {
         this.attemptRepository
-                .findAllByUserNameAndAppType(userName, appType)
+                .findAllByUserNameAndAppTypeAndCategory(userName, appType, category)
                 .subscribe(attempt -> {
                     log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
                     log.info(attempt.toString());
@@ -283,6 +310,7 @@ public class SessionService {
                                     .password(attempt.getPassword())
                                     .mobile(attempt.getMobile())
                                     .appType(attempt.getAppType())
+                                    .category(attempt.getCategory())
                                     .attemptTime(attempt.getAttemptTime())
                                     .timestamp(Clock.currentTime())
                                     .status(attempt.getStatus())

@@ -28,6 +28,8 @@ public class SessionHistory {
     @NotNull
     private String                  appType;            //应用类型：WEB、APP、WECHAT、CMS
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  user;               //用户编号
     @NotNull
     private String                  userName;           //用户名

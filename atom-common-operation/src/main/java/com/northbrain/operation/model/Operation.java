@@ -28,6 +28,8 @@ public class Operation {
     @NotNull
     private String                      appType;            //应用程序类型
     @NotNull
+    private String                      category;           //类别（企业）
+    @NotNull
     private String                      user;               //用户编号
     @NotNull
     private String                      userName;           //操作者真实姓名
