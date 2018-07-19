@@ -24,13 +24,13 @@ public class Attempt {
     private String                  id;                 //id编号
     @NotNull
     private String                  type;               //类型
-    private String                  userName;           //尝试登录用户名
-    private String                  password;           //尝试登录密码
-    private String                  mobile;             //尝试登录手机号码
     @NotNull
     private String                  appType;            //应用类型
     @NotNull
     private String                  category;           //类别（企业）
+    private String                  userName;           //尝试登录用户名
+    private String                  password;           //尝试登录密码
+    private String                  mobile;             //尝试登录手机号码
     @NotNull
     private Date                    attemptTime;        //尝试登录时间
     @NotNull
