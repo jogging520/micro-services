@@ -28,8 +28,6 @@ public class User {
     @NotNull
     private String                  type;               //类型
     @NotNull
-    private String                  category;           //类别（企业）
-    @NotNull
     private String                  name;               //用户名称
     @NotNull
     private String                  password;           //密码
@@ -40,6 +38,8 @@ public class User {
     private String                  avatar;             //头像
     @NotNull
     private String[]                appTypes;           //可以登录的应用类型
+    @NotNull
+    private String                  category;           //类别（企业）
     @NotNull
     private String[]                roles;              //角色
     private Integer[]               permissions;        //权限

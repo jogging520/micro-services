@@ -160,12 +160,12 @@ public class UserService {
                 .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
                 .switchIfEmpty(this.userRepository
                         .save(user
-                                .setCategory(category)
                                 .setName(this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
                                 .setPassword(Password.encrypt(this.crypt.decrypt4UserDownStream(user.getPassword(), appType, false), salt))
                                 .setSalt(this.crypt.encrypt4System(salt))
                                 .setRealName(this.crypt.encrypt4System(
                                         this.crypt.decrypt4UserDownStream(user.getRealName(), appType, false)))
+                                .setCategory(category)
                                 .setStatus(Constants.USER_STATUS_ACTIVE)
                                 .setCreateTime(Clock.currentTime())
                                 .setTimestamp(Clock.currentTime())
@@ -178,12 +178,12 @@ public class UserService {
                                             .operationType(Constants.USER_HISTORY_CREATE)
                                             .userId(newUser.getId())
                                             .type(newUser.getType())
-                                            .category(newUser.getCategory())
                                             .name(newUser.getName())
                                             .password(newUser.getPassword())
                                             .realName(newUser.getRealName())
                                             .avatar(newUser.getAvatar())
                                             .appTypes(newUser.getAppTypes())
+                                            .category(newUser.getCategory())
                                             .roles(newUser.getRoles())
                                             .permissions(newUser.getPermissions())
                                             .affiliations(newUser.getAffiliations())
