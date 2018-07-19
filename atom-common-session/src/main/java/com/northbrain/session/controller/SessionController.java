@@ -93,19 +93,19 @@ public class SessionController {
     /**
      * 方法：查询尝试登录的次数（当日）
      * @param serialNo 流水号
-     * @param userName 用户名
      * @param appType 应用类型
-     * @param category 类别（企业
+     * @param category 类别（企业）
+     * @param userName 用户名
      * @return 尝试登录的次数
      */
     @GetMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Long>> queryAttemptCount(@RequestParam String serialNo,
-                                                        @RequestParam String userName,
                                                         @RequestParam String appType,
-                                                        @RequestParam String category) {
+                                                        @RequestParam String category,
+                                                        @RequestParam String userName) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .queryAttemptCount(serialNo, userName, appType, category));
+                        .queryAttemptCount(serialNo, appType, category, userName));
     }
 
     /**

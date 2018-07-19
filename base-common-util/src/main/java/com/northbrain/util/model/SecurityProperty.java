@@ -71,6 +71,19 @@ public class SecurityProperty {
     @Value(Constants.UTIL_SECURITY_WCT_TEMPORARY_PRIVATE_KEY)
     private String  wctTemporaryPrivateKey;         //WCT类型应用的临时私钥
 
+    @Value(Constants.UTIL_SECURITY_WCA_UP_PUBLIC_KEY)
+    private String  wcaUpPublicKey;                 //WCA类型应用的上行公钥
+    @Value(Constants.UTIL_SECURITY_WCA_UP_PRIVATE_KEY)
+    private String  wcaUpPrivateKey;                //WCA类型应用的上行私钥
+    @Value(Constants.UTIL_SECURITY_WCA_DOWN_PUBLIC_KEY)
+    private String  wcaDownPublicKey;               //WCA类型应用的下行公钥
+    @Value(Constants.UTIL_SECURITY_WCA_DOWN_PRIVATE_KEY)
+    private String  wcaDownPrivateKey;              //WCA类型应用的下行私钥
+    @Value(Constants.UTIL_SECURITY_WCA_TEMPORARY_PUBLIC_KEY)
+    private String  wcaTemporaryPublicKey;          //WCA类型应用的临时公钥
+    @Value(Constants.UTIL_SECURITY_WCA_TEMPORARY_PRIVATE_KEY)
+    private String  wcaTemporaryPrivateKey;         //WCA类型应用的临时私钥
+
     @Value(Constants.UTIL_SECURITY_LED_UP_PUBLIC_KEY)
     private String  ledUpPublicKey;                 //LED类型应用的上行公钥
     @Value(Constants.UTIL_SECURITY_LED_UP_PRIVATE_KEY)

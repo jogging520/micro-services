@@ -204,6 +204,9 @@ public class Crypt {
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
                 base64PublicKey = securityProperty.getWctUpPublicKey();
                 break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCA:
+                base64PublicKey = securityProperty.getWcaUpPublicKey();
+                break;
             default:
                 base64PublicKey = "";
                 break;
@@ -260,6 +263,12 @@ public class Crypt {
                 else
                     base64PrivateKey = securityProperty.getWctDownPrivateKey();
                 break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCA:
+                if(isTemporary)
+                    base64PrivateKey = securityProperty.getWcaTemporaryPrivateKey();
+                else
+                    base64PrivateKey = securityProperty.getWcaDownPrivateKey();
+                break;
             default:
                 base64PrivateKey = "";
                 break;
@@ -296,6 +305,9 @@ public class Crypt {
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
                 temporaryPublicKey = securityProperty.getWctTemporaryPublicKey();
                 break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCA:
+                temporaryPublicKey = securityProperty.getWcaTemporaryPublicKey();
+                break;
             default:
                 temporaryPublicKey = "";
                 break;
@@ -331,6 +343,9 @@ public class Crypt {
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
                 downPublicKey = securityProperty.getWctDownPublicKey();
                 break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCA:
+                downPublicKey = securityProperty.getWcaDownPublicKey();
+                break;
             default:
                 downPublicKey = "";
                 break;
@@ -365,6 +380,9 @@ public class Crypt {
                 break;
             case Constants.UTIL_SECURITY_APP_TYPE_WCT:
                 upPrivateKey = securityProperty.getWctUpPrivateKey();
+                break;
+            case Constants.UTIL_SECURITY_APP_TYPE_WCA:
+                upPrivateKey = securityProperty.getWcaUpPrivateKey();
                 break;
             default:
                 upPrivateKey = "";

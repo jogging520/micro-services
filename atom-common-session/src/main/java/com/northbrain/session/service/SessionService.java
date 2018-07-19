@@ -233,15 +233,15 @@ public class SessionService {
     /**
      * 方法：查询尝试登录的次数（当日）
      * @param serialNo 流水号
-     * @param userName 用户名
      * @param appType 应用类型
      * @param category 类别（企业）
+     * @param userName 用户名
      * @return 尝试登录的次数
      */
     public Mono<Long> queryAttemptCount(String serialNo,
-                                        String userName,
                                         String appType,
-                                        String category) {
+                                        String category,
+                                        String userName) {
         return this.attemptRepository
                 .findByUserNameAndAppTypeAndCategoryAndAttemptTimeBetween(
                         this.crypt.decrypt4UserDownStream(userName, appType, true),

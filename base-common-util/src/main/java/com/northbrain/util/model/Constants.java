@@ -32,6 +32,12 @@ public class Constants {
     public final static String UTIL_SECURITY_WCT_DOWN_PRIVATE_KEY       =   "${security.wct.down.private.key}";         //WCT类型应用的下行私钥
     public final static String UTIL_SECURITY_WCT_TEMPORARY_PUBLIC_KEY   =   "${security.wct.temporary.public.key}";     //APP类型应用的临时公钥
     public final static String UTIL_SECURITY_WCT_TEMPORARY_PRIVATE_KEY  =   "${security.wct.temporary.private.key}";    //APP类型应用的临时私钥
+    public final static String UTIL_SECURITY_WCA_UP_PUBLIC_KEY          =   "${security.wca.up.public.key}";            //WCT类型应用的上行公钥
+    public final static String UTIL_SECURITY_WCA_UP_PRIVATE_KEY         =   "${security.wca.up.private.key}";           //WCT类型应用的上行私钥
+    public final static String UTIL_SECURITY_WCA_DOWN_PUBLIC_KEY        =   "${security.wca.down.public.key}";          //WCT类型应用的下行公钥
+    public final static String UTIL_SECURITY_WCA_DOWN_PRIVATE_KEY       =   "${security.wca.down.private.key}";         //WCT类型应用的下行私钥
+    public final static String UTIL_SECURITY_WCA_TEMPORARY_PUBLIC_KEY   =   "${security.wca.temporary.public.key}";     //APP类型应用的临时公钥
+    public final static String UTIL_SECURITY_WCA_TEMPORARY_PRIVATE_KEY  =   "${security.wca.temporary.private.key}";    //APP类型应用的临时私钥
     public final static String UTIL_SECURITY_LED_UP_PUBLIC_KEY          =   "${security.led.up.public.key}";            //LED类型应用的上行公钥
     public final static String UTIL_SECURITY_LED_UP_PRIVATE_KEY         =   "${security.led.up.private.key}";           //LED类型应用的上行私钥
     public final static String UTIL_SECURITY_LED_DOWN_PUBLIC_KEY        =   "${security.led.down.public.key}";          //LED类型应用的下行公钥
@@ -53,7 +59,8 @@ public class Constants {
     public final static String UTIL_SECURITY_APP_TYPE_CMS               =   "cms";                                      //后端管理系统应用类型
     public final static String UTIL_SECURITY_APP_TYPE_LED               =   "led";                                      //大屏应用类型
     public final static String UTIL_SECURITY_APP_TYPE_MON               =   "mon";                                      //监控系统应用类型
-    public final static String UTIL_SECURITY_APP_TYPE_WCT               =   "wct";                                      //微信应用类型
+    public final static String UTIL_SECURITY_APP_TYPE_WCT               =   "wct";                                      //微信应用类型（用户）
+    public final static String UTIL_SECURITY_APP_TYPE_WCA               =   "wca";                                      //微信应用类型（管理员）
 
     public final static int    UTIL_SECURITY_ASYMMETRIC_KEY_LENGTH      =   1024;                                       //非对称加解密的密钥对长度
     public final static String UTIL_SECURITY_ASYMMETRIC_ALGORITHM       =   "RSA";                                      //非对称加解密算法
