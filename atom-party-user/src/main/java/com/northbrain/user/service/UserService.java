@@ -33,14 +33,18 @@ public class UserService {
      * 方法：根据ID号查找用户信息
      * @param serialNo 流水号
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param userId 用户编号
      * @return 用户信息
      */
     public Mono<User> queryUserById(String serialNo,
                                     String appType,
+                                    String category,
                                     String userId) {
         return this.userRepository
-                .findByIdAndStatus(userId, Constants.USER_STATUS_ACTIVE)
+                .findById(userId)
+                .filter(user -> user.getCategory().equalsIgnoreCase(category))
+                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE))
                 .map(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
                     log.info(user.toString());
@@ -57,22 +61,23 @@ public class UserService {
      * 方法：根据用户名+密码验证用户信息
      * @param serialNo 流水号
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param name 用户名
      * @param password 密码
      * @return 校验结果
      */
     public Mono<Authentication> verifyByUserNameAndPassword(String serialNo,
                                                             String appType,
+                                                            String category,
                                                             String name,
                                                             String password) {
         return this.userRepository
-                .findByName(
+                .findByCategoryAndStatusAndName(category, Constants.USER_STATUS_ACTIVE,
                         this.crypt.decrypt4UserDownStream(name, appType, true))
                 .flatMap(user -> {
                     log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
 
-                    if(user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                            user.getAppTypes() != null &&
+                    if(user.getAppTypes() != null &&
                             Arrays.asList(user.getAppTypes()).contains(appType) &&
                             Password.verify(user.getPassword(),
                                     this.crypt.decrypt4UserDownStream(password, appType, true),
@@ -100,16 +105,18 @@ public class UserService {
      * 方法：根据手机号码验证用户信息
      * @param serialNo 流水号
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param mobile 手机号码
      * @return 校验结果
      */
     public Mono<Authentication> verifyByMobile(String serialNo,
                                                String appType,
+                                               String category,
                                                String mobile) {
         return this.userRepository
-                .findByMobilesContaining(mobile)
-                .filter(user -> user.getStatus().equalsIgnoreCase(Constants.USER_STATUS_ACTIVE) &&
-                        user.getAppTypes() != null &&
+                .findByCategoryAndStatusAndMobilesContaining(category,
+                        Constants.USER_STATUS_ACTIVE, mobile)
+                .filter(user -> user.getAppTypes() != null &&
                         Arrays.asList(user.getAppTypes()).contains(appType))
                 .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
@@ -136,20 +143,24 @@ public class UserService {
      * 方法：创建新用户
      * @param serialNo 流水号
      * @param appType 应用类型
+     * @param category 类别（企业）
      * @param user 用户
      * @return 新用户
      */
     public Mono<User> createUser(String serialNo,
                                  String appType,
+                                 String category,
                                  User user) {
         String salt = Password.generateSalt();
         log.info(user.toString());
 
         return this.userRepository
-                .findByIdOrName(user.getId(), this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
+                .findByCategoryAndStatusAndIdOrName(category, Constants.USER_STATUS_ACTIVE,
+                        user.getId(), this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
                 .map(newUser -> newUser.setStatus(Constants.USER_ERRORCODE_HAS_EXISTS))
                 .switchIfEmpty(this.userRepository
                         .save(user
+                                .setCategory(category)
                                 .setName(this.crypt.decrypt4UserDownStream(user.getName(), appType, false))
                                 .setPassword(Password.encrypt(this.crypt.decrypt4UserDownStream(user.getPassword(), appType, false), salt))
                                 .setSalt(this.crypt.encrypt4System(salt))
@@ -167,6 +178,7 @@ public class UserService {
                                             .operationType(Constants.USER_HISTORY_CREATE)
                                             .userId(newUser.getId())
                                             .type(newUser.getType())
+                                            .category(newUser.getCategory())
                                             .name(newUser.getName())
                                             .password(newUser.getPassword())
                                             .realName(newUser.getRealName())

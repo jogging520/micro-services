@@ -26,13 +26,16 @@ public class StorageService {
     /**
      * 方法：按照图片ID号查询图片
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param pictureId 图片ID
      * @return 图片
      */
     public Mono<Picture> queryPictureById(String serialNo,
+                                          String category,
                                           String pictureId) {
         return this.pictureRepository
                 .findById(pictureId)
+                .filter(picture -> picture.getCategory().equalsIgnoreCase(category))
                 .filter(picture -> picture.getStatus().equalsIgnoreCase(Constants.STORAGE_STATUS_ACTIVE))
                 .map(picture -> {
                     log.info(Constants.STORAGE_OPERATION_SERIAL_NO + serialNo);
@@ -44,20 +47,23 @@ public class StorageService {
     /**
      * 方法：创建图片
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param pictures 图片
      * @return 创建成功的图片
      */
     public Flux<Picture> createPictures(String serialNo,
+                                        String category,
                                         Flux<Picture> pictures) {
         return pictures
                 .flatMap(picture ->
                         this.pictureRepository
                                 .save(picture
-                                .setId(null)
-                                .setStatus(Constants.STORAGE_STATUS_ACTIVE)
-                                .setCreateTime(Clock.currentTime())
-                                .setTimestamp(Clock.currentTime())
-                                .setSerialNo(serialNo)))
+                                        .setId(null)
+                                        .setCategory(category)
+                                        .setStatus(Constants.STORAGE_STATUS_ACTIVE)
+                                        .setCreateTime(Clock.currentTime())
+                                        .setTimestamp(Clock.currentTime())
+                                        .setSerialNo(serialNo)))
                 .map(newPicture -> {
                     log.info(Constants.STORAGE_OPERATION_SERIAL_NO + serialNo);
                     log.info(newPicture.toString());
@@ -67,6 +73,7 @@ public class StorageService {
                                     .operationType(Constants.STORAGE_HISTORY_CREATE)
                                     .pictureId(newPicture.getId())
                                     .type(newPicture.getType())
+                                    .category(newPicture.getCategory())
                                     .content(newPicture.getContent())
                                     .createTime(newPicture.getCreateTime())
                                     .timestamp(Clock.currentTime())

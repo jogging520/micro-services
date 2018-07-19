@@ -28,6 +28,8 @@ public class Summary {
     @Field
     private String      type;               //实体的类型
     @Field
+    private String      category;           //类别（企业）
+    @Field
     private String      name;               //实体的名称
     @Field
     private String      description;        //实体的描述

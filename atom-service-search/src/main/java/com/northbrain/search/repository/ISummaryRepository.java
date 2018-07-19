@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.List;
 
 public interface ISummaryRepository extends ElasticsearchRepository<Summary, String> {
-    List<Summary> findByNameContaining(String name);
+    List<Summary> findByCategoryAndNameContaining(String category, String name);
 
-    Summary findByEntity(String entity);
+    Summary findByCategoryAndEntity(String category, String entity);
 }

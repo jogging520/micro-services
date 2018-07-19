@@ -34,8 +34,8 @@ public class StrategyService {
                                                      String appType,
                                                      String category) {
         return this.strategyRepository
-                .findByStatusAndTypeAndAppTypeAndCategory(Constants.STRATEGY_STATUS_ACTIVE,
-                        Constants.STRATEGY_TYPE_APPLICATION, appType, category)
+                .findByTypeAndAppTypeAndCategoryAndStatus(Constants.STRATEGY_TYPE_APPLICATION,
+                        appType, category, Constants.STRATEGY_STATUS_ACTIVE)
                 .map(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
                     log.info(strategy.toString());
@@ -54,8 +54,8 @@ public class StrategyService {
                                                    String appType,
                                                    String category) {
         return this.strategyRepository
-                .findByStatusAndTypeAndAppTypeAndCategory(Constants.STRATEGY_STATUS_ACTIVE,
-                        Constants.STRATEGY_TYPE_ERRORCODE, appType, category)
+                .findByTypeAndAppTypeAndCategoryAndStatus(Constants.STRATEGY_TYPE_ERRORCODE,
+                        appType, category, Constants.STRATEGY_STATUS_ACTIVE)
                 .map(strategy -> {
                     log.info(Constants.STRATEGY_OPERATION_SERIAL_NO + serialNo);
                     log.info(strategy.toString());

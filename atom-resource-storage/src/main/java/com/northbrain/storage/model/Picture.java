@@ -21,6 +21,8 @@ public class Picture {
     @NotNull
     private String                  type;               //类型：png，jpg
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  content;            //图片内容，BASE64格式
     @NotNull
     private Date                    createTime;         //创建时间

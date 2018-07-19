@@ -6,11 +6,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IStudentRepository extends ReactiveCrudRepository<Student, String> {
-    Flux<Student> findByStatusAndRegionIn(String status, String[] regions);
+    Flux<Student> findByCategoryAndStatusAndRegionIn(String category, String status, String[] regions);
 
-    Flux<Student> findByStatusAndFamily(String status, String family);
+    Flux<Student> findByCategoryAndStatusAndFamily(String category, String status, String family);
 
-    Flux<Student> findByStatusAndSchool(String status, String school);
+    Flux<Student> findByCategoryAndStatusAndSchool(String category, String status, String school);
 
-    Mono<Student> findByNameAndFamily(String name, String family);
+    Mono<Student> findByCategoryAndStatusAndNameAndFamily(String category, String status, String name, String family);
 }

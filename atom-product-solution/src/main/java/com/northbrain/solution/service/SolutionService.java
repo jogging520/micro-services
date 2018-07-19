@@ -25,11 +25,13 @@ public class SolutionService {
     /**
      * 方法：查询在用的所以解决方案
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @return 解决方案
      */
-    public Flux<Solution> querySolutions(String serialNo) {
+    public Flux<Solution> querySolutions(String serialNo,
+                                         String category) {
         return this.solutionRepository
-                .findByStatus(Constants.SOLUTION_STATUS_ACTIVE)
+                .findByCategoryAndStatus(category, Constants.SOLUTION_STATUS_ACTIVE)
                 .map(solution -> {
                     log.info(Constants.SOLUTION_OPERATION_SERIAL_NO + serialNo);
                     log.info(solution.toString());
@@ -40,14 +42,17 @@ public class SolutionService {
     /**
      * 方法：创建解决方案
      * @param serialNo 流水号
+     * @param category 类别（企业）
      * @param solutions 解决方案
      * @return 创建成功的解决方案
      */
     public Flux<Solution> createSolutions(String serialNo,
+                                          String category,
                                           Flux<Solution> solutions) {
         return solutions
                 .flatMap(solution -> this.solutionRepository
                         .save(solution
+                                .setCategory(category)
                                 .setStatus(Constants.SOLUTION_STATUS_ACTIVE)
                                 .setCreateTime(Clock.currentTime())
                                 .setTimestamp(Clock.currentTime())
@@ -61,6 +66,7 @@ public class SolutionService {
                                             .operationType(Constants.SOLUTION_HISTORY_CREATE)
                                             .solutionId(newSolution.getId())
                                             .type(newSolution.getType())
+                                            .category(newSolution.getCategory())
                                             .organizations(newSolution.getOrganizations())
                                             .schools(newSolution.getSchools())
                                             .families(newSolution.getFamilies())

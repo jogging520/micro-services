@@ -21,6 +21,8 @@ public class School {
     @NotNull
     private String                  type;               //类型
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  name;               //学校名称
     @NotNull
     private String                  region;             //归属行政区域编号

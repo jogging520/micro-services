@@ -21,6 +21,8 @@ public class Student {
     @NotNull
     private String              type;                           //类型
     @NotNull
+    private String              category;                       //类别（企业）
+    @NotNull
     private String              name;                           //姓名
     private String              otherName;                      //曾用名
     @NotNull

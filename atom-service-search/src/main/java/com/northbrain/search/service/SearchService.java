@@ -19,10 +19,19 @@ public class SearchService {
         this.summaryRepository = summaryRepository;
     }
 
-    public Flux<Summary> querySummaries(String serialNo,
-                                        Flux<Condition> conditions) {
+    /**
+     * 方法：搜索
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param conditions 条件
+     * @return 符合条件的摘要信息
+     */
+    public Flux<Summary> querySummariesByConditions(String serialNo,
+                                                    String category,
+                                                    Flux<Condition> conditions) {
         log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
 
+        //TODO 判断category
         return conditions
                 .flatMap(condition -> {
                     QueryStringQueryBuilder queryStringQueryBuilder =
@@ -33,8 +42,17 @@ public class SearchService {
                 });
     }
 
+    /**
+     * 方法：创建摘要信息
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param summaries 摘要
+     * @return 创建成功的摘要信息
+     */
     public Flux<Summary> createSummaries(String serialNo,
+                                         String category,
                                          Flux<Summary> summaries) {
+        //TODO 判断category
         return Flux.fromIterable(this.summaryRepository
                 .saveAll(summaries.toIterable()))
                 .map(summary -> {
@@ -46,9 +64,11 @@ public class SearchService {
     }
 
     public Flux<Void> deleteSummaries(String serialNo,
+                                      String category,
                                       Flux<Summary> summaries) {
         log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
 
+        //TODO 判断category
         this.summaryRepository
                 .deleteAll(summaries.toIterable());
 

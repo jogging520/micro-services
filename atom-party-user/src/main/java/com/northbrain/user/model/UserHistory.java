@@ -28,6 +28,8 @@ public class UserHistory {
     @NotNull
     private String                  type;               //类型
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String                  name;               //用户名称
     @NotNull
     private String                  password;           //密码

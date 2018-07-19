@@ -26,6 +26,8 @@ public class SolutionHistory {
     @NotNull
     private String                  type;               //类型
     @NotNull
+    private String                  category;           //类别（企业）
+    @NotNull
     private String[]                organizations;      //适用的组织机构
     private String[]                schools;            //适用的学校
     private String[]                families;           //适用的家庭

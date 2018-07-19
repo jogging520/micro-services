@@ -6,9 +6,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ISchoolRepository extends ReactiveCrudRepository<School, String> {
-    Flux<School> findByRegionIn(String[] regions);
+    Flux<School> findByCategoryAndRegionIn(String category, String[] regions);
 
-    Flux<School> findByNameLike(String name);
+    Flux<School> findByCategoryAndNameLike(String category, String name);
 
-    Mono<School> findByName(String name);
+    Mono<School> findByCategoryAndName(String category, String name);
 }
