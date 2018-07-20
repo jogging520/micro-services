@@ -25,6 +25,8 @@ public class Record {
     @NotNull
     private String                      category;           //类别（企业）
     @NotNull
+    private String                      user;               //用户编号
+    @NotNull
     private String                      businessType;       //业务类型
     @NotNull
     private String                      url;                //url

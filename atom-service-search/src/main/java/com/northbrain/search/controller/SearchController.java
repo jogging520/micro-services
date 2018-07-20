@@ -1,6 +1,5 @@
 package com.northbrain.search.controller;
 
-import com.northbrain.search.model.Condition;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,17 +36,21 @@ public class SearchController {
     /**
      * 方法：搜索
      * @param serialNo 流水号
+     * @param appType 应用类型
      * @param category 类别（企业）
-     * @param conditions 条件
+     * @param user 用户编号
+     * @param condition 条件
      * @return 符合条件的摘要信息
      */
     @GetMapping(Constants.SEARCH_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Summary>> querySummariesByConditions(@RequestParam String serialNo,
-                                                                    @RequestParam String category,
-                                                                    @RequestBody Flux<Condition> conditions) {
+    public ResponseEntity<Flux<Summary>> querySummariesByCondition(@RequestParam String serialNo,
+                                                                   @RequestParam String appType,
+                                                                   @RequestParam String category,
+                                                                   @RequestParam String user,
+                                                                   @RequestParam String condition) {
         return ResponseEntity.ok()
                 .body(this.searchService
-                        .querySummariesByConditions(serialNo, category, conditions));
+                        .querySummariesByCondition(serialNo, appType, category, user, condition));
 
     }
 }

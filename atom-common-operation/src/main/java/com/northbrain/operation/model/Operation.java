@@ -32,7 +32,7 @@ public class Operation {
     @NotNull
     private String                      user;               //用户编号
     @NotNull
-    private String                      userName;           //操作者真实姓名
+    private String                      realName;           //操作者真实姓名
     @NotNull
     private String                      session;            //会话编号
     @NotNull

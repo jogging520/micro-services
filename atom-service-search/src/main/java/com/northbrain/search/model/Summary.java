@@ -39,5 +39,7 @@ public class Summary {
     private Date        timestamp;          //时间戳
     @Field
     private String      status;             //状态
+    @Field
+    private String      serialNo;           //操作流水号
 
 }

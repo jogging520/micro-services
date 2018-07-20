@@ -37,7 +37,7 @@ public class SessionController {
      * 方法：登录
      * @param appType 应用类型
      * @param category 类别（企业）
-     * @param userId 用户编号
+     * @param user 用户编号
      * @param userName 用户姓名
      * @param mobile 手机号码
      * @return 令牌
@@ -46,12 +46,12 @@ public class SessionController {
     public ResponseEntity<Mono<Token>> login(@RequestParam String serialNo,
                                              @RequestParam String appType,
                                              @RequestParam String category,
-                                             @RequestParam String userId,
+                                             @RequestParam String user,
                                              @RequestParam(required = false) String userName,
                                              @RequestParam(required = false) String mobile) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .createSession(serialNo, appType, category, userId, userName, mobile));
+                        .createSession(serialNo, appType, category, user, userName, mobile));
     }
 
     /**
