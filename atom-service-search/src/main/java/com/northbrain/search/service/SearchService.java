@@ -70,7 +70,7 @@ public class SearchService {
         return Flux.fromIterable(this.summaryRepository
                 .search(queryStringQueryBuilder));
 
-        //TODO 判断category
+        //TODO 判断category，是否按照TYPE做。
     }
 
     /**
