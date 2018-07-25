@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
 
-import java.util.Iterator;
-
 @Service
 @Log
 public class SearchService {
@@ -60,17 +58,9 @@ public class SearchService {
         QueryStringQueryBuilder queryStringQueryBuilder =
                 new QueryStringQueryBuilder(condition);
 
-        Iterator<Summary> iterator = this.summaryRepository
-                .search(queryStringQueryBuilder).iterator();
-
-        while(iterator.hasNext()){
-            log.info(iterator.next().toString());
-        }
-
         return Flux.fromIterable(this.summaryRepository
-                .search(queryStringQueryBuilder));
-
-        //TODO 判断category，是否按照TYPE做。
+                .search(queryStringQueryBuilder))
+                .filter(summary -> summary.getCategory().equalsIgnoreCase(category));
     }
 
     /**

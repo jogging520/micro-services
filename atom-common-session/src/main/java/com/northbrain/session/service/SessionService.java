@@ -211,7 +211,7 @@ public class SessionService {
                     .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
                     .filter(session -> session.getAppType().equalsIgnoreCase(appType))
                     .filter(session -> session.getCategory().equalsIgnoreCase(category))
-                    .filter(session -> session.getCreateTime().getTime() + session.getLifeTime() >= System.currentTimeMillis())
+                    .filter(session -> session.getLoginTime().getTime() + session.getLifeTime() >= System.currentTimeMillis())
                     .switchIfEmpty(Mono.just(Session.builder().build()))
                     .flatMap(session -> {
                         if(session.getId() == null)

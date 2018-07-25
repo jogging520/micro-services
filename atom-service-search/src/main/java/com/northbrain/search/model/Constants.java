@@ -9,12 +9,15 @@ public class Constants {
     public final static String  SEARCH_HISTORY_UPDATE                   =   "UPDATE";   //历史归档：更新
     public final static String  SEARCH_HISTORY_DELETE                   =   "DELETE";   //历史归档：删除
 
-    public final static String  SEARCH_SUMMARY_INDEX_NAME               =   "summary";  //index名称
+    public final static String  SEARCH_SUMMARY_INDEX_NAME               =   "northbrain";  //index名称
+    public final static String  SEARCH_SUMMARY_TYPE_NAME                =   "summary";  //type名称
     public final static Short   SEARCH_SUMMARY_SHARDS                   =   3;          //分配数量
     public final static Short   SEARCH_SUMMARY_REPLICAS                 =   3;          //副本数量
     public final static String  SEARCH_SUMMARY_REFRESH_INTERVAL         =   "-1";       //刷新间隔
+    public final static String  SEARCH_SUMMARY_ANALYZER_PINYIN          =   "pinyin_analyzer";  //拼音搜索（分词器）
 
     public final static String  SEARCH_TYPE_COMMON                      =   "COMMON";   //普通搜索类型
+
 
     /**
      * restful资源定义
