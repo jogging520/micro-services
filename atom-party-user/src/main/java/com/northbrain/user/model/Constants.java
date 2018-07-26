@@ -30,5 +30,6 @@ public class Constants {
      * 错误码定义
      */
     public final static String  USER_ERRORCODE_SUCCESS                      =   "SUCCESS";
-    public final static String  USER_ERRORCODE_HAS_EXISTS                   =   "ERROR_PARTY_USER_HAS_EXISTS";
+    public final static String  USER_ERRORCODE_HAS_EXISTS                   =   "ERROR_PARTY_USER_HAS_EXISTS";              //用户已经存在
+    public final static String  USER_ERRORCODE_AUTHENTICATION_FAILURE       =   "ERROR_PARTY_USER_AUTHENTICATION_FAILURE";  //认证失败
 }

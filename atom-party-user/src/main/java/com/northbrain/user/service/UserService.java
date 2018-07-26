@@ -66,7 +66,7 @@ public class UserService {
      * @param password 密码
      * @return 校验结果
      */
-    public Mono<Authentication> verifyByUserNameAndPassword(String serialNo,
+    public Mono<Authentication> verifyUserByNameAndPassword(String serialNo,
                                                             String appType,
                                                             String category,
                                                             String name,
@@ -86,18 +86,18 @@ public class UserService {
                                 .builder()
                                 .user(user.getId())
                                 .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
-                                .result(true)
+                                .status(Constants.USER_ERRORCODE_SUCCESS)
                                 .build());
                     }
 
                     return Mono.just(Authentication
                             .builder()
-                            .result(false)
+                            .status(Constants.USER_ERRORCODE_AUTHENTICATION_FAILURE)
                             .build());
                 })
                 .switchIfEmpty(Mono.just(Authentication
                         .builder()
-                        .result(false)
+                        .status(Constants.USER_ERRORCODE_AUTHENTICATION_FAILURE)
                         .build()));
     }
 
@@ -116,27 +116,28 @@ public class UserService {
         return this.userRepository
                 .findByCategoryAndStatusAndMobilesContaining(category,
                         Constants.USER_STATUS_ACTIVE, mobile)
-                .filter(user -> user.getAppTypes() != null &&
-                        Arrays.asList(user.getAppTypes()).contains(appType))
-                .switchIfEmpty(Mono.just(User.builder().build()))
                 .flatMap(user -> {
-                    if(user.getId() == null)
+                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
+
+                    if(user.getAppTypes() != null &&
+                            Arrays.asList(user.getAppTypes()).contains(appType)) {
                         return Mono.just(Authentication
                                 .builder()
-                                .result(false)
+                                .user(user.getId())
+                                .authType(Constants.USER_LOGGING_TYPE_PASSWORD)
+                                .status(Constants.USER_ERRORCODE_SUCCESS)
                                 .build());
+                    }
+
                     return Mono.just(Authentication
                             .builder()
-                            .user(user.getId())
-                            .authType(Constants.USER_LOGGING_TYPE_CAPTCHA)
-                            .result(true)
+                            .status(Constants.USER_ERRORCODE_AUTHENTICATION_FAILURE)
                             .build());
                 })
-                .map(authentication -> {
-                    log.info(Constants.USER_OPERATION_SERIAL_NO + serialNo);
-                    log.info(authentication.toString());
-                    return authentication;
-                });
+                .switchIfEmpty(Mono.just(Authentication
+                        .builder()
+                        .status(Constants.USER_ERRORCODE_AUTHENTICATION_FAILURE)
+                        .build()));
     }
 
     /**

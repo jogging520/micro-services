@@ -36,9 +36,6 @@ public class Constants {
      * restful资源定义
      */
     public final static String SESSION_HTTP_REQUEST_MAPPING                         =   "/sessions";
-    public final static String SESSION_LOGIN_HTTP_REQUEST_MAPPING                   =   "/sessions/login";
-    public final static String SESSION_LOGOUT_HTTP_REQUEST_MAPPING                  =   "/sessions/logout";
-    public final static String SESSION_SPECIFIED_HTTP_REQUEST_MAPPING               =   "/sessions/{sessionId}";
     public final static String SESSION_JWT_HTTP_REQUEST_MAPPING                     =   "/sessions/token";
     public final static String SESSION_ATTEMPT_HTTP_REQUEST_MAPPING                 =   "/sessions/attempt";
     public final static String SESSION_TEMPORARY_HTTP_REQUEST_MAPPING               =   "/sessions/temporary";
@@ -54,4 +51,6 @@ public class Constants {
      * 错误码定义
      */
     public final static String SESSION_ERRORCODE_SUCCESS                            =   "SUCCESS";
+    public final static String SESSION_ERRORCODE_TOKEN_EXPIRED                      =   "ERROR_COMMON_SESSION_TOKEN_EXPIRED";  //token已经失效
+
 }

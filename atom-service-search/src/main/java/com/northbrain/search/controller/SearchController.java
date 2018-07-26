@@ -8,6 +8,7 @@ import com.northbrain.search.model.Summary;
 import com.northbrain.search.service.SearchService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class SearchController {
@@ -31,6 +32,38 @@ public class SearchController {
         return ResponseEntity.ok()
                 .body(this.searchService
                         .createSummaries(serialNo, category, summaries));
+    }
+
+    /**
+     * 方法：创建摘要信息
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param summaries 摘要
+     * @return 创建成功的摘要信息
+     */
+    @PutMapping(Constants.SEARCH_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Summary>> updateSummaries(@RequestParam String serialNo,
+                                                         @RequestParam String category,
+                                                         @RequestBody Flux<Summary> summaries) {
+        return ResponseEntity.ok()
+                .body(this.searchService
+                        .updateSummaries(serialNo, category, summaries));
+    }
+
+    /**
+     * 方法：创建摘要信息
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param summaries 摘要
+     * @return 创建成功的摘要信息
+     */
+    @DeleteMapping(Constants.SEARCH_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Void>> deleteSummaries(@RequestParam String serialNo,
+                                                      @RequestParam String category,
+                                                      @RequestBody Flux<Summary> summaries) {
+        return ResponseEntity.ok()
+                .body(this.searchService
+                        .deleteSummaries(serialNo, category, summaries));
     }
 
     /**

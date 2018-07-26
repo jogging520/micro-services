@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @Log
@@ -39,6 +40,7 @@ public class SearchService {
                                                    String user,
                                                    String condition) {
         log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
+        log.info(Constants.SEARCH_OPERATION_QUERY_CONDITION + condition);
 
         this.searchRepository
                 .save(Search.builder()
@@ -79,16 +81,64 @@ public class SearchService {
                     log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
                     log.info(summary.toString());
 
-                    //TODO 判断是否存在
-                    return this.summaryRepository
-                            .save(summary
-                                    .setCategory(category)
-                                    .setSerialNo(serialNo)
-                                    .setStatus(Constants.SEARCH_ERRORCODE_SUCCESS));
+                    if(!this.summaryRepository
+                            .existsById(summary.getId())) {
+                        return this.summaryRepository
+                                .save(summary
+                                        .setCategory(category)
+                                        .setSerialNo(serialNo)
+                                        .setStatus(Constants.SEARCH_ERRORCODE_SUCCESS));
+                    }
+
+                    return Summary.builder()
+                            .category(category)
+                            .serialNo(serialNo)
+                            .status(Constants.SEARCH_ERRORCODE_HAS_EXISTS)
+                            .build();
                 });
     }
 
-    public Flux<Void> deleteSummaries(String serialNo,
+    /**
+     * 方法：更新摘要信息
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param summaries 摘要
+     * @return 更新成功的摘要信息
+     */
+    public Flux<Summary> updateSummaries(String serialNo,
+                                         String category,
+                                         Flux<Summary> summaries) {
+        return summaries
+                .filter(summary -> summary.getCategory().equalsIgnoreCase(category))
+                .map(summary -> {
+                    log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
+                    log.info(summary.toString());
+
+                    if(this.summaryRepository
+                            .existsById(summary.getId())) {
+                        return this.summaryRepository
+                                .save(summary
+                                        .setCategory(category)
+                                        .setSerialNo(serialNo)
+                                        .setStatus(Constants.SEARCH_ERRORCODE_SUCCESS));
+                    }
+
+                    return Summary.builder()
+                            .category(category)
+                            .serialNo(serialNo)
+                            .status(Constants.SEARCH_ERRORCODE_NOT_EXISTS)
+                            .build();
+                });
+    }
+
+    /**
+     * 方法：删除摘要信息
+     * @param serialNo 流水号
+     * @param category 类别（企业）
+     * @param summaries 摘要
+     * @return 无
+     */
+    public Mono<Void> deleteSummaries(String serialNo,
                                       String category,
                                       Flux<Summary> summaries) {
 
@@ -102,6 +152,6 @@ public class SearchService {
                             .delete(summary);
                 });
 
-        return Flux.empty();
+        return Mono.empty().then();
     }
 }

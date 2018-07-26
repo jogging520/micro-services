@@ -10,8 +10,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.Date;
-
 /**
  * 类名：搜索摘要信息类
  * 用途：用于在ES存储各类产品、用户、资源的摘要信息
@@ -30,8 +28,6 @@ import java.util.Date;
 public class Summary {
     @Id
     private String      id;                 //id
-    @Field
-    private String      entity;             //实体的真实ID
     @Field
     private String      type;               //实体的类型
     @Field

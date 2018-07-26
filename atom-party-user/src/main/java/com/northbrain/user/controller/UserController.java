@@ -37,7 +37,7 @@ public class UserController {
         if(name != null && password != null)
             return ResponseEntity.ok()
                     .body(this.userService
-                            .verifyByUserNameAndPassword(serialNo, appType, category, name, password));
+                            .verifyUserByNameAndPassword(serialNo, appType, category, name, password));
         else if(mobile != null)
             return ResponseEntity.ok()
                     .body(this.userService

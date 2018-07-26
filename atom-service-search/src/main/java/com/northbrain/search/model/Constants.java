@@ -11,8 +11,6 @@ public class Constants {
 
     public final static String  SEARCH_SUMMARY_INDEX_NAME               =   "northbrain";  //index名称
     public final static String  SEARCH_SUMMARY_TYPE_NAME                =   "summary";  //type名称
-    public final static Short   SEARCH_SUMMARY_SHARDS                   =   3;          //分配数量
-    public final static Short   SEARCH_SUMMARY_REPLICAS                 =   3;          //副本数量
     public final static String  SEARCH_SUMMARY_REFRESH_INTERVAL         =   "-1";       //刷新间隔
     public final static String  SEARCH_SUMMARY_ANALYZER_PINYIN          =   "pinyin_analyzer";  //拼音搜索（分词器）
 
@@ -28,10 +26,13 @@ public class Constants {
      * 操作定义
      */
     public final static String  SEARCH_OPERATION_SERIAL_NO                    =   "本次操作搜索的流水号为：";
+    public final static String  SEARCH_OPERATION_QUERY_CONDITION              =   "本次操作搜索的查询条件为：";
 
     /**
      * 错误码定义
      */
-    public final static String  SEARCH_ERRORCODE_SUCCESS                      =   "SUCCESS";
+    public final static String  SEARCH_ERRORCODE_SUCCESS                      =   "SUCCESS";                            //成功操作
+    public final static String  SEARCH_ERRORCODE_HAS_EXISTS                   =   "ERROR_SERVICE_SEARCH_HAS_EXISTS";    //已经存在相应的记录
+    public final static String  SEARCH_ERRORCODE_NOT_EXISTS                   =   "ERROR_SERVICE_SEARCH_NOT_EXISTS";    //不存在相应的记录
 
 }

@@ -21,5 +21,5 @@ public class Authentication {
     @NotNull
     private int         authType;           //认证方式
     @NotNull
-    private Boolean     result;             //校验结果
+    private String      status;             //状态
 }

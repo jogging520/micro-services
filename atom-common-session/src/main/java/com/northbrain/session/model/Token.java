@@ -29,4 +29,6 @@ public class Token {
     private String  downPublicKey;      //下行加密密钥（公钥）
     @NotNull
     private String  upPrivateKey;       //上行解密密钥（私钥）
+    @NotNull
+    private String  status;             //状态
 }

@@ -4,7 +4,6 @@ import com.northbrain.session.model.Attempt;
 import com.northbrain.session.model.Constants;
 import com.northbrain.session.model.Token;
 import com.northbrain.session.service.SessionService;
-import com.northbrain.session.model.Session;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +19,6 @@ public class SessionController {
     }
 
     /**
-     * 方法：根据ID号查找会话信息
-     * @param serialNo 流水号
-     * @param sessionId 会话编号
-     * @return 会话信息
-     */
-    @GetMapping(Constants.SESSION_SPECIFIED_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Mono<Session>> selectSessionById(@RequestParam String serialNo,
-                                                           @PathVariable String sessionId) {
-        return ResponseEntity.ok()
-                .body(this.sessionService
-                        .querySessionById(serialNo, sessionId));
-    }
-
-    /**
      * 方法：登录
      * @param appType 应用类型
      * @param category 类别（企业）
@@ -42,7 +27,7 @@ public class SessionController {
      * @param mobile 手机号码
      * @return 令牌
      */
-    @PostMapping(Constants.SESSION_LOGIN_HTTP_REQUEST_MAPPING)
+    @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Token>> login(@RequestParam String serialNo,
                                              @RequestParam String appType,
                                              @RequestParam String category,
@@ -57,19 +42,19 @@ public class SessionController {
     /**
      * 方法：登出
      * @param serialNo 流水号
-     * @param sessionId 会话编号
+     * @param session 会话编号
      * @param appType 应用类型
      * @param category 类别（企业）
      * @return 无
      */
-    @PostMapping(Constants.SESSION_LOGOUT_HTTP_REQUEST_MAPPING)
+    @DeleteMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Void>> logout(@RequestParam String serialNo,
-                                             @RequestParam String sessionId,
+                                             @RequestParam String session,
                                              @RequestParam String appType,
                                              @RequestParam String category) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .deleteSession(serialNo, sessionId, appType, category));
+                        .deleteSession(serialNo, session, appType, category));
     }
 
     /**
@@ -135,15 +120,13 @@ public class SessionController {
      * @return 空
      */
     @DeleteMapping(Constants.SESSION_ATTEMPT_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Void> deleteAttempts(@RequestParam String serialNo,
-                                               @RequestParam String userName,
-                                               @RequestParam String appType,
-                                               @RequestParam String category) {
-        this.sessionService
-                .deleteAttempts(serialNo, userName, appType, category);
-
+    public ResponseEntity<Mono<Void>> deleteAttempts(@RequestParam String serialNo,
+                                                     @RequestParam String userName,
+                                                     @RequestParam String appType,
+                                                     @RequestParam String category) {
         return ResponseEntity.ok()
-                .body(null);
+                .body(this.sessionService
+                        .deleteAttempts(serialNo, userName, appType, category));
     }
 
     /**
