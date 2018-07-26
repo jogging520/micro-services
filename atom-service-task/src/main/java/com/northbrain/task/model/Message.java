@@ -27,9 +27,11 @@ public class Message {
     @NotNull
     private String                  category;           //类别（企业）
     @NotNull
-    private String                  sender;             //发送者
+    private String[]                appTypes;           //接收的app类型
     @NotNull
-    private String[]                receiver;           //接收者
+    private String                  from;               //发送者
+    @NotNull
+    private String[]                to;                 //接收者（角色或者用户）
     @NotNull
     private String                  content;            //内容
     @NotNull

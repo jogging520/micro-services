@@ -1,70 +1,42 @@
 package com.northbrain.task.controller;
 
+import com.northbrain.task.model.Constants;
+import com.northbrain.task.model.Message;
+import com.northbrain.task.service.TaskService;
 import com.northbrain.util.security.Crypt;
-import com.northbrain.util.security.Password;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RefreshScope
 public class TaskController {
 
-    private final Crypt crypt;
+    private final TaskService taskService;
 
-    @Value("${logging.path}")
-    private String name;
-
-    public TaskController(Crypt crypt) {
-        this.crypt = crypt;
-    }
-
-
-    @GetMapping("/decrypt")
-    public String hello2(@RequestParam String serialNo,
-                         @RequestParam Long ddd) {
-        return this.crypt
-                .decrypt4UserDownStream("ZuZ47YNeOoCXhxV6rwNnnUvpSN8E9tJSC52Yg5eOYtxkKTtmSeUD9jQQKvI1JaOp0SLzj9P9Vb0hZkpLTMH+paAtI9wJ/nw/UyqjQrOrBWwoxuGlpFQzoumdIeeRm/ps9CqMVbSL9y/nhMbZRH/GZkct3AAlQvfL0P5SGGsBoXU=", "app",
-                        false);
-    }
-
-    @GetMapping("/path")
-    public String hello1() {
-        return "Hello, " + this.name;
-    }
-
-    @GetMapping("/password")
-    public String hello3() {
-        String salt = Password.generateSalt();
-        String ciphertext = Password.encrypt("jiakun", salt);
-
-        return "Hello, salt=" + salt + ",   ciphertext:" + ciphertext;
-    }
-
-    @GetMapping("/verify1")
-    public String hello4() {
-        String salt = "3716055997914a9b396bb4bbb83a0c31";
-        String ciphertext = "45068726ddec3e35c1f96cee8db83098b1d7aca66217ad77ec06216cbb457dc708a9ace6a4b5381592d46623609ebf731a0af598d007bc969a14dffa2723705f";
-
-        Boolean verified = Password.verify("jiakun", ciphertext, salt);
-
-        return "Hello, salt=" + verified;
-    }
-
-    @GetMapping("/verify2")
-    public String hello5() {
-        String salt = "3716055997914a9b396bb4bbb83a0c31";
-        String ciphertext = "45068726ddec3e35c1f96cee8db83098b1d7aca66217ad77ec06216cbb457dc708a9ace6a4b5381592d46623609ebf731a0af598d007bc969a14dffa2723705f";
-
-        Boolean verified = Password.verify("liangtao", ciphertext, salt);
-
-        return "Hello, salt=" + verified;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping("/keypair")
     public void hello6() {
         Crypt.generateRSAKeyPair();
+    }
+
+    /**
+     * 方法：发送消息
+     * 发送至kafka的相应topic，同时存储至库中。
+     * @param serialNo 流水号
+     * @param category 分类（企业）
+     * @param messages 消息
+     * @return 无
+     */
+    @PostMapping(Constants.TASK_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Mono<Void>> sendMessages(@RequestParam String serialNo,
+                                                   @RequestParam String category,
+                                                   @RequestBody Flux<Message> messages) {
+        return ResponseEntity.ok()
+                .body(this.taskService
+                        .sendMessages(serialNo, category, messages));
     }
 }
