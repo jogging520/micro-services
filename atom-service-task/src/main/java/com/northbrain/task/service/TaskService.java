@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+
 @Service
 @Log
 public class TaskService {
@@ -55,6 +57,33 @@ public class TaskService {
                 });
 
         return Mono.empty().then();
+    }
+
+    /**
+     * 方法：色查询历史消息
+     * 根据用户或者角，或者广播消息
+     * @param serialNo 流水号
+     * @param category 分类（企业）
+     * @param user 用户
+     * @param role 角色
+     * @return 历史消息
+     */
+    public Flux<Message> queryMessagesByUserOrRole(String serialNo,
+                                                   String category,
+                                                   String user,
+                                                   String role) {
+        return this.messageRepository
+                .findByCategoryAndStatus(category, Constants.TASK_STATUS_ACTIVE)
+                .filter(message -> message.getTo() != null &&
+                        (Arrays.asList(message.getTo()).contains(user) ||
+                                Arrays.asList(message.getTo()).contains(role) ||
+                                Arrays.asList(message.getTo()).contains(Constants.TASK_MESSAGE_BROADCAST)))
+                .map(message -> {
+                    log.info(Constants.TASK_OPERATION_SERIAL_NO + serialNo);
+                    log.info(message.toString());
+
+                    return message;
+                });
     }
 
     @KafkaListener(topics = Constants.TASK_MESSAGE_TOPIC)

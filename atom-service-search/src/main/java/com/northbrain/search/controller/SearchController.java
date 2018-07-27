@@ -72,6 +72,7 @@ public class SearchController {
      * @param appType 应用类型
      * @param category 类别（企业）
      * @param user 用户编号
+     * @param type 实体类型
      * @param condition 条件
      * @return 符合条件的摘要信息
      */
@@ -80,10 +81,12 @@ public class SearchController {
                                                                    @RequestParam String appType,
                                                                    @RequestParam String category,
                                                                    @RequestParam String user,
+                                                                   @RequestParam String type,
                                                                    @RequestParam String condition) {
         return ResponseEntity.ok()
                 .body(this.searchService
-                        .querySummariesByCondition(serialNo, appType, category, user, condition));
+                        .querySummariesByCondition(serialNo, appType, category,
+                                user, type, condition));
 
     }
 }

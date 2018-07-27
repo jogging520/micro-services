@@ -60,8 +60,8 @@ public class SessionService {
         log.info(Constants.SESSION_OPERATION_SERIAL_NO + serialNo);
 
         return this.sessionRepository
-                .findByAppTypeAndCategoryAndUserName(appType, category, userName)
-                .filter(session -> session.getStatus().equalsIgnoreCase(Constants.SESSION_STATUS_LOGIN))
+                .findByAppTypeAndCategoryAndStatusAndUserName(appType, category,
+                        Constants.SESSION_STATUS_LOGIN, userName)
                 .switchIfEmpty(
                         this.sessionRepository.save(Session
                                 .builder()

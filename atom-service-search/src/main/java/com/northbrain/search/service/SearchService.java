@@ -31,6 +31,7 @@ public class SearchService {
      * @param appType 应用类型
      * @param category 类别（企业）
      * @param user 用户编号
+     * @param type 实体类型
      * @param condition 条件
      * @return 符合条件的摘要信息
      */
@@ -38,6 +39,7 @@ public class SearchService {
                                                    String appType,
                                                    String category,
                                                    String user,
+                                                   String type,
                                                    String condition) {
         log.info(Constants.SEARCH_OPERATION_SERIAL_NO + serialNo);
         log.info(Constants.SEARCH_OPERATION_QUERY_CONDITION + condition);
@@ -62,7 +64,10 @@ public class SearchService {
 
         return Flux.fromIterable(this.summaryRepository
                 .search(queryStringQueryBuilder))
-                .filter(summary -> summary.getCategory().equalsIgnoreCase(category));
+                .filter(summary -> summary.getCategory().equalsIgnoreCase(category))
+                .filter(summary ->
+                        summary.getType().equalsIgnoreCase(Constants.SEARCH_SUMMARY_TYPE_ALL) ||
+                                summary.getType().equalsIgnoreCase(type));
     }
 
     /**

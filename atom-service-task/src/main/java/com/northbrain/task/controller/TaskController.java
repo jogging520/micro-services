@@ -39,4 +39,23 @@ public class TaskController {
                 .body(this.taskService
                         .sendMessages(serialNo, category, messages));
     }
+
+    /**
+     * 方法：色查询历史消息
+     * 根据用户或者角，或者广播消息
+     * @param serialNo 流水号
+     * @param category 分类（企业）
+     * @param user 用户
+     * @param role 角色
+     * @return 历史消息
+     */
+    @GetMapping(Constants.TASK_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Message>> queryMessagesByUserOrRole(@RequestParam String serialNo,
+                                                                   @RequestParam String category,
+                                                                   @RequestParam String user,
+                                                                   @RequestParam String role) {
+        return ResponseEntity.ok()
+                .body(this.taskService
+                        .queryMessagesByUserOrRole(serialNo, category, user, role));
+    }
 }

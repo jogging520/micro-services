@@ -6,11 +6,12 @@ public class Constants {
      */
     public final static String  TASK_STATUS_ACTIVE                          =   "ACTIVE";   //用户状态：在用
 
-    public final static String  TASK_MESSAGE_TOPIC                          =   "message";
+    public final static String  TASK_MESSAGE_TOPIC                          =   "message";  //KAFKA的topic
+    public final static String  TASK_MESSAGE_BROADCAST                      =   "ALL";      //广播消息
     /**
      * restful资源定义
      */
-    public final static String  TASK_HTTP_REQUEST_MAPPING                   =   "/tasks";
+    public final static String  TASK_HTTP_REQUEST_MAPPING                   =   "/tasks/messages";
 
     /**
      * 操作定义

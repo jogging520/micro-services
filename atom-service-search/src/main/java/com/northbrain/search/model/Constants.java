@@ -15,6 +15,7 @@ public class Constants {
     public final static String  SEARCH_SUMMARY_ANALYZER_PINYIN          =   "pinyin_analyzer";  //拼音搜索（分词器）
 
     public final static String  SEARCH_TYPE_COMMON                      =   "COMMON";   //普通搜索类型
+    public final static String  SEARCH_SUMMARY_TYPE_ALL                 =   "ALL";   //全部搜索
 
 
     /**
