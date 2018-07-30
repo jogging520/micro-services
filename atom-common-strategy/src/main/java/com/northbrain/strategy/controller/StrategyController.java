@@ -19,35 +19,33 @@ public class StrategyController {
     }
 
     /**
-     * 方法：查询应用程序策略信息
+     * 方法：根据类型查询策略信息
+     * @param type 策略类型
      * @param serialNo 流水号
      * @param appType 应用类型
      * @param category 类别（企业）
      * @return 应用程序策略列表
      */
-    @GetMapping(Constants.STRATEGY_APPLICATION_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Strategy>> queryApplicationStrategies(@RequestParam String serialNo,
-                                                                     @RequestParam String appType,
-                                                                     @RequestParam String category) {
-        return ResponseEntity.ok()
-                .body(this.strategyService
-                        .queryApplicationStrategies(serialNo, appType, category));
-    }
+    @GetMapping(Constants.STRATEGY_SPECIFIED_HTTP_REQUEST_MAPPING)
+    public ResponseEntity<Flux<Strategy>> queryStrategies(@PathVariable String type,
+                                                          @RequestParam String serialNo,
+                                                          @RequestParam String appType,
+                                                          @RequestParam String category) {
+        switch (type) {
+            case Constants.STRATEGY_TYPE_APPLICATION:
+                return ResponseEntity.ok()
+                        .body(this.strategyService
+                                .queryApplicationStrategies(serialNo, appType, category));
 
-    /**
-     * 方法：查询错误码策略信息
-     * @param serialNo 流水号
-     * @param appType 应用类型
-     * @param category 类别（企业）
-     * @return 错误码策略列表
-     */
-    @GetMapping(Constants.STRATEGY_ERRORCODE_HTTP_REQUEST_MAPPING)
-    public ResponseEntity<Flux<Strategy>> queryErrorCodeStrategies(@RequestParam String serialNo,
-                                                                   @RequestParam String appType,
-                                                                   @RequestParam String category) {
-        return ResponseEntity.ok()
-                .body(this.strategyService
-                        .queryErrorCodeStrategies(serialNo, appType, category));
+            case Constants.STRATEGY_TYPE_ERRORCODE:
+                return ResponseEntity.ok()
+                        .body(this.strategyService
+                                .queryErrorCodeStrategies(serialNo, appType, category));
+
+            default:
+                return ResponseEntity.ok()
+                        .body(Flux.empty());
+        }
     }
 
     /**

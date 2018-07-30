@@ -17,8 +17,7 @@ public class Constants {
      * restful资源定义
      */
     public final static String STRATEGY_HTTP_REQUEST_MAPPING                    =   "/strategies";
-    public final static String STRATEGY_APPLICATION_HTTP_REQUEST_MAPPING        =   "/strategies/application";
-    public final static String STRATEGY_ERRORCODE_HTTP_REQUEST_MAPPING          =   "/strategies/errorcode";
+    public final static String STRATEGY_SPECIFIED_HTTP_REQUEST_MAPPING          =   "/strategies/{type}";
 
     /**
      * 操作定义

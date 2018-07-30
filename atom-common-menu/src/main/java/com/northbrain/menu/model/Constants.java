@@ -6,15 +6,11 @@ public class Constants {
      */
     public final static String  MENU_STATUS_ACTIVE                      =   "ACTIVE";
 
+    public final static String  MENU_TYPE_CMS                           =   "cms";  //菜单类型：cms
     /**
      * restful资源定义
      */
-    public final static String  MENU_CMS_HTTP_REQUEST_MAPPING           =   "/menus/cms";
-    public final static String  MENU_WEB_HTTP_REQUEST_MAPPING           =   "/menus/web";
-    public final static String  MENU_APP_HTTP_REQUEST_MAPPING           =   "/menus/app";
-    public final static String  MENU_WCT_HTTP_REQUEST_MAPPING           =   "/menus/wct";
-    public final static String  MENU_LED_HTTP_REQUEST_MAPPING           =   "/menus/led";
-    public final static String  MENU_MON_HTTP_REQUEST_MAPPING           =   "/menus/mon";
+    public final static String  MENU_SPECIFIED_HTTP_REQUEST_MAPPING     =   "/menus/{appType}";
 
     /**
      * 操作定义
