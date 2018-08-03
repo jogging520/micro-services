@@ -301,7 +301,7 @@ public class SessionService {
                                     .attemptTime(attempt.getAttemptTime())
                                     .timestamp(Clock.currentTime())
                                     .status(attempt.getStatus())
-                                    .serialNo(attempt.getSerialNo())
+                                    .serialNo(serialNo)
                                     .description(attempt.getDescription())
                                     .build())
                             .subscribe(attemptHistory -> {
