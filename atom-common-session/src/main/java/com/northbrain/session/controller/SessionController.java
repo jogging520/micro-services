@@ -25,6 +25,7 @@ public class SessionController {
      * @param user 用户编号
      * @param userName 用户姓名
      * @param mobile 手机号码
+     * @param address 客户端IP地址
      * @return 令牌
      */
     @PostMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
@@ -33,28 +34,32 @@ public class SessionController {
                                              @RequestParam String category,
                                              @RequestParam String user,
                                              @RequestParam(required = false) String userName,
-                                             @RequestParam(required = false) String mobile) {
+                                             @RequestParam(required = false) String mobile,
+                                             @RequestParam String address) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .createSession(serialNo, appType, category, user, userName, mobile));
+                        .createSession(serialNo, appType, category, user,
+                                userName, mobile, address));
     }
 
     /**
      * 方法：登出
      * @param serialNo 流水号
-     * @param session 会话编号
      * @param appType 应用类型
      * @param category 类别（企业）
+     * @param session 会话编号
+     * @param address 客户端IP地址
      * @return 无
      */
     @DeleteMapping(Constants.SESSION_HTTP_REQUEST_MAPPING)
     public ResponseEntity<Mono<Void>> logout(@RequestParam String serialNo,
-                                             @RequestParam String session,
                                              @RequestParam String appType,
-                                             @RequestParam String category) {
+                                             @RequestParam String category,
+                                             @RequestParam String session,
+                                             @RequestParam String address) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .deleteSession(serialNo, session, appType, category));
+                        .deleteSession(serialNo, session, appType, category, address));
     }
 
     /**
@@ -62,6 +67,7 @@ public class SessionController {
      * @param serialNo 流水号
      * @param appType 应用类型
      * @param category 类别（企业）
+     * @param address 客户端IP地址
      * @param jwt json web token
      * @return 校验结果（正常、异常、失效、无会话等），如果无效，那么lifetime=0
      */
@@ -69,10 +75,11 @@ public class SessionController {
     public ResponseEntity<Mono<Token>> verifyJWT(@RequestParam String serialNo,
                                                  @RequestParam String appType,
                                                  @RequestParam String category,
+                                                 @RequestParam String address,
                                                  @RequestParam String jwt) {
         return ResponseEntity.ok()
                 .body(this.sessionService
-                        .verifyJWT(serialNo, appType, category, jwt));
+                        .verifyJWT(serialNo, appType, category, address, jwt));
     }
 
     /**

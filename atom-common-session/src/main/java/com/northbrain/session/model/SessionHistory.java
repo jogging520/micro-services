@@ -35,6 +35,8 @@ public class SessionHistory {
     private String                  userName;           //用户名
     private String                  mobile;             //手机号码
     @NotNull
+    private String                  address;            //客户端IP
+    @NotNull
     private Date                    loginTime;          //登录时间
     @NotNull
     private Long                    lifeTime;           //寿命，毫秒

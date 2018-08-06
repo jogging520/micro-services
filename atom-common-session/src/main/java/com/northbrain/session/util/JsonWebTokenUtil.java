@@ -22,8 +22,22 @@ import java.util.Map;
  */
 @Log
 public class JsonWebTokenUtil {
-    public static String generateJsonWebToken(String session, String appType, String key,
-                                              String company, String audience, String issuer, Long lifeTime)
+    /**
+     * 方法：生成JWT
+     * @param session 会话编号
+     * @param appType 应用类型
+     * @param address IP地址
+     * @param key 密钥
+     * @param company 公司
+     * @param audience 受众
+     * @param issuer 发行者
+     * @param lifeTime 寿命
+     * @return  JWT
+     * @throws Exception 异常
+     */
+    public static String generateJsonWebToken(String session, String appType, String address,
+                                              String key, String company, String audience,
+                                              String issuer, Long lifeTime)
             throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long currentTimeMillis = System.currentTimeMillis();
@@ -34,10 +48,11 @@ public class JsonWebTokenUtil {
         byte[] keySecretBytes = key.getBytes();
         Key secretKey = new SecretKeySpec(keySecretBytes, signatureAlgorithm.getJcaName());
 
-        //私有claims部分，目前只保持id号
+        //私有claims部分，包括会话编号、应用类型和IP地址
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.SESSION_JWT_CLAIMS_SESSION, session);
         claims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, appType);
+        claims.put(Constants.SESSION_JWT_CLAIMS_ADDRESS, address);
 
         //添加构成JWT的参数
         JwtBuilder jwtBuilder = Jwts
@@ -61,6 +76,16 @@ public class JsonWebTokenUtil {
         return jwtBuilder.compact();
     }
 
+    /**
+     * 方法：解析JWT
+     * @param jsonWebToken JWT
+     * @param key 密钥
+     * @param company 公司
+     * @param audience 受众
+     * @param issuer 发行者
+     * @return jwt的申明
+     * @throws Exception 异常
+     */
     public static Map<String, String> parseJsonWebToken(String jsonWebToken, String key, String company,
                                                         String audience, String issuer)
             throws Exception {
@@ -86,6 +111,7 @@ public class JsonWebTokenUtil {
         Map<String, String> privateClaims = new HashMap<>();
         privateClaims.put(Constants.SESSION_JWT_CLAIMS_SESSION, (String) claims.get(Constants.SESSION_JWT_CLAIMS_SESSION));
         privateClaims.put(Constants.SESSION_JWT_CLAIMS_APP_TYPE, (String) claims.get(Constants.SESSION_JWT_CLAIMS_APP_TYPE));
+        privateClaims.put(Constants.SESSION_JWT_CLAIMS_ADDRESS, (String) claims.get(Constants.SESSION_JWT_CLAIMS_ADDRESS));
 
         return privateClaims;
     }
